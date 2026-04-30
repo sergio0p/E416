@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECON 416 Syllabus</title>
+
+    <!-- TODO: Add Google Analytics tag for E416 -->
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Solarized */
+            --base03: #002b36;
+            --base02: #073642;
+            --base01: #586e75;
+            --base00: #657b83;
+            --base0: #839496;
+            --base1: #93a1a1;
+            --base2: #eee8d5;
+            --base3: #fdf6e3;
+            --yellow: #b58900;
+            --orange: #cb4b16;
+            --red: #dc322f;
+            --magenta: #d33682;
+            --violet: #6c71c4;
+            --blue: #268bd2;
+            --cyan: #2aa198;
+            --green: #859900;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--base03);
+            color: var(--base0);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--base03);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            color: var(--orange);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--blue);
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .instructor-info {
+            background-color: var(--base02);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--cyan);
+        }
+
+        .instructor-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Copenhagen Block Aesthetics */
+        .accordion {
+            border: 1px solid var(--base01);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--base01);
+            background: var(--base03);
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-button {
+            background-color: var(--base02);
+            color: var(--base1);
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 1rem 1.25rem;
+            border: none;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: var(--blue);
+            color: var(--base3);
+            box-shadow: none;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: var(--base01);
+        }
+
+        .accordion-button::after {
+            filter: brightness(2);
+        }
+
+        .accordion-button:not(.collapsed)::after {
+            filter: brightness(0) invert(1);
+        }
+
+        .accordion-body {
+            padding: 1.25rem;
+            background-color: var(--base03);
+            border-top: 1px solid var(--base01);
+        }
+
+        /* Nested collapsible sections */
+        .nested-collapse {
+            margin: 15px 0;
+        }
+
+        .nested-header {
+            background-color: var(--base02);
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--base01);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--base1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.15s ease;
+        }
+
+        .nested-header:hover {
+            background-color: var(--base01);
+            color: var(--base3);
+        }
+
+        .nested-header.active {
+            background-color: var(--cyan);
+            color: var(--base03);
+            border-color: var(--cyan);
+        }
+
+        .nested-header::after {
+            content: "▼";
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .nested-header.active::after {
+            transform: rotate(-180deg);
+        }
+
+        .nested-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .nested-content.show {
+            max-height: 2000px;
+            margin-top: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        table th {
+            background-color: var(--base01);
+            color: var(--base3);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--base01);
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:nth-child(even) {
+            background-color: var(--base02);
+        }
+
+        /* Links */
+        a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: var(--cyan);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background-color: var(--yellow);
+            color: var(--base03);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .text-red {
+            color: var(--red);
+            font-weight: bold;
+        }
+
+        .schedule-table {
+            font-size: 0.95rem;
+        }
+
+        .schedule-table td {
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        .schedule-table .week-col {
+            font-weight: 600;
+            background-color: var(--base02);
+        }
+
+        h5 {
+            color: var(--magenta);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h6 {
+            color: var(--violet);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        blockquote {
+            background-color: var(--base02);
+            padding: 15px 20px;
+            border-left: 4px solid var(--violet);
+            margin: 15px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ECON 416: Behavioral Economics</h1>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="subtitle" style="margin-bottom: 0;"><!-- TODO: Term (e.g. Fall 2026) --></div>
+            <div>
+                <button class="btn btn-outline-secondary btn-sm" onclick="expandAll()">Expand All</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="collapseAll()">Collapse All</button>
+            </div>
+        </div>
+
+        <div class="instructor-info">
+            <p><strong>Instructor:</strong> Sérgio O. Parreiras</p>
+            <p><strong>Email:</strong> sergiop@unc.edu (use Canvas Inbox)</p>
+            <p><strong>Office:</strong> Gardner Hall, Room 200B</p>
+            <p><strong>Class Time:</strong> <!-- TODO --></p>
+            <p><strong>Location:</strong> <!-- TODO --></p>
+            <p><strong>Office Hours:</strong> <!-- TODO --></p>
+            <p><strong>Canvas:</strong> <a href="#" target="_blank"><!-- TODO: Canvas URL --></a></p>
+        </div>
+
+        <!-- Main Accordion -->
+        <div class="accordion" id="syllabusAccordion">
+
+            <!-- Course Information & Description -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#courseInfo" aria-expanded="true">
+                        Course Information &amp; Description
+                    </button>
+                </h2>
+                <div id="courseInfo" class="accordion-collapse collapse show" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <p><strong>Course:</strong> ECON 416 - Behavioral Economics (3 Credits)</p>
+                        <p><strong>Term:</strong> <!-- TODO --></p>
+                        <p><strong>Prerequisite:</strong> <!-- TODO --></p>
+                        <p><strong>Grading Status:</strong> Letter grade</p>
+
+                        <h5>Course Description</h5>
+                        <blockquote>
+                            <!-- TODO: Course description -->
+                        </blockquote>
+
+                        <!-- Learning Objectives Collapsible -->
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">
+                                Learning Objectives
+                            </div>
+                            <div class="nested-content">
+                                <!-- TODO: Learning objectives -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Communication -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#communication" aria-expanded="false">
+                        Communication
+                    </button>
+                </h2>
+                <div id="communication" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <p>The Canvas website is our primary means of communication. Assignments, readings, grades, podcast links and other resources will be posted on Canvas.</p>
+
+                        <p>Canvas messages are responded within 48 business hours (Monday through Friday). Outlook messages are not recommended.</p>
+
+                        <p><strong>For office hours (OHs):</strong> Use Canvas > Calendar > Find Appointment. You must sign in with SSO login option at <a href="https://unc.zoom.us" target="_blank">unc.zoom.us</a> for OH meetings.</p>
+
+                        <p>If your schedule conflicts with regular OHs, please send a Canvas message to schedule meetings <span class="text-red">outside of regular OH</span>.</p>
+
+                        <p>To request an in-person meeting, add "F2F" in the comments field when booking.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Required Materials -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#materials" aria-expanded="false">
+                        Required Materials
+                    </button>
+                </h2>
+                <div id="materials" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <h5>Textbook</h5>
+                        <!-- TODO: Textbook or no-textbook policy -->
+
+                        <h5>Required Software/Apps</h5>
+
+                        <!-- Zoom Collapsible -->
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">
+                                Zoom
+                            </div>
+                            <div class="nested-content">
+                                <p>Download the application from <a href="https://zoom.us/download" target="_blank">https://zoom.us/download</a>.</p>
+                                <p><!-- TODO: Zoom meeting link for OH --> You must sign in with SSO at <a href="https://unc.zoom.us" target="_blank">unc.zoom.us</a> for office hour meetings.</p>
+                            </div>
+                        </div>
+
+                        <!-- Respondus Lockdown Browser Collapsible -->
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">
+                                Respondus Lockdown Browser
+                            </div>
+                            <div class="nested-content">
+                                <p>Download the browser from <a href="https://oasis.unc.edu/service/respondus-lockdown-browser/" target="_blank">https://oasis.unc.edu/service/respondus-lockdown-browser/</a>.</p>
+                                <p>This browser is required for all exams and quizzes. Make sure to use the test page provided in the link prior to using it for the first time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grading & Important Dates -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grading" aria-expanded="false">
+                        Grading &amp; Important Dates
+                    </button>
+                </h2>
+                <div id="grading" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <h5>Course Grade Weights</h5>
+                        <!-- TODO: Grading breakdown -->
+                        <ul>
+                            <li>Midterms: <!-- % --></li>
+                            <li>Problem Sets and Quizzes: <!-- % --></li>
+                            <li>Final Exam: <!-- % --></li>
+                            <li>Active Participation: <!-- % --></li>
+                        </ul>
+
+                        <h5 class="mt-3">Important Dates</h5>
+                        <!-- TODO: Exam dates -->
+
+                        <h5 class="mt-3">Grading Scale</h5>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Letter Grade</th>
+                                    <th>Minimum Score</th>
+                                    <th>Letter Grade</th>
+                                    <th>Minimum Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>A</td><td>95</td><td>C+</td><td>77</td></tr>
+                                <tr><td>A-</td><td>90</td><td>C</td><td>73</td></tr>
+                                <tr><td>B+</td><td>87</td><td>C-</td><td>70</td></tr>
+                                <tr><td>B</td><td>83</td><td>D+</td><td>67</td></tr>
+                                <tr><td>B-</td><td>80</td><td>D</td><td>63</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p class="mt-3"><strong>Note on Exam Grading:</strong> Exam grades are converted into scores ("curved") according to the formula: original grade plus 100 minus the maximum between the top class grade and 50. Assignments or problem sets are not "curved".</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Environment -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#environment" aria-expanded="false">
+                        Class Environment
+                    </button>
+                </h2>
+                <div id="environment" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <p>During this course, we may employ additional material from podcasts, video, or literature to discuss economics related issues. Sometimes, you may find the political or religious views; or the profanity contained in these materials offensive or objectionable and, you may feel uncomfortable.</p>
+
+                        <p>I will not endorse or advocate any particular political views but as part of your university education, I wholeheartedly believe that it is important for us to engage in critical thinking while respecting different opinions.</p>
+
+                        <p>Our classroom is an inclusive environment and your participation is critical for the success of this course. You are expected to attend class, read the assigned readings and, be prepared to discuss and present your work in the classroom.</p>
+
+                        <h5>Personal Hardship</h5>
+                        <p>If you are going through personal hardships that may interfere with your academic performance, please contact me as soon as possible. I am here to help you succeed in this course but we may run out of options if we act too late.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Policy -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#aipolicy" aria-expanded="false">
+                        AI Policy
+                    </button>
+                </h2>
+                <div id="aipolicy" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <p><strong>Carolina students are expected to follow these general AI guidelines:</strong></p>
+
+                        <!-- General AI Guidelines Collapsible -->
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">
+                                General AI Guidelines
+                            </div>
+                            <div class="nested-content">
+                                <ol>
+                                    <li>AI should help you think, not think for you. You may be able to use these tools to brainstorm ideas, research topics, and analyze problems, but you must decide what's appropriate and accurate.</li>
+                                    <li>Engage responsibly with AI. You must evaluate AI-generated outputs for potential biases, limitations, inaccuracies, false output, and ethical implications. Do not put personal or confidential data into these tools.</li>
+                                    <li>The use of AI must be open and documented. You should declare, explain, and cite any use of AI in the creation of your work using applicable standards (e.g., APA, MLA, course guidelines). Understand that you are ultimately 100% responsible for your final product.</li>
+                                    <li>Follow specific AI guidelines in this syllabus. If you are unsure, check with me. Guidance offered in this syllabus would be referenced should an issue be referred to Student Conduct for alleged academic misconduct.</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- ECON 416 AI Guidelines Collapsible -->
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">
+                                ECON 416 Additional AI Guidelines
+                            </div>
+                            <div class="nested-content">
+                                <!-- TODO: Course-specific AI policy -->
+                                <ul>
+                                    <li>AI assistance is permitted for homework and projects only. <strong class="text-red">AI use is not allowed during exams or quizzes.</strong></li>
+                                    <li>You must clearly cite any AI tool used. If AI-generated content is substantial, include the original prompt alongside your citation.</li>
+                                    <li>You may be asked to present or explain your work, regardless of AI use.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Policies & Procedures -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="false">
+                        Policies &amp; Procedures
+                    </button>
+                </h2>
+                <div id="policies" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Syllabus Changes</div>
+                            <div class="nested-content">
+                                <p>I reserve the right to make changes to the syllabus including project due dates and test dates. These changes will be kept to the necessary minimum and announced as early as possible.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Communication Policy</div>
+                            <div class="nested-content">
+                                <p>Please use Canvas to send me messages instead of regular email. All assignments should be submitted on Canvas.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Honor Code</div>
+                            <div class="nested-content">
+                                <p>All students are expected to follow the guidelines of the UNC honor code. In particular, students are expected to refrain from "lying, cheating, or stealing" in the academic context. If you are unsure about which actions violate the honor code, please see me or consult <a href="https://catalog.unc.edu/policies-procedures/honor-code/" target="_blank">https://catalog.unc.edu/policies-procedures/honor-code/</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Exams and Grades</div>
+                            <div class="nested-content">
+                                <p>Any final-exam rescheduling request, for those with more than three final exams within a 24-hour period, must be received no later than our first midterm.</p>
+                                <p>Exam grades are converted into scores ("curved") according to the formula: original grade plus 100 minus the maximum between the top class grade and 50. Assignments or problem sets are not "curved".</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Attendance Policy</div>
+                            <div class="nested-content">
+                                <h6>University Approved Absences (UAA)</h6>
+                                <p>No right or privilege exists that permits a student to be absent from any class meetings, except for these University Approved Absences:</p>
+                                <ol>
+                                    <li>Authorized University activities</li>
+                                    <li>Disability/religious observance/pregnancy, as required by law and approved by Accessibility Resources and Service and/or the Equal Opportunity and Compliance Office</li>
+                                    <li>Significant health condition and/or personal/family emergency as approved by the Office of the Dean of Students, Gender Violence Service Coordinators, and/or the Equal Opportunity and Compliance Office</li>
+                                </ol>
+                                <p class="mt-3"><strong>Important:</strong> Eight non-UAA absences without any consultation with the instructor may result in a grade F in the course. Ten total non-UAA absences in a semester may result in a grade F regardless of the reasons you missed class.</p>
+                                <p>In all instances, either UAA or non-UAA, you MUST notify the instructor prior to missing class. If a student misses a class, it is the student's responsibility to find out what was covered in the class and whether changes have been made on the schedule, and if there was any assignment given.</p>
+                                <p>Attendance and participation are recorded in every class and posted to Canvas > Assignments > Participation on a weekly basis.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Accommodations</div>
+                            <div class="nested-content">
+                                <p>The University Compliance Office (UCO) Accommodations Team (<a href="https://compliance.unc.edu/accommodations/" target="_blank">Accommodations</a>) receives requests for accommodations for disability, pregnancy and related conditions, and sincerely held religious beliefs and practices through the University's Policy on Accommodations. It determines eligibility and reasonable accommodations consistent with state and federal laws.</p>
+                                <p>If you are eligible to take exams with accommodations, please schedule your exam using their hub at <a href="https://ars.unc.edu/" target="_blank">https://ars.unc.edu/</a>, and notify me as soon as possible.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Counseling and Psychological Services</div>
+                            <div class="nested-content">
+                                <p>UNC-Chapel Hill is strongly committed to addressing the mental health needs of a diverse student body. The Heels Care Network website is a place to access the many mental resources at Carolina. CAPS is the primary mental health provider for students, offering timely access to consultation and connection to clinically appropriate services.</p>
+                                <p>Go to their website <a href="https://caps.unc.edu/" target="_blank">https://caps.unc.edu/</a> or visit their facilities on the third floor of the Campus Health building for an initial evaluation to learn more. Students can also call CAPS 24/7 at 919-966-3658 for immediate assistance.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Title IX Resources</div>
+                            <div class="nested-content">
+                                <p>Any student who is impacted by discrimination, harassment, interpersonal (relationship) violence, sexual violence, sexual exploitation, or stalking is encouraged to seek resources on campus or in the community. Reports can be made online to the EOC at <a href="https://compliance.unc.edu/reporting/incident/" target="_blank">https://compliance.unc.edu/reporting/incident/</a>.</p>
+                                <p>Please contact the University's Title IX Coordinator (Elizabeth Hall, titleixcoordinator@unc.edu), Report and Response Coordinators in the Equal Opportunity and Compliance Office (reportandresponse@unc.edu), Counseling and Psychological Services (confidential), or the Gender Violence Services Coordinators (gvsc@unc.edu; confidential) to discuss your specific needs. Additional resources are available at <a href="https://safe.unc.edu" target="_blank">safe.unc.edu</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Policy on Non-Discrimination</div>
+                            <div class="nested-content">
+                                <p>The University is committed to providing an inclusive and welcoming environment for all members of our community and to ensuring that educational and employment decisions are based on individuals' abilities and qualifications. UNC offers access to its educational programs and activities as well as employment terms and conditions without respect to race, color, gender, national origin, age, religion, genetic information, disability, veteran's status, sexual orientation, gender identity or gender expression.</p>
+                                <p>If you are experiencing harassment or discrimination, you can seek assistance and file a report through the Report and Response Coordinators (see contact info at <a href="https://safe.unc.edu" target="_blank">safe.unc.edu</a>) or the Equal Opportunity and Compliance Office, or online to the EOC at <a href="https://compliance.unc.edu/reporting/incident/" target="_blank">https://compliance.unc.edu/reporting/incident/</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="nested-collapse">
+                            <div class="nested-header" onclick="toggleNested(this)">Grade Appeal Process</div>
+                            <div class="nested-content">
+                                <p>If you feel you have been awarded an incorrect grade, please discuss with me. If we cannot resolve the issue, you may talk to our departmental director of undergraduate studies or appeal the grade through a formal university process based on arithmetic/clerical error, arbitrariness, discrimination, harassment, or personal malice. To learn more, go to the Academic Advising Program website.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Schedule -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#schedule" aria-expanded="false">
+                        Tentative Course Schedule
+                    </button>
+                </h2>
+                <div id="schedule" class="accordion-collapse collapse" data-bs-parent="#syllabusAccordion">
+                    <div class="accordion-body">
+                        <!-- TODO: Course schedule table -->
+                        <p><em>Schedule to be added.</em></p>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End Accordion -->
+
+    </div> <!-- End Container -->
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function toggleNested(element) {
+            const content = element.nextElementSibling;
+            const isOpen = content.classList.contains('show');
+            if (isOpen) {
+                content.classList.remove('show');
+                element.classList.remove('active');
+            } else {
+                content.classList.add('show');
+                element.classList.add('active');
+            }
+        }
+
+        function expandAll() {
+            document.querySelectorAll('#syllabusAccordion .accordion-collapse').forEach(el => {
+                new bootstrap.Collapse(el, { toggle: false }).show();
+            });
+            document.querySelectorAll('.nested-content').forEach(el => el.classList.add('show'));
+            document.querySelectorAll('.nested-header').forEach(el => el.classList.add('active'));
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('#syllabusAccordion .accordion-collapse').forEach(el => {
+                new bootstrap.Collapse(el, { toggle: false }).hide();
+            });
+            document.querySelectorAll('.nested-content').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.nested-header').forEach(el => el.classList.remove('active'));
+        }
+    </script>
+</body>
+</html>
