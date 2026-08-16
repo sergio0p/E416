@@ -4,47 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECON 416: Behavioral Economics</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="description" content="ECON 416 Behavioral Economics, UNC Chapel Hill. Fall 2026.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
+
     <style>
+        /* ------------------------------------------------------------------
+           ECON 416 — landing page
+
+           The Siren Vase is the whole page. Nothing is written on it: the
+           figures are the navigation. Odysseus bound to the mast, the crew
+           rowing with stopped ears, and the sail struck so the wind cannot
+           carry them — the course's subject rendered as its own menu.
+           ------------------------------------------------------------------ */
+
         :root {
-            --base03: #002b36; --base02: #073642; --base01: #586e75;
-            --base0: #839496; --base1: #93a1a1; --base3: #fdf6e3;
-            --orange: #cb4b16; --blue: #268bd2; --cyan: #2aa198;
+            --attic-black:    #171310;
+            --soot:           #2B211B;
+            --terracotta:     #B55232;
+            --clay-highlight: #D07852;
+            --deep-oxide:     #71311F;
+            --ancient-cream:  #E6D1AD;
+
+            --font-display: 'Cinzel', Georgia, serif;
         }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--base03);
-            color: var(--base0);
-            padding: 40px 20px;
+            background: var(--attic-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            overflow: hidden;
         }
-        .container { max-width: 700px; margin: 0 auto; }
-        h1 { color: var(--orange); font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem; }
-        .subtitle { color: var(--blue); font-size: 1.2rem; margin-bottom: 2rem; }
-        .nav-link-card {
+
+        /* The stage locks to the artwork's aspect ratio (2560 × 1762) so every
+           hotspot percentage stays true at any viewport size. */
+        .stage {
+            position: relative;
+            width: 100%;
+            max-width: min(96vw, calc(88vh * 1.4529));
+            aspect-ratio: 2560 / 1762;
+        }
+
+        .stage img {
             display: block;
-            padding: 1rem 1.5rem;
-            background: var(--base02);
-            border-left: 4px solid var(--cyan);
-            color: var(--base1);
-            text-decoration: none;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-            transition: background 0.2s, border-color 0.2s;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
         }
-        .nav-link-card:hover {
-            background: var(--base01);
-            border-left-color: var(--blue);
-            color: var(--base3);
+
+        /* ---------------- hotspots ---------------- */
+
+        .hs {
+            position: absolute;
+            display: block;
+            cursor: pointer;
+            /* Faint wash on hover so the target reads before the label lands */
+            background: transparent;
+            transition: background 160ms ease;
+            border: 0;
+        }
+
+        .hs:hover,
+        .hs:focus-visible {
+            background: rgba(208, 120, 82, 0.16);
+        }
+
+        .hs:focus-visible {
+            outline: 2px solid var(--clay-highlight);
+            outline-offset: 1px;
+        }
+
+        /* ---------------- labels ---------------- */
+
+        .lb {
+            position: absolute;
+            font-family: var(--font-display);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: clamp(0.5rem, 0.95vw, 0.78rem);
+            line-height: 1.35;
+            color: var(--ancient-cream);
+            background: var(--soot);
+            border: 1px solid var(--deep-oxide);
+            border-left: 3px solid var(--terracotta);
+            padding: 0.45em 0.8em;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(0.25rem);
+            transition: opacity 160ms ease, transform 160ms ease;
+            z-index: 5;
+        }
+
+        /* Vertical blocks for the tall figures at the edges */
+        .lb.vert {
+            writing-mode: vertical-rl;
+            white-space: nowrap;
+            border-left: 1px solid var(--deep-oxide);
+            border-top: 3px solid var(--terracotta);
+        }
+
+        .hs:hover + .lb,
+        .hs:focus-visible + .lb {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ------------------------------------------------------------------
+           Geometry. Percentages are of the artwork box, mapped from the
+           vase itself. Stacking follows the painting's depth: the rocks are
+           backdrop, the figures stand in front of them.
+           ------------------------------------------------------------------ */
+
+        /* --- backdrop --- */
+        .hs-rock-l  { left: 10%;   top: 33%;  width: 19%;   height: 37%;  z-index: 1; }
+        .hs-rock-r  { left: 68%;   top: 40%;  width: 15%;   height: 28%;  z-index: 1; }
+        .hs-hull    { left: 35%;   top: 69%;  width: 40%;   height: 13%;  z-index: 2; }
+        .hs-mast    { left: 43%;   top: 24%;  width: 4%;    height: 20%;  z-index: 2; }
+
+        /* --- figures --- */
+        .hs-siren-l { left: 16%;   top: 13%;  width: 19%;   height: 22%;  z-index: 3; }
+        .hs-siren-c { left: 52%;   top: 30%;  width: 17%;   height: 22%;  z-index: 3; }
+        .hs-siren-r { left: 74%;   top: 17%;  width: 15%;   height: 27%;  z-index: 3; }
+        .hs-odyss   { left: 44%;   top: 44%;  width: 6%;    height: 17%;  z-index: 3; }
+        .hs-oars    { left: 39%;   top: 61%;  width: 25%;   height: 8%;   z-index: 3; }
+        .hs-helm    { left: 71%;   top: 54%;  width: 8%;    height: 14%;  z-index: 3; }
+        .hs-eye     { left: 27%;   top: 72%;  width: 6%;    height: 8%;   z-index: 4; }
+
+        /* The sail is a diagonal band, so its box is clipped to a
+           parallelogram — a plain rect would swallow both neighbouring
+           sirens and most of the empty ground between them. */
+        .hs-sail {
+            left: 30%; top: 12%; width: 34%; height: 21%;
+            z-index: 3;
+            clip-path: polygon(0% 76%, 0% 100%, 100% 24%, 100% 0%);
+        }
+
+        /* --- label placement: outside the figure, into the dark --- */
+        .lb-siren-l { left: 3%;    top: 6%; }
+        .lb-sail    { left: 40%;   top: 2%; }
+        .lb-siren-c { left: 60%;   top: 54%; }
+        .lb-siren-r { right: 1%;   top: 10%; }
+        .lb-mast    { left: 48%;   top: 24%; }
+        .lb-odyss   { left: 34%;   top: 51%; }
+        .lb-oars    { left: 40%;   top: 73%; }
+        .lb-helm    { right: 2%;   top: 58%; }
+        .lb-hull    { left: 36%;   top: 92%; }
+        .lb-eye     { left: 2%;    top: 78%; }
+        .lb-rock-l  { left: 1%;    top: 36%; }
+        .lb-rock-r  { right: 1%;   top: 72%; }
+
+        /* ------------------------------------------------------------------
+           Touch: there is no hover, so the labels are always visible.
+           ------------------------------------------------------------------ */
+        @media (hover: none) {
+            .lb {
+                opacity: 0.92;
+                transform: none;
+            }
+            .hs { background: rgba(208, 120, 82, 0.08); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .lb, .hs { transition: none; }
+        }
+
+        /* Very small screens: the vase is unreadable as a menu, so fall back
+           to a plain list rather than twelve overlapping labels. */
+        .fallback-nav { display: none; }
+
+        @media (max-width: 560px) {
+            body { overflow: auto; display: block; padding: 1.25rem; }
+            .stage { max-width: 100%; margin-bottom: 1.5rem; }
+            .hs, .lb { display: none; }
+
+            .fallback-nav { display: block; }
+            .fallback-nav a {
+                display: block;
+                font-family: var(--font-display);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                font-size: 0.72rem;
+                color: var(--ancient-cream);
+                background: var(--soot);
+                border-left: 3px solid var(--terracotta);
+                padding: 0.85rem 1rem;
+                margin-bottom: 0.5rem;
+                text-decoration: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>ECON 416: Behavioral Economics</h1>
-        <p class="subtitle"><!-- TODO: Term --></p>
-        <a href="syllabus.html" class="nav-link-card">Syllabus</a>
-        <a href="LECWeb/index.html" class="nav-link-card">Web Lectures</a>
-    </div>
+
+<main class="stage">
+
+    <picture>
+        <source srcset="img/ulises-sirens-2560.avif" type="image/avif">
+        <source srcset="img/ulises-sirens-1920.webp" type="image/webp">
+        <img src="img/ulises-sirens-1920.webp"
+             alt="Attic red-figure vase painting: Odysseus bound to the mast as his crew rows past the Sirens. Each figure links to a part of the ECON 416 course site.">
+    </picture>
+
+    <!-- Backdrop -->
+    <a class="hs hs-rock-l" href="syllabus.html#courseInfo" aria-label="Course information"></a>
+    <span class="lb lb-rock-l">Course Information</span>
+
+    <a class="hs hs-rock-r" href="syllabus.html#materials" aria-label="Required materials"></a>
+    <span class="lb lb-rock-r">Required Materials</span>
+
+    <a class="hs hs-hull" href="syllabus.html" aria-label="Syllabus"></a>
+    <span class="lb lb-hull">Syllabus</span>
+
+    <a class="hs hs-mast" href="syllabus.html#aipolicy" aria-label="AI policy"></a>
+    <span class="lb lb-mast">AI Policy</span>
+
+    <!-- Figures -->
+    <a class="hs hs-siren-l" href="syllabus.html#communication" aria-label="Communication"></a>
+    <span class="lb lb-siren-l">Communication</span>
+
+    <a class="hs hs-sail" href="https://uncch.instructure.com/courses/128467" aria-label="Canvas course page"></a>
+    <span class="lb lb-sail">Canvas Course Page</span>
+
+    <a class="hs hs-siren-c" href="syllabus.html#schedule" aria-label="Tentative course schedule"></a>
+    <span class="lb lb-siren-c">Tentative Course Schedule</span>
+
+    <a class="hs hs-siren-r" href="syllabus.html#policies" aria-label="Policies and procedures"></a>
+    <span class="lb lb-siren-r vert">Policies &amp; Procedures</span>
+
+    <a class="hs hs-odyss" href="Apps/index.html" aria-label="Interactive apps"></a>
+    <span class="lb lb-odyss">Interactive Apps</span>
+
+    <a class="hs hs-oars" href="syllabus.html#environment" aria-label="Class environment"></a>
+    <span class="lb lb-oars">Class Environment</span>
+
+    <a class="hs hs-helm" href="LECWeb/index.html" aria-label="Lecture notes"></a>
+    <span class="lb lb-helm">Lecture Notes</span>
+
+    <a class="hs hs-eye" href="syllabus.html#grading" aria-label="Grading and important dates"></a>
+    <span class="lb lb-eye">Grading &amp; Important Dates</span>
+
+    <!-- Small screens only -->
+    <nav class="fallback-nav" aria-label="Course sections">
+        <a href="syllabus.html">Syllabus</a>
+        <a href="LECWeb/index.html">Lecture Notes</a>
+        <a href="Apps/index.html">Interactive Apps</a>
+        <a href="https://uncch.instructure.com/courses/128467">Canvas Course Page</a>
+        <a href="syllabus.html#courseInfo">Course Information</a>
+        <a href="syllabus.html#communication">Communication</a>
+        <a href="syllabus.html#materials">Required Materials</a>
+        <a href="syllabus.html#grading">Grading &amp; Important Dates</a>
+        <a href="syllabus.html#environment">Class Environment</a>
+        <a href="syllabus.html#aipolicy">AI Policy</a>
+        <a href="syllabus.html#policies">Policies &amp; Procedures</a>
+        <a href="syllabus.html#schedule">Tentative Course Schedule</a>
+    </nav>
+
+</main>
+
 </body>
 </html>

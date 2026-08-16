@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Revealed Preference App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    #left-panel {
+      width: 50%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    #svg-container {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+    }
+    #right-panel {
+      width: 45%;
+      padding: 5px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .statement {
+      display: flex;
+      align-items: center;
+      font-size: 1em;
+    }
+    .statement input {
+      margin-right: 0.5em;
+    }
+
+   #statements {
+  display: grid;
+  grid-auto-flow: column;             /* Fill down columns first */
+  grid-template-rows: repeat(6, auto); /* 18 items ÷ 3 columns = 6 rows */
+  gap: 6px 16px;
+  justify-content: center;
+  }
+    .correct {
+      color: green;
+      margin-left: 10px;
+    }
+.incorrect {
+  color: red;
+  margin-left: 10px;
+  cursor: pointer;
+}
+    #done-btn {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+    #score {
+      font-weight: bold;
+      margin-bottom: 1em;
+    }
+    /* Add these new styles */
+#feedback-window {
+  background-color: #f9f9f9;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  min-height: 80px;
+  display: none;
+}
+
+#feedback-window.show {
+  display: block;
+}
+
+#feedback-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+#feedback-content {
+  color: #666;
+  line-height: 1.4;
+}
+
+.feedback-error {
+  background-color: #fee;
+  border-color: #fcc;
+}
+
+.feedback-error #feedback-title {
+  color: #a00;
+}
+
+.feedback-error #feedback-content {
+  color: #800;
+}
+  </style>
+</head>
+<body>
+  <div id="left-panel">
+    <h2>Budget Sets and Chosen Baskets</h2>
+    <svg id="svg-container" viewBox="0 -5 110 110"></svg>
+  </div>
+
+  <div id="right-panel">
+    <div id="score">Score: </div>
+    <div id="statements"></div>
+    <button id="done-btn">Done</button>
+    <div id="feedback-window">
+    <div id="feedback-title"></div>
+    <div id="feedback-content"></div>
+    </div>
+  </div>
+
+  <script>
+    let budgets = null; // Store budgets globally for feedback
+
+    function getBudgetsAndChoices() {
+      function randomBudget() {
+        const px = Math.random() * 6 + 0.75;
+        const py = Math.random() * 6 + 0.75;
+        const income = Math.random() * 70 + 70;
+
+        const xMinBudget = (income - 95 * py) / px;
+        const xMaxBudget = (income - 5 * py) / px;
+
+        const xMin = Math.max(5, xMinBudget);
+        const xMax = Math.min(95, xMaxBudget);
+
+        if (xMax < xMin) {
+          // fallback: center of budget line
+          const x = income / (2 * px);
+          const y = (income - px * x) / py;
+          return { px, py, income, chosen: { x, y } };
+        }
+
+        const x = Math.random() * (xMax - xMin) + xMin;
+        const y = (income - px * x) / py;
+
+  return { px, py, income, chosen: { x, y } };
+  }
+      return { r: randomBudget(), b: randomBudget(), g: randomBudget() };
+    }
+
+    const labels = ['r', 'b', 'g'];
+    const relations = [
+  {
+    type: 'DR',
+    symbol: `<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='12.694248pt' height='18.517227pt' viewBox='0 -16.166031 12.694248 18.517227'>
+<defs>
+<path id='g1-23' d='M5.164633-4.315816C4.124533-4.052802 3.19203-3.753923 2.343213-3.024658C1.219427-2.056289 1.147696-.729265 1.147696-.657534C1.147696-.430386 1.338979-.286924 1.506351-.286924C1.817186-.286924 1.865006-.537983 1.900872-.836862C2.355168-3.741968 6.850311-3.93325 9.109838-3.945205C9.468493-3.945205 9.528269-4.208219 9.528269-4.303861C9.528269-4.674471 9.181569-4.674471 9.026152-4.674471C8.249066-4.674471 6.38406-4.710336 4.877709-5.128767C2.797509-5.71457 2.080199-6.694894 1.888917-7.890411C1.865006-8.057783 1.817186-8.332752 1.506351-8.332752C1.327024-8.332752 1.147696-8.18929 1.147696-7.962142C1.147696-7.938232 1.147696-6.766625 2.247572-5.69066C2.414944-5.523288 3.19203-4.758157 5.164633-4.315816ZM1.685679 1.649813C1.506351 1.649813 1.147696 1.649813 1.147696 2.008468C1.147696 2.379078 1.494396 2.379078 1.685679 2.379078H8.990286C9.169614 2.379078 9.528269 2.379078 9.528269 2.020423C9.528269 1.649813 9.181569 1.649813 8.990286 1.649813H1.685679Z'/>
+<path id='g0-68' d='M.366625-5.443587V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0H3.395268C4.829888 0 5.985554-1.195517 5.985554-2.669988C5.985554-4.208219 4.821918-5.443587 3.395268-5.443587H.366625ZM2.263512-.263014C1.896887-.263014 1.880946-.318804 1.880946-.589788V-4.853798C1.880946-5.124782 1.896887-5.180573 2.263512-5.180573H3.180075C3.801743-5.180573 4.319801-4.925529 4.670486-4.527024C5.180573-3.921295 5.180573-3.068493 5.180573-2.677958C5.180573-2.271482 5.180573-1.490411 4.678456-.900623C4.399502-.573848 3.889415-.263014 3.180075-.263014H2.263512Z'/>
+<path id='g0-82' d='M3.777833-2.709838C4.399502-2.86924 5.164633-3.323537 5.164633-4.008966C5.164633-4.798007 4.152428-5.443587 2.964882-5.443587H.366625V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0C1.044085-.02391 1.060025-.02391 1.522291-.02391C1.992528-.02391 2.008468-.02391 2.685928 0V-.263014H2.510585C1.896887-.263014 1.880946-.350685 1.880946-.645579V-2.614197H2.885181C3.474969-2.614197 3.737983-2.319303 3.793773-2.255542C4.024907-2.000498 4.024907-1.849066 4.024907-1.307098C4.024907-.804981 4.024907-.462267 4.359651-.167372C4.702366 .127522 5.148692 .167372 5.379826 .167372C6.041345 .167372 6.200747-.486177 6.200747-.72528C6.200747-.773101 6.200747-.876712 6.073225-.876712C5.961644-.876712 5.961644-.789041 5.953674-.73325C5.913823-.231133 5.634869-.055791 5.411706-.055791C4.98132-.055791 4.933499-.422416 4.790037-1.43462C4.734247-1.888917 4.654545-2.438854 3.777833-2.709838ZM2.86127-2.83736H1.880946V-4.853798C1.880946-5.061021 1.888917-5.148692 2.080199-5.172603C2.15193-5.180573 2.406974-5.180573 2.566376-5.180573C3.283686-5.180573 4.335741-5.180573 4.335741-4.008966C4.335741-3.124284 3.698132-2.83736 2.86127-2.83736Z'/>
+</defs>
+<g id='page1'>
+<use x='0' y='-10.719795' xlink:href='#g0-68'/>
+<use x='6.46474' y='-10.719795' xlink:href='#g0-82'/>
+<use x='1.000536' y='0' xlink:href='#g1-23'/>
+</g>
+</svg>`
+  },  {
+    type: 'IR',
+    symbol: `<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='10.693177pt' height='18.517227pt' viewBox='0 -16.166031 10.693177 18.517227'>
+<defs>
+<path id='g1-23' d='M5.164633-4.315816C4.124533-4.052802 3.19203-3.753923 2.343213-3.024658C1.219427-2.056289 1.147696-.729265 1.147696-.657534C1.147696-.430386 1.338979-.286924 1.506351-.286924C1.817186-.286924 1.865006-.537983 1.900872-.836862C2.355168-3.741968 6.850311-3.93325 9.109838-3.945205C9.468493-3.945205 9.528269-4.208219 9.528269-4.303861C9.528269-4.674471 9.181569-4.674471 9.026152-4.674471C8.249066-4.674471 6.38406-4.710336 4.877709-5.128767C2.797509-5.71457 2.080199-6.694894 1.888917-7.890411C1.865006-8.057783 1.817186-8.332752 1.506351-8.332752C1.327024-8.332752 1.147696-8.18929 1.147696-7.962142C1.147696-7.938232 1.147696-6.766625 2.247572-5.69066C2.414944-5.523288 3.19203-4.758157 5.164633-4.315816ZM1.685679 1.649813C1.506351 1.649813 1.147696 1.649813 1.147696 2.008468C1.147696 2.379078 1.494396 2.379078 1.685679 2.379078H8.990286C9.169614 2.379078 9.528269 2.379078 9.528269 2.020423C9.528269 1.649813 9.181569 1.649813 8.990286 1.649813H1.685679Z'/>
+<path id='g0-73' d='M1.888917-4.798007C1.888917-5.100872 1.912827-5.180573 2.542466-5.180573H2.733748V-5.443587C2.096139-5.419676 2.080199-5.419676 1.522291-5.419676S.948443-5.419676 .310834-5.443587V-5.180573H.502117C1.131756-5.180573 1.155666-5.100872 1.155666-4.798007V-.645579C1.155666-.342715 1.131756-.263014 .502117-.263014H.310834V0C.948443-.02391 .964384-.02391 1.522291-.02391S2.096139-.02391 2.733748 0V-.263014H2.542466C1.912827-.263014 1.888917-.342715 1.888917-.645579V-4.798007Z'/>
+<path id='g0-82' d='M3.777833-2.709838C4.399502-2.86924 5.164633-3.323537 5.164633-4.008966C5.164633-4.798007 4.152428-5.443587 2.964882-5.443587H.366625V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0C1.044085-.02391 1.060025-.02391 1.522291-.02391C1.992528-.02391 2.008468-.02391 2.685928 0V-.263014H2.510585C1.896887-.263014 1.880946-.350685 1.880946-.645579V-2.614197H2.885181C3.474969-2.614197 3.737983-2.319303 3.793773-2.255542C4.024907-2.000498 4.024907-1.849066 4.024907-1.307098C4.024907-.804981 4.024907-.462267 4.359651-.167372C4.702366 .127522 5.148692 .167372 5.379826 .167372C6.041345 .167372 6.200747-.486177 6.200747-.72528C6.200747-.773101 6.200747-.876712 6.073225-.876712C5.961644-.876712 5.961644-.789041 5.953674-.73325C5.913823-.231133 5.634869-.055791 5.411706-.055791C4.98132-.055791 4.933499-.422416 4.790037-1.43462C4.734247-1.888917 4.654545-2.438854 3.777833-2.709838ZM2.86127-2.83736H1.880946V-4.853798C1.880946-5.061021 1.888917-5.148692 2.080199-5.172603C2.15193-5.180573 2.406974-5.180573 2.566376-5.180573C3.283686-5.180573 4.335741-5.180573 4.335741-4.008966C4.335741-3.124284 3.698132-2.83736 2.86127-2.83736Z'/>
+</defs>
+<g id='page1'>
+<use x='.706974' y='-10.719795' xlink:href='#g0-73'/>
+<use x='3.756695' y='-10.719795' xlink:href='#g0-82'/>
+<use x='0' y='0' xlink:href='#g1-23'/>
+</g>
+</svg>`
+  },  {
+    type: 'SDR',
+    symbol: `<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='17.398896pt' height='15.860521pt' viewBox='0 -14.837684 17.398896 15.860521'>
+<defs>
+<path id='g1-31' d='M5.164633-2.988792C4.124533-2.725778 3.19203-2.426899 2.343213-1.697634C1.219427-.729265 1.147696 .597758 1.147696 .669489C1.147696 .872727 1.303113 1.0401 1.518306 1.0401C1.817186 1.0401 1.865006 .777086 1.900872 .561893C2.271482-1.793275 4.985305-2.594271 9.109838-2.618182C9.468493-2.618182 9.528269-2.881196 9.528269-2.976837C9.528269-3.347447 9.181569-3.347447 9.026152-3.347447C8.249066-3.347447 6.38406-3.383313 4.877709-3.801743C2.797509-4.387547 2.080199-5.36787 1.888917-6.563387C1.865006-6.73076 1.817186-7.005729 1.506351-7.005729C1.327024-7.005729 1.147696-6.862267 1.147696-6.635118C1.147696-6.611208 1.147696-5.439601 2.247572-4.363636C2.414944-4.196264 3.19203-3.431133 5.164633-2.988792Z'/>
+<path id='g0-68' d='M.366625-5.443587V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0H3.395268C4.829888 0 5.985554-1.195517 5.985554-2.669988C5.985554-4.208219 4.821918-5.443587 3.395268-5.443587H.366625ZM2.263512-.263014C1.896887-.263014 1.880946-.318804 1.880946-.589788V-4.853798C1.880946-5.124782 1.896887-5.180573 2.263512-5.180573H3.180075C3.801743-5.180573 4.319801-4.925529 4.670486-4.527024C5.180573-3.921295 5.180573-3.068493 5.180573-2.677958C5.180573-2.271482 5.180573-1.490411 4.678456-.900623C4.399502-.573848 3.889415-.263014 3.180075-.263014H2.263512Z'/>
+<path id='g0-82' d='M3.777833-2.709838C4.399502-2.86924 5.164633-3.323537 5.164633-4.008966C5.164633-4.798007 4.152428-5.443587 2.964882-5.443587H.366625V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0C1.044085-.02391 1.060025-.02391 1.522291-.02391C1.992528-.02391 2.008468-.02391 2.685928 0V-.263014H2.510585C1.896887-.263014 1.880946-.350685 1.880946-.645579V-2.614197H2.885181C3.474969-2.614197 3.737983-2.319303 3.793773-2.255542C4.024907-2.000498 4.024907-1.849066 4.024907-1.307098C4.024907-.804981 4.024907-.462267 4.359651-.167372C4.702366 .127522 5.148692 .167372 5.379826 .167372C6.041345 .167372 6.200747-.486177 6.200747-.72528C6.200747-.773101 6.200747-.876712 6.073225-.876712C5.961644-.876712 5.961644-.789041 5.953674-.73325C5.913823-.231133 5.634869-.055791 5.411706-.055791C4.98132-.055791 4.933499-.422416 4.790037-1.43462C4.734247-1.888917 4.654545-2.438854 3.777833-2.709838ZM2.86127-2.83736H1.880946V-4.853798C1.880946-5.061021 1.888917-5.148692 2.080199-5.172603C2.15193-5.180573 2.406974-5.180573 2.566376-5.180573C3.283686-5.180573 4.335741-5.180573 4.335741-4.008966C4.335741-3.124284 3.698132-2.83736 2.86127-2.83736Z'/>
+<path id='g0-83' d='M1.857036-3.323537C1.346949-3.443088 .972354-3.849564 .972354-4.335741C.972354-4.869738 1.43462-5.371856 2.12802-5.371856C3.506849-5.371856 3.690162-4.080697 3.730012-3.777833C3.745953-3.690162 3.753923-3.634371 3.857534-3.634371C3.985056-3.634371 3.985056-3.690162 3.985056-3.841594V-5.403736C3.985056-5.531258 3.985056-5.610959 3.881445-5.610959C3.817684-5.610959 3.801743-5.587049 3.745953-5.499377L3.466999-5.053051C3.068493-5.491407 2.558406-5.610959 2.12005-5.610959C1.171606-5.610959 .470237-4.893649 .470237-4.080697C.470237-3.474969 .812951-3.140224 .964384-2.988792C1.251308-2.701868 1.514321-2.638107 2.375093-2.438854C3.060523-2.279452 3.180075-2.255542 3.443088-1.976588C3.52279-1.888917 3.722042-1.617933 3.722042-1.227397C3.722042-.67746 3.299626-.095641 2.550436-.095641C1.673724-.095641 .765131-.518057 .71731-1.625903C.70934-1.753425 .70934-1.809215 .597758-1.809215C.470237-1.809215 .470237-1.745455 .470237-1.594022V-.039851C.470237 .087671 .470237 .167372 .573848 .167372C.637609 .167372 .645579 .151432 .70137 .071731C.73325 .02391 .765131-.047821 .988294-.382565C1.490411 .063761 2.080199 .167372 2.558406 .167372C3.55467 .167372 4.224159-.621669 4.224159-1.474471C4.224159-2.16787 3.769863-2.87721 2.956912-3.068493L1.857036-3.323537Z'/>
+</defs>
+<g id='page1'>
+<use x='0' y='-9.391448' xlink:href='#g0-83'/>
+<use x='4.704648' y='-9.391448' xlink:href='#g0-68'/>
+<use x='11.169388' y='-9.391448' xlink:href='#g0-82'/>
+<use x='3.35286' y='0' xlink:href='#g1-31'/>
+</g>
+</svg>`
+  }
+];
+
+    let selectedStatements = new Set();
+
+    function generateStatements() {
+    const statements = [];
+
+    const typeOrder = ['SDR', 'DR', 'IR'];  // hardcoded preferred order
+    for (const type of typeOrder) {
+      const rel = relations.find(r => r.type === type);
+      for (const i of labels) {
+        for (const j of labels) {
+          if (i !== j) {
+            statements.push({ 
+              left: i, 
+              right: j, 
+              type: rel.type, 
+              symbol: rel.symbol
+            });
+          }
+        }
+      }
+    }
+
+    return statements;
+  }
+
+    function dot(p, b) {
+      return p.px * b.x + p.py * b.y;
+    }
+
+    function isDR(budgets, i, j) {
+      const pi = budgets[i];
+      const xj = budgets[j].chosen;
+      return dot(pi, xj) <= pi.income + 1e-6;
+    }
+
+    function isIR(budgets, i, j) {
+      const graph = {};
+      for (const a of labels) graph[a] = [];
+      for (const a of labels) {
+        for (const b of labels) {
+          if (a !== b && isDR(budgets, a, b)) {
+            graph[a].push(b);
+          }
+        }
+      }
+      const visited = new Set();
+      function dfs(u) {
+        if (u === j) return true;
+        visited.add(u);
+        for (const v of graph[u]) {
+          if (!visited.has(v) && dfs(v)) return true;
+        }
+        return false;
+      }
+      return dfs(i);
+    }
+
+    function isSDR(budgets, i, j) {
+      const pi = budgets[i];
+      const xi = pi.chosen;
+      const xj = budgets[j].chosen;
+      return dot(pi, xi) > dot(pi, xj) + 1e-6;
+    }
+
+    function evaluateStatement(stmt, budgets) {
+      const { left, right, type } = stmt;
+      if (type === 'DR') return isDR(budgets, left, right);
+      if (type === 'IR') return isIR(budgets, left, right);
+      if (type === 'SDR') return isSDR(budgets, left, right);
+      return false;
+    }
+
+    function drawBudgetLines(budgets) {
+      const svg = document.getElementById("svg-container");
+      svg.innerHTML = '';
+      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      defs.innerHTML = `
+        <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M 0 0 L 6 3 L 0 6 Z" fill="black" />
+        </marker>
+      `;
+      svg.appendChild(defs);
+
+      // Create a group with transform
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("transform", "translate(10, 0)");
+      svg.appendChild(group);
+
+      // Axes
+      const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      xAxis.setAttribute("x1", 0);
+      xAxis.setAttribute("y1", 100);
+      xAxis.setAttribute("x2", 90); // now ends at 90 instead of 100
+      xAxis.setAttribute("y2", 100);
+      xAxis.setAttribute("stroke", "black");
+      xAxis.setAttribute("marker-end", "url(#arrowhead)");
+      group.appendChild(xAxis);
+
+      const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      yAxis.setAttribute("x1", 0);
+      yAxis.setAttribute("y1", 100);
+      yAxis.setAttribute("x2", 0);
+      yAxis.setAttribute("y2", 0);
+      yAxis.setAttribute("stroke", "black");
+      yAxis.setAttribute("marker-end", "url(#arrowhead)");
+      group.appendChild(yAxis);
+
+      for (const key of labels) {
+        const { px, py, income, chosen } = budgets[key];
+        const color = key === 'r' ? 'red' : key === 'b' ? 'blue' : 'green';
+
+        const x0 = 0;
+        const y0 = income / py;
+        const x1 = income / px;
+        const y1 = 0;
+
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x0);
+        line.setAttribute("y1", 100 - y0);
+        line.setAttribute("x2", x1);
+        line.setAttribute("y2", 100 - y1);
+        line.setAttribute("stroke", color);
+        line.setAttribute("stroke-width", "1.5");
+        group.appendChild(line);
+
+        const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        dot.setAttribute("cx", chosen.x);
+        dot.setAttribute("cy", 100 - chosen.y);
+        dot.setAttribute("r", 1.5);
+        dot.setAttribute("fill", color);
+        group.appendChild(dot);
+
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", chosen.x + 1);
+        label.setAttribute("y", 100 - chosen.y - 1);
+        label.setAttribute("font-size", "4");
+        label.textContent = key;
+        group.appendChild(label);
+      }
+    }
+
+    function getExplanation(stmt, budgets) {
+      const { left, right, type } = stmt;
+      const pi = budgets[left];
+      const pj = budgets[right];
+      const xi = pi.chosen;
+      const xj = pj.chosen;
+      const costI = dot(pi, xi).toFixed(2);
+      const costJ = dot(pi, xj).toFixed(2);
+
+      if (type === 'DR') return `Under ${left}'s prices, bundle ${right} costs ${costJ}, which exceeds income.`;
+      if (type === 'SDR') return `Under ${left}'s prices, bundle ${left} costs ${costI}, while ${right} costs ${costJ}. ${left} is not strictly more expensive.`;
+      if (type === 'IR') return `No sequence of directly revealed preferences connects ${left} to ${right}.`;
+      return 'Incorrect.';
+    }
+// New functions to show/hide feedback in the dedicated window
+function showFeedback(stmt, explanation) {
+  const feedbackWindow = document.getElementById('feedback-window');
+  const feedbackTitle = document.getElementById('feedback-title');
+  const feedbackContent = document.getElementById('feedback-content');
+  
+  feedbackTitle.innerHTML = `Incorrect: ${stmt.left} ${stmt.symbol} ${stmt.right}`;
+  feedbackContent.textContent = explanation;
+  
+  feedbackWindow.className = 'feedback-error show';
+}
+
+function hideFeedback() {
+  const feedbackWindow = document.getElementById('feedback-window');
+  feedbackWindow.className = '';
+}
+    function renderApp() {
+      budgets = getBudgetsAndChoices();
+      drawBudgetLines(budgets);
+
+      const statements = generateStatements();
+      const container = document.getElementById('statements');
+      container.innerHTML = '';
+
+      for (const [idx, stmt] of statements.entries()) {
+        const div = document.createElement('div');
+        div.className = 'statement';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `stmt-${idx}`;
+        checkbox.addEventListener('change', e => {
+          if (e.target.checked) selectedStatements.add(idx);
+          else selectedStatements.delete(idx);
+        });
+
+        const label = document.createElement('label');
+        label.htmlFor = `stmt-${idx}`;
+        label.innerHTML = `${stmt.left} ${stmt.symbol} ${stmt.right}`;
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        container.appendChild(div);
+      }
+
+    document.getElementById('done-btn').addEventListener('click', () => {
+  let correct = 0;
+  let total = selectedStatements.size;
+  let firstIncorrect = null;
+
+  // Clear previous marks
+  const marks = document.querySelectorAll('.correct, .incorrect');
+  marks.forEach(mark => mark.remove());
+
+  for (const idx of selectedStatements) {
+    const stmt = statements[idx];
+    const div = document.getElementById(`stmt-${idx}`).parentElement;
+    const result = evaluateStatement(stmt, budgets);
+
+    const mark = document.createElement('span');
+    mark.className = result ? 'correct' : 'incorrect';
+    mark.textContent = result ? '✓' : '❌';
+
+    // Add hover functionality for incorrect answers
+    if (!result) {
+      mark.addEventListener('mouseenter', () => {
+        showFeedback(stmt, getExplanation(stmt, budgets));
+      });
+      mark.addEventListener('mouseleave', () => {
+        hideFeedback();
+      });
+      
+      if (!firstIncorrect) {
+        firstIncorrect = { stmt, explanation: getExplanation(stmt, budgets) };
+      }
+    }
+
+    div.appendChild(mark);
+    if (result) correct++;
+  }
+
+  // Show first incorrect immediately
+  if (firstIncorrect) {
+    showFeedback(firstIncorrect.stmt, firstIncorrect.explanation);
+  }
+
+  const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+  document.getElementById('score').textContent = `Score: ${score}% correct`;
+});
+}
+    window.addEventListener('load', renderApp);
+  </script>
+</body>
+</html>

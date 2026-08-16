@@ -1,0 +1,381 @@
+/* ==========================================================================
+   ECON 416 — Behavioral Economics
+   Attic red-figure theme
+
+   Palette taken from the Siren Vase (Odysseus and the Sirens), the same
+   artwork used on the course landing page: terracotta figures reserved
+   against a fired black ground.
+   ========================================================================== */
+
+/* Fonts are loaded with <link> in each page's <head>, not @import —
+   an @import here would cost an extra render-blocking round trip. */
+
+:root {
+    /* Attic red-figure palette */
+    --attic-black:    #171310;
+    --soot:           #2B211B;
+
+    --terracotta:     #B55232;
+    --clay-highlight: #D07852;
+    --deep-oxide:     #71311F;
+
+    --ancient-cream:  #E6D1AD;
+
+    /* Semantic colors */
+    --background:     var(--attic-black);
+    --surface:        var(--soot);
+    --primary:        var(--terracotta);
+    --primary-hover:  var(--clay-highlight);
+    --border:         var(--deep-oxide);
+    --text:           var(--ancient-cream);
+    --text-muted:     #B79D82;
+
+    /* Type */
+    --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+    --font-body:    'EB Garamond', Georgia, 'Times New Roman', serif;
+
+    /* Rhythm */
+    --measure: 68ch;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    padding: 0 0 4rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 960px;
+}
+
+/* --------------------------------------------------------------------------
+   Display type
+
+   Cinzel is cut from Roman inscriptional capitals, so it is set in caps with
+   open tracking throughout. It is never used for running text — at paragraph
+   length inscriptional capitals are unreadable.
+   -------------------------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6,
+.display-face {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+h1 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+}
+
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.15rem; }
+
+h4, h5, h6 {
+    font-size: 1rem;
+    color: var(--clay-highlight);
+    letter-spacing: 0.1em;
+}
+
+/* Sub-headings inside prose sit closer to their paragraph than to the one above */
+.accordion-body h4,
+.accordion-body h5 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.accordion-body > :first-child {
+    margin-top: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Masthead
+   -------------------------------------------------------------------------- */
+
+.masthead {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    padding: 2.25rem 0 1.75rem;
+    margin-bottom: 2.5rem;
+}
+
+.masthead .eyebrow {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.subtitle {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Links
+   -------------------------------------------------------------------------- */
+
+a {
+    color: var(--primary-hover);
+    text-decoration-color: rgba(208, 120, 82, 0.4);
+    text-underline-offset: 0.15em;
+}
+
+a:hover,
+a:focus {
+    color: var(--text);
+    text-decoration-color: currentColor;
+}
+
+.back-link {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Bootstrap accordion — retheme via Bootstrap 5.3 CSS variables rather than
+   overriding selectors, which keeps specificity flat and survives upgrades.
+   -------------------------------------------------------------------------- */
+
+.accordion {
+    --bs-accordion-color: var(--text);
+    --bs-accordion-bg: transparent;
+    --bs-accordion-border-color: var(--border);
+    --bs-accordion-border-width: 1px;
+    --bs-accordion-border-radius: 0;
+    --bs-accordion-inner-border-radius: 0;
+
+    --bs-accordion-btn-color: var(--text);
+    --bs-accordion-btn-bg: var(--surface);
+    --bs-accordion-btn-padding-y: 1rem;
+    --bs-accordion-btn-padding-x: 1.25rem;
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 2px var(--clay-highlight);
+
+    --bs-accordion-active-color: var(--attic-black);
+    --bs-accordion-active-bg: var(--terracotta);
+
+    --bs-accordion-body-padding-y: 1.5rem;
+    --bs-accordion-body-padding-x: 1.25rem;
+
+    /* Chevrons recolored to match: cream when closed, black on terracotta when open */
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23E6D1AD'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23171310'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3e%3c/svg%3e");
+}
+
+.accordion-button {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    /* Headings live inside <button>, which browsers refuse to let you
+       drag-select. Restore selection so the syllabus can be copied. */
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.accordion-item {
+    border-left: 0;
+    border-right: 0;
+}
+
+.accordion-body {
+    max-width: var(--measure);
+}
+
+/* Schedule needs the full width, not the reading measure */
+.accordion-body.is-wide {
+    max-width: none;
+}
+
+/* --------------------------------------------------------------------------
+   Tables
+   -------------------------------------------------------------------------- */
+
+.table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.95rem;
+}
+
+th {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    color: var(--primary);
+    text-align: left;
+    font-weight: 600;
+}
+
+th, td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    vertical-align: top;
+}
+
+tbody tr:nth-child(odd) {
+    background: rgba(43, 33, 27, 0.55);
+}
+
+/* Grading scale is a short two-column table — keep it narrow */
+.table-scale {
+    max-width: 22rem;
+}
+
+.table-scale td:last-child,
+.table-scale th:last-child {
+    text-align: right;
+}
+
+/* Schedule table */
+.table-schedule th:first-child,
+.table-schedule td:first-child {
+    white-space: nowrap;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Exams, breaks and holidays — the only cells that carry emphasis */
+.is-marked {
+    background: rgba(181, 82, 50, 0.28) !important;
+    border-left: 3px solid var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   Small pieces
+   -------------------------------------------------------------------------- */
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.meta-label {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.15rem;
+}
+
+blockquote {
+    border-left: 2px solid var(--border);
+    padding-left: 1.25rem;
+    margin: 1.25rem 0;
+    color: var(--text);
+    font-style: italic;
+}
+
+.note {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.emphasis {
+    color: var(--clay-highlight);
+    font-weight: 600;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* --------------------------------------------------------------------------
+   Controls
+   -------------------------------------------------------------------------- */
+
+.btn-attic {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.7rem;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 0.4rem 0.9rem;
+}
+
+.btn-attic:hover,
+.btn-attic:focus {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--attic-black);
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility
+   -------------------------------------------------------------------------- */
+
+:focus-visible {
+    outline: 2px solid var(--clay-highlight);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 576px) {
+    body { font-size: 1rem; }
+
+    .masthead {
+        padding: 1.5rem 0 1.25rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .accordion {
+        --bs-accordion-btn-padding-x: 0.9rem;
+        --bs-accordion-body-padding-x: 0.9rem;
+    }
+
+    .accordion-button { font-size: 0.8rem; }
+}
