@@ -42,18 +42,27 @@
    Base
    -------------------------------------------------------------------------- */
 
+/* Type scales with the viewport. Because --measure is expressed in ch, the
+   reading column widens with the type at a constant ~68 characters per line —
+   so a large display gets bigger text rather than a longer, harder-to-track
+   line. Below the clamp floor nothing shrinks past 17px. */
 body {
     background-color: var(--background);
     color: var(--text);
     font-family: var(--font-body);
-    font-size: 1.0625rem;
+    font-size: clamp(1.15rem, 1rem + 0.5vw, 1.5rem);
     line-height: 1.65;
     padding: 0 0 4rem;
     -webkit-font-smoothing: antialiased;
 }
 
+/* Fluid gutters: ~1rem on a phone, ~2.5rem on a desktop. The ceiling stays
+   moderate on purpose — the accordion header spans the container while the
+   prose is capped at --measure, so a very wide container would leave the
+   header overhanging the text it belongs to. */
 .container {
-    max-width: 960px;
+    max-width: 1000px;
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
 }
 
 /* --------------------------------------------------------------------------
@@ -115,7 +124,7 @@ h4, h5, h6 {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.22em;
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     margin-bottom: 0.75rem;
 }
@@ -124,7 +133,7 @@ h4, h5, h6 {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
     margin-bottom: 0;
 }
@@ -149,7 +158,7 @@ a:focus {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     text-decoration: none;
 }
 
@@ -187,7 +196,7 @@ a:focus {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
 
     /* Headings live inside <button>, which browsers refuse to let you
@@ -201,8 +210,11 @@ a:focus {
     border-right: 0;
 }
 
+/* Centred, so the residual gap between the reading column and the full-width
+   header is split evenly rather than pooling on the right. */
 .accordion-body {
     max-width: var(--measure);
+    margin-inline: auto;
 }
 
 /* Schedule needs the full width, not the reading measure */
@@ -223,14 +235,14 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin: 1rem 0 1.5rem;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 th {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     color: var(--primary);
     text-align: left;
     font-weight: 600;
@@ -261,7 +273,7 @@ tbody tr:nth-child(odd) {
 .table-schedule td:first-child {
     white-space: nowrap;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
 /* Exams, breaks and holidays — the only cells that carry emphasis */
@@ -285,7 +297,7 @@ tbody tr:nth-child(odd) {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     display: block;
     margin-bottom: 0.15rem;
@@ -301,7 +313,7 @@ blockquote {
 
 .note {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 .emphasis {
@@ -314,7 +326,7 @@ footer {
     margin-top: 3rem;
     padding-top: 1.5rem;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.92rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -325,7 +337,7 @@ footer {
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     color: var(--text);
     background: transparent;
     border: 1px solid var(--border);
@@ -365,7 +377,8 @@ footer {
    -------------------------------------------------------------------------- */
 
 @media (max-width: 576px) {
-    body { font-size: 1rem; }
+    /* No font-size override here: the clamp floor already sets the phone
+       size, and re-declaring it would shrink text below that floor. */
 
     .masthead {
         padding: 1.5rem 0 1.25rem;
@@ -377,5 +390,5 @@ footer {
         --bs-accordion-body-padding-x: 0.9rem;
     }
 
-    .accordion-button { font-size: 0.8rem; }
+    .accordion-button { font-size: 0.9rem; }
 }
