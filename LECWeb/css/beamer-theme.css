@@ -615,3 +615,33 @@ dl.beamer-description dt:first-of-type + dd {
     padding: 1rem 1.5rem;
   }
 }
+
+/* ============================================
+   Persuasion frame — debate clip + FRED chart
+   need real vertical room; the FRED embed must
+   be tall enough to show its x-axis years.
+   ============================================ */
+#persuasion .frame-content {
+  min-height: 720px;
+}
+
+#persuasion .columns {
+  align-items: flex-start;
+}
+
+#persuasion .fred-embed {
+  width: 100%;
+  height: 620px;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  #persuasion .frame-content {
+    min-height: 0;
+  }
+
+  #persuasion .fred-embed {
+    height: 480px;
+  }
+}

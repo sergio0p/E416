@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="index.html">
+  <meta name="nav-next" content="preferences.html">
+  <title>Introduction | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+  <style>
+    /* Beamer \alert<N>: chunk always visible, highlighted only at its step */
+    .alert {
+      transition: color 0.3s ease, font-weight 0.3s ease;
+    }
+    .alert.alert-active {
+      color: var(--crane-amber);
+      font-weight: bold;
+    }
+
+    /* Image swap container: both images stacked, swap in place */
+    .image-swap {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 4 / 3;
+      margin: 0 auto;
+    }
+    .image-swap > img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Victoire flip: photo/painting toggle */
+    .victoire-img { opacity: 0; transition: opacity 0.3s ease; }
+    .victoire-img.active { opacity: 1; }
+    .victoire-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .victoire-arrow:hover { background: rgba(0,0,0,0.6); }
+    .victoire-arrow-left { left: 0.4rem; }
+    .victoire-arrow-right { right: 0.4rem; }
+  </style>
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="intro">
+    <div class="section-title-box">
+      <h1>Introduction</h1>
+    </div>
+  </section>
+
+  <!-- Frame: Borges — On Exactitude in Science -->
+  <section class="frame overlay-frame fs-10pt" id="borges">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">On Exactitude in Science</h2>
+      <p class="frame-subtitle">Jorge Luis Borges, <em>Collected Fictions</em>, translated by Andrew Hurley.</p>
+    </div>
+    <div class="frame-content">
+      <p style="text-align: justify;">
+        <span class="alert" data-alert="1">In that Empire, the Art of Cartography attained such Perfection that the map of a single Province occupied the entirety of a City, and the map of the Empire, the entirety of a Province.</span>
+        <span class="alert" data-alert="2">In time, those Unconscionable Maps no longer satisfied, and the Cartographers Guilds struck a Map of the Empire whose size was that of the Empire, and which coincided point for point with it.</span>
+        <span class="alert" data-alert="3">The following Generations, who were not so fond of the Study of Cartography as their Forebears had been, saw that that vast Map was Useless,</span>
+        <span class="alert" data-alert="4">and not without some Pitilessness was it, that they delivered it up to the Inclemencies of Sun and Winters. In the Deserts of the West, still today, there are Tattered Ruins of that Map, inhabited by Animals and Beggars; in all the Land there is no other Relic of the Disciplines of Geography.</span>
+      </p>
+      <p style="text-align: right; font-style: italic; font-size: 0.85em; margin-top: 1em;">Suarez Miranda, Viajes de varones prudentes, Libro IV, Cap. XLV, L&eacute;rida, 1658.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Mont Sainte Victoire — photo vs Cézanne -->
+  <section class="frame" id="sainte-victoire">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Mont Sainte Victoire</h2>
+      <p class="frame-subtitle">Photography vs C&eacute;zanne</p>
+    </div>
+    <div class="frame-content">
+      <div class="image-swap" id="victoire-swap">
+        <img class="victoire-img active" src="svg/sainte-victoire-photo.jpg" alt="Photograph of Mont Sainte-Victoire">
+        <img class="victoire-img" src="svg/mont-sainte-victoire.jpg" alt="C&eacute;zanne, Mont Sainte-Victoire">
+        <button class="victoire-arrow victoire-arrow-left" aria-label="Previous">&#8249;</button>
+        <button class="victoire-arrow victoire-arrow-right" aria-label="Next">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: No Pain, No Gain -->
+  <section class="frame fs-10pt" id="no-pain-no-gain">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">No Pain, No Gain</h2>
+    </div>
+    <div class="frame-content">
+      <p style="text-align: justify;">Videos create a strong illusion of comprehension because the narration, pacing, and visuals reduce cognitive effort. Students frequently report feeling they &ldquo;got it,&rdquo; yet perform worse later on transfer or recall tasks.</p>
+      <ul>
+        <li>Reading is slower and more cognitively effortful.</li>
+        <li>Videos feel easier and more fluent.</li>
+        <li>Students often mistake that fluency for understanding.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: No Pain, No Gain (cont.) — Why reading often wins -->
+  <section class="frame fs-10pt" id="no-pain-no-gain-2">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">No Pain, No Gain</h2>
+      <p class="frame-subtitle">(continuation) Why reading often wins</p>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li><strong>Self-pacing.</strong> A reader naturally pauses, rereads, jumps backward, compares paragraphs, and controls speed continuously. Video is linear and transient.</li>
+        <li><strong>Active reconstruction.</strong> Reading forces the learner to internally generate timing, emphasis, and structure. That mental reconstruction improves encoding.</li>
+        <li><strong>Reduced split attention.</strong> Many educational videos overload students with narration + animation + transitions + decorative visuals.</li>
+        <li><strong>Better integration with note-taking.</strong> Students annotate<br>text more effectively than they annotate video.</li>
+        <li><strong>Easier retrieval practice.</strong> Written material is easier to revisit selectively.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: No Pain, No Gain (cont.) — References -->
+  <section class="frame fs-10pt" id="no-pain-no-gain-3">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">No Pain, No Gain</h2>
+      <p class="frame-subtitle">(continuation)</p>
+    </div>
+    <div class="frame-content">
+      <p>References:</p>
+      <ul>
+        <li>H&ouml;rnlein, M., &amp; Kulgemeyer, C. (2026). <a href="https://doi.org/10.1080/09500693.2026.2646710" target="_blank">Learning science and the illusion of understanding: exploring the effects of integrating learning tasks after explainer videos.</a> <em>International Journal of Science Education.</em></li>
+        <li>Veritasium. <a href="https://www.youtube.com/watch?v=eVtCO84MDj8" target="_blank">Khan Academy and the Effectiveness of Science Videos.</a> YouTube.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Practice Makes Perfect (Bayles & Orland) -->
+  <section class="frame overlay-frame fs-10pt" id="practice-makes-perfect">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Practice Makes Perfect</h2>
+    </div>
+    <div class="frame-content">
+      <p style="text-align: justify;"><span class="overlay" data-overlay="1">The ceramics teacher announced on opening day that he was dividing the class into two groups. All those on the left side of the studio, he said, would be graded solely on the quantity of work they produced, all those on the right solely on its quality. His procedure was simple: on the final day of class he would bring in his bathroom scales and weigh the work of the &ldquo;quantity&rdquo; group: fifty pounds of pots rated an &ldquo;A&rdquo;, forty pounds a &ldquo;B&rdquo;, and so on. Those being graded on &ldquo;quality&rdquo;, however, needed to produce only one pot&mdash;albeit a perfect one&mdash;to get an &ldquo;A&rdquo;.</span> <span class="overlay" data-overlay="2">Well, came grading time and a curious fact emerged: the works of highest quality were all produced by the group being graded for quantity. It seems that while the &ldquo;quantity&rdquo; group was busily churning out piles of work and learning from their mistakes&mdash;the &ldquo;quality&rdquo; group had sat theorizing about perfection, and in the end had little more to show for their efforts than grandiose theories and a pile of dead clay.</span></p>
+      <p style="text-align: right; font-style: italic; font-size: 0.85em; margin-top: 1em;">&mdash; Bayles, David, and Ted Orland (1993) <em>Art &amp; Fear: Observations on the Perils (and Rewards) of Artmaking</em>, pp.&nbsp;25&ndash;26.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Mathematics is a tool (language) — math + English | Rosetta -->
+  <section class="frame overlay-frame" id="math-language">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Mathematics is a tool (language)</h2>
+    </div>
+    <div class="frame-content">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center;">
+        <div>
+          <p class="overlay fs-14pt" data-overlay="1">$\text{If}$ $f:[a,b]\to\mathbb{R}$ $\text{satisfies}$ $[\forall x\in[a,b]$ $\text{and}$ $\forall \varepsilon\gt 0,$ $\exists\delta\gt 0$ $\text{such that}$ $|x-y|\lt\delta \Rightarrow |f(x)-f(y)|\lt\varepsilon]$ $\Rightarrow \exists z\in[a,b];$ $\forall x\in[a,b],$ $f(z)\ge f(x).$</p>
+          <p class="overlay" data-overlay="2" style="margin-top: 1.5em; font-size: 1.4em; line-height: 1.3; font-style: italic;">If a real-valued function defined on a closed interval on the real line is continuous, then it attains a maximum on that interval.</p>
+        </div>
+        <div style="text-align: center;">
+          <img src="svg/egypt.jpeg" alt="Egyptian hieroglyphs / mathematics" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: On The Importance of Persuasion -->
+  <section class="frame fs-10pt" id="persuasion">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">On The Importance of Persuasion</h2>
+    </div>
+    <div class="frame-content">
+      <div class="columns">
+        <div class="column">
+          <video style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,0.28); background: #000;"
+                 src="https://www.dropbox.com/scl/fi/esmna37pd2wbkrqd0rwum/Bush-Gore-2000-fuzzy-math-clip.mp4?rlkey=kw961twczodhbolf4eoef2c3n&amp;raw=1"
+                 controls playsinline preload="metadata"></video>
+          <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 0.5em;">
+            First Bush&ndash;Gore presidential debate, 3 October 2000 (47:28&ndash;51:00).
+          </p>
+        </div>
+        <div class="column">
+          <iframe class="fred-embed"
+                  src="https://fred.stlouisfed.org/graph/graph-landing.php?id=FYGFGDQ188S&amp;width=600&amp;height=620"
+                  loading="lazy" scrolling="no"
+                  title="Federal Debt Held by the Public as Percent of GDP"></iframe>
+          <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 0.5em;">
+            Source: FRED, Federal Reserve Bank of St.&nbsp;Louis &mdash;
+            <a href="https://fred.stlouisfed.org/series/FYGFGDQ188S" target="_blank">FYGFGDQ188S</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Nobel Prize (source: lines 155-162) -->
+  <section class="frame" id="nobel">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Sveriges Riksbank Prize in Economic Sciences</h2>
+      <p class="frame-subtitle">in Memory of Alfred Nobel</p>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li><a href="https://www.nobelprize.org/prizes/economic-sciences/2017/thaler/lecture/" target="_blank">Richard H. Thaler, 2017 prize winner.</a></li>
+        <li><a href="https://www.nobelprize.org/prizes/economic-sciences/2002/kahneman/lecture/" target="_blank">Daniel Kahneman, 2002 prize winner.</a></li>
+        <li><a href="https://www.nobelprize.org/prizes/economic-sciences/2002/smith/lecture/" target="_blank">Vernon L. Smith, 2002 prize winner.</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="index.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Index</a>
+    <a href="preferences.html" style="color: var(--crane-blue); text-decoration: none;">Preferences &rarr;</a>
+  </div>
+
+  <!-- KaTeX JS -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <!-- Mont Sainte Victoire: click or arrow keys to flip -->
+  <script>
+    (function () {
+      const swap = document.getElementById('victoire-swap');
+      const imgs = swap.querySelectorAll('.victoire-img');
+      let current = 0;
+      function show(idx) {
+        imgs.forEach((img, i) => img.classList.toggle('active', i === idx));
+        current = idx;
+      }
+      swap.addEventListener('click', e => {
+        if (e.target.classList.contains('victoire-arrow-left'))
+          show((current - 1 + imgs.length) % imgs.length);
+        else
+          show((current + 1) % imgs.length);
+      });
+      document.addEventListener('keydown', e => {
+        const frame = document.getElementById('sainte-victoire');
+        const rect = frame.getBoundingClientRect();
+        if (rect.top > window.innerHeight || rect.bottom < 0) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); show((current + 1) % imgs.length); }
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); show((current - 1 + imgs.length) % imgs.length); }
+      });
+    })();
+  </script>
+
+  <!-- Overlay animation system -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.querySelectorAll('.overlay-frame').forEach(frame => {
+      const overlays = frame.querySelectorAll('.overlay');
+      const alerts = frame.querySelectorAll('.alert');
+      const count = Math.max(overlays.length, alerts.length);
+      if (count === 0) return;
+      if (overlays.length > 0) overlays[0].classList.add('revealed');
+      if (alerts.length > 0) alerts[0].classList.add('alert-active');
+      const scrollPerStep = window.innerHeight * 0.5;
+      const totalScroll = scrollPerStep * (count - 1);
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: `+=${totalScroll}`,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const currentStep = Math.min(count - 1, Math.floor(progress * count));
+          overlays.forEach((overlay, i) => {
+            const isOnly = overlay.hasAttribute('data-overlay-only');
+            if (isOnly) {
+              overlay.classList.toggle('revealed', i === currentStep);
+            } else {
+              overlay.classList.toggle('revealed', i <= currentStep);
+            }
+          });
+          alerts.forEach((alert, i) => {
+            alert.classList.toggle('alert-active', i === currentStep);
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
