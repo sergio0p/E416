@@ -472,6 +472,23 @@ dl.beamer-description dt:first-of-type + dd {
 .vspace-neg-4mm > .frame-content { padding-top: 0.55rem; }
 .vspace-neg-3mm > .frame-content { padding-top: 0.7rem; }
 
+/* Pull quote — verbatim passages inside a reading frame */
+.pullquote {
+  margin: 1rem 0 1rem 1.5rem;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-left: 4px solid var(--crane-amber);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.pullquote .attrib {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
 /* Reveal animations - hidden by default */
 .reveal {
   opacity: 0;
