@@ -20,7 +20,7 @@
   <!-- Section Header -->
   <section class="section-header" id="preferences">
     <div class="section-title-box">
-      <h1>Choice Under Certainty &mdash; Preferences</h1>
+      <h1>Choice Under Certainty &mdash; The Standard Model</h1>
     </div>
 
     <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
@@ -95,7 +95,7 @@
     <div class="frame-content">
       <ol>
         <li>When $\mathbf{a}\succeq \mathbf{b}$ and $\mathbf{b}\succeq \mathbf{a}$, we say that the individual is indifferent between the baskets $\mathbf{a}$ and $\mathbf{b}$ and we write $\mathbf{a}\sim \mathbf{b}$.</li>
-        <li>It is (implicitly) assumed that an individual's preferences are stable: they remain the same (at least for the period of our analysis).</li>
+        <li>It is (implicitly) assumed that an individual's preferences are exogenous and stable: they are given and remain the same (at least for the period of our analysis).</li>
         <li>Also, it is (implicitly) assumed that preferences are invariant with respect to different representations. That is, if <span style="color: #dc322f;">$(x,y)$</span> and <span style="color: #268bd2;">$(x,y)$</span> are different representations of the same basket, then <span style="color: #dc322f;">$(x,y)$</span> $\sim$ <span style="color: #268bd2;">$(x,y)$</span>.</li>
         <li>But the standard model does not assume one is conscious of one's own preferences. If an individual chooses basket $\mathbf{a}$ over basket $\mathbf{b}$, we will say that he/she <em>reveals</em> to prefer the basket $\mathbf{a}$ over the basket $\mathbf{b}$, $\mathbf{a}\succeq \mathbf{b}$.</li>
       </ol>
@@ -105,14 +105,45 @@
   <!-- Frame 4: Quiz 0 / Feedback (source: lines 214-220) -->
   <section class="frame overlay-frame" id="quiz-0">
     <div class="frame-title-bar">
-      <h2 class="frame-title">Quiz 0</h2>
-      <p class="frame-subtitle">Feedback</p>
+      <h2 class="frame-title">Economic Rationality</h2>
+      <p class="frame-subtitle">Quiz 0 Feedback</p>
     </div>
     <div class="frame-content">
-      <p>We need to avoid some pitfalls related to:</p>
+      <div class="block">
+        <div class="block-title">Definition: Economic Rationality</div>
+        <div class="block-body">We say an individual is <strong>rational</strong> (in the economic sense) if and only if the preferences of the individual satisfy: ability to rank; coherence; and more is better.</div>
+      </div>
+      <p>Notice that we DO NOT require that:</p>
       <ol>
-        <li class="overlay" data-overlay="1">The definition of a good.</li>
-        <li class="overlay" data-overlay="2"><em>De gustibus non disputandum est.</em></li>
+        <li class="overlay" data-overlay="1">One is self-aware of the reasons for the choices taken.</li>
+        <li class="overlay" data-overlay="2">One is a human being &mdash; animals, algorithms, and institutions can be rational too.</li>
+        <li class="overlay" data-overlay="3">One abstains from choices that are harmful to oneself.</li>
+        <li class="overlay" data-overlay="4">One is selfish.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Pitfalls of Our Textbook (scroll-reveal, long vertical) -->
+  <section class="frame" id="textbook-pitfalls">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Pitfalls of Our Textbook</h2>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li class="scroll-reveal"><strong>Strawman argument.</strong> The &ldquo;traditional&rdquo; model
+          (XIX&ndash;early XX century economics) of a selfish, rational, economic man is NOT standard
+          economic theory.</li>
+
+        <li class="scroll-reveal"><strong>Fallacy of composition.</strong>
+          &ldquo;Second, economic man is selfish, but even in traditional economics there are cases of a
+          parent having altruistic feelings toward a child. In this situation we consider the decision
+          maker as maximizing with respect to themselves and their descendants as a single unit,
+          preserving the postulation of selfish man.&rdquo;</li>
+
+        <li class="scroll-reveal"><strong>Definition by contrast.</strong> Rationality&rsquo;s broad
+          meanings are stated&mdash;(1) means&ndash;end coherence, and (2) the ends themselves withstand
+          scrutiny&mdash;but &ldquo;economic rationality&rdquo; is defined by contrast against a standard
+          never stated.</li>
       </ol>
     </div>
   </section>
@@ -120,7 +151,7 @@
   <!-- Frame 5: Limitations (source: lines 222-228) -->
   <section class="frame" id="limitations">
     <div class="frame-title-bar">
-      <h2 class="frame-title">Limitations of the Standard Model Assumptions</h2>
+      <h2 class="frame-title">Limitations of the Standard Model</h2>
     </div>
     <div class="frame-content">
       <ol>
@@ -177,9 +208,8 @@
            Indifference diagram with kit-kat (X-axis) vs. banana (Y-axis),
            diagonal y=x line with points at (2,1), (4,2), (6,3),
            and a basket c=(2,3.5) connected to d=(4,2) by indifference. -->
-      <div style="margin: 1rem auto; padding: 2rem; border: 2px dashed #999; background: #fdf6e3; text-align: center; max-width: 480px; color: #586e75; font-style: italic;">
-        [TikZ placeholder &mdash; indifference diagram with diagonal $u(x,x)=x$, points $c=(2,3.5)$ and $d=(4,2)$ on same indifference curve]
-      </div>
+      <img src="svg/fig-utility-recipe.png" alt="Indifference diagram: diagonal u(x,x)=x with baskets c and d"
+           style="display: block; margin: 1rem auto; max-width: 520px; width: 100%; height: auto;">
     </div>
   </section>
 
@@ -274,9 +304,8 @@
       <!-- PLACEHOLDER: TikZ diagram (source: lines 337-359)
            Three budget lines (red 0,5→3,0; blue 0,3→5,0; green 0,4→20/3,0)
            and chosen baskets a (red), b (blue), c (green) on each. -->
-      <div style="margin: 1rem auto; padding: 2rem; border: 2px dashed #999; background: #fdf6e3; text-align: center; max-width: 480px; color: #586e75; font-style: italic;">
-        [TikZ placeholder &mdash; three budget lines (red, blue, green) with chosen baskets $a$, $b$, $c$]
-      </div>
+      <img src="svg/fig-garp-example-1.png" alt="Three budget lines with chosen baskets a, b, c; GARP not violated"
+           style="display: block; margin: 1rem auto; max-width: 420px; width: 100%; height: auto;">
 
       <ul>
         <li class="overlay" data-overlay="1">When our consumer faces the red budget line, she picks $a$; when she faces the blue budget line, she picks $b$; at the green budget line, she picks $c$.</li>
@@ -296,9 +325,8 @@
     <div class="frame-content">
       <!-- PLACEHOLDER: TikZ diagram (source: lines 362-382)
            Three budget lines, baskets a, b, c chosen such that GARP is violated. -->
-      <div style="margin: 1rem auto; padding: 2rem; border: 2px dashed #999; background: #fdf6e3; text-align: center; max-width: 480px; color: #586e75; font-style: italic;">
-        [TikZ placeholder &mdash; three budget lines with baskets $a$, $b$, $c$ violating GARP]
-      </div>
+      <img src="svg/fig-garp-example-2.png" alt="Three budget lines with chosen baskets a, b, c; GARP violated"
+           style="display: block; margin: 1rem auto; max-width: 420px; width: 100%; height: auto;">
       <p>In this other example, GARP is violated. Can you explain why?</p>
     </div>
   </section>
@@ -375,6 +403,18 @@
             }
           });
         }
+      });
+    });
+
+    // Scroll-reveal: fade in on scroll down, hide on scroll up (no pinning)
+    gsap.utils.toArray('.scroll-reveal').forEach(el => {
+      gsap.set(el, { opacity: 0, y: 15 });
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        end: 'top 85%',
+        onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }),
+        onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
       });
     });
   </script>
