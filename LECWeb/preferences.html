@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="intro.html">
+  <meta name="nav-next" content="behavioral-choice.html">
+  <title>Preferences | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="preferences">
+    <div class="section-title-box">
+      <h1>Choice Under Certainty &mdash; Preferences</h1>
+    </div>
+
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#consumer-choice" style="margin-left: 1rem;">1. Consumer Choice</a>
+      <a href="#standard-assumptions" style="margin-left: 1rem;">2. Standard Assumptions</a>
+      <a href="#remarks" style="margin-left: 1rem;">3. Remarks</a>
+      <a href="#quiz-0" style="margin-left: 1rem;">4. Quiz 0 Feedback</a>
+      <br>
+      <a href="#limitations" style="margin-left: 1rem;">5. Limitations</a>
+      <a href="#utility-functions" style="margin-left: 1rem;">6. Utility Functions</a>
+      <a href="#representation" style="margin-left: 1rem;">7. Representation</a>
+      <a href="#extracting-utility" style="margin-left: 1rem;">8. Extracting Utility</a>
+      <br>
+      <a href="#rationality" style="margin-left: 1rem;">9. Rationality</a>
+      <a href="#revealed-data" style="margin-left: 1rem;">10. Revealed: Data</a>
+      <a href="#revealed-defs" style="margin-left: 1rem;">11. Revealed: Definitions</a>
+      <a href="#garp" style="margin-left: 1rem;">12. GARP</a>
+      <br>
+      <a href="#garp-example-1" style="margin-left: 1rem;">13. GARP Example 1</a>
+      <a href="#garp-example-2" style="margin-left: 1rem;">14. GARP Example 2</a>
+      <a href="#behavioral-rules" style="margin-left: 1rem;">15. Behavioral Rules</a>
+      <a href="#benchmarks" style="margin-left: 1rem;">16. Benchmarks</a>
+    </nav>
+  </section>
+
+  <!-- Frame 1: Consumer Choice (source: lines 186-195) -->
+  <section class="frame" id="consumer-choice">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Consumer Choice</h2>
+      <p class="frame-subtitle">The Standard Model</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider a set $X$ of alternatives. Think primarily of $X$ as the set of possible baskets of consumption goods/services, $x=(x_1,x_2,\dots,x_n)$ in $X$ is a basket that contains $x_1$ units of good 1, $x_2$ units of good 2, ..., $x_n$ units of good $n$.</p>
+      <p>The standard model assumes that any individual is able to compare and rank the elements of $X$. Fix some individual $i$.</p>
+
+      <div class="block">
+        <div class="block-title">Individual Preference Relations</div>
+        <div class="block-body">
+          <p>We write <span style="color: #dc322f;">$\mathbf{x} \succeq_i \mathbf{y}$</span> to say that individual $i$ considers the basket $\mathbf{x}$ <span style="color: #dc322f;">at least as good as basket</span> $\mathbf{y}$.</p>
+          <p>And <span style="color: #d33682;">$\mathbf{x} \succ_i \mathbf{y}$</span> means that individual $i$ considers the basket $\mathbf{x}$ <span style="color: #d33682;">strictly better than the basket</span> $\mathbf{y}$.</p>
+        </div>
+      </div>
+      <p>We call the ranking $\succ_i$ individual $i$'s preferences.</p>
+    </div>
+  </section>
+
+  <!-- Frame 2: Preferences / The Standard Assumptions (source: lines 196-204)
+       Has \alt<2>{ More is better (II) }{ More is better (I) } overlay -->
+  <section class="frame" id="standard-assumptions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Preferences</h2>
+      <p class="frame-subtitle">The Standard Assumptions</p>
+    </div>
+    <div class="frame-content">
+      <p>Given a choice set $X$ and individual $i$ with preferences $\succeq$ we shall assume:</p>
+      <ul>
+        <li><strong>Ability to rank</strong> (aka Completeness): for any two baskets $\mathbf{a}$ and $\mathbf{b}$ then $\mathbf{a}\succeq \mathbf{b}$ or $\mathbf{b}\succeq \mathbf{a}$.</li>
+        <li><strong>Coherence</strong> (aka Transitivity): for any three baskets $\mathbf{a}$, $\mathbf{b}$ and $\mathbf{c}$: $\mathbf{a}\succeq \mathbf{b}$ and $\mathbf{b}\succeq \mathbf{c}$ together imply that $\mathbf{a}\succeq \mathbf{c}$.</li>
+        <li><strong>More is better (I)</strong> (aka Monotonicity): for any two baskets, $\mathbf{a}=(a_1,\ldots,a_n)$ and $\mathbf{b}=(b_1,\ldots,b_n)$, whenever $a_1\ge b_1,\ldots,a_n\ge b_n$ it must be that $\mathbf{a}\succeq \mathbf{b}$.</li>
+        <li><strong>More is better (II)</strong> (aka Strict Monotonicity): for any two baskets, $\mathbf{a}$ and $\mathbf{b}$, whenever $a_1\ge b_1,\ldots,a_n\ge b_n$ <em>and</em> $\mathbf{a}\neq \mathbf{b}$, it must be that $\mathbf{a}\succ \mathbf{b}$.</li>
+        <li><strong>Continuity</strong>: for any basket $\mathbf{a}$ and a sequence of baskets $\mathbf{b}_n$: if $\mathbf{a}\succ \mathbf{b}_n$ and $\mathbf{b}=\lim b_n$ then $\mathbf{a}\succeq \mathbf{b}$.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 3: Assumptions on Preferences / Remarks (source: lines 206-213) -->
+  <section class="frame" id="remarks">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Assumptions on Preferences</h2>
+      <p class="frame-subtitle">Remarks</p>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li>When $\mathbf{a}\succeq \mathbf{b}$ and $\mathbf{b}\succeq \mathbf{a}$, we say that the individual is indifferent between the baskets $\mathbf{a}$ and $\mathbf{b}$ and we write $\mathbf{a}\sim \mathbf{b}$.</li>
+        <li>It is (implicitly) assumed that an individual's preferences are stable: they remain the same (at least for the period of our analysis).</li>
+        <li>Also, it is (implicitly) assumed that preferences are invariant with respect to different representations. That is, if <span style="color: #dc322f;">$(x,y)$</span> and <span style="color: #268bd2;">$(x,y)$</span> are different representations of the same basket, then <span style="color: #dc322f;">$(x,y)$</span> $\sim$ <span style="color: #268bd2;">$(x,y)$</span>.</li>
+        <li>But the standard model does not assume one is conscious of one's own preferences. If an individual chooses basket $\mathbf{a}$ over basket $\mathbf{b}$, we will say that he/she <em>reveals</em> to prefer the basket $\mathbf{a}$ over the basket $\mathbf{b}$, $\mathbf{a}\succeq \mathbf{b}$.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame 4: Quiz 0 / Feedback (source: lines 214-220) -->
+  <section class="frame overlay-frame" id="quiz-0">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Quiz 0</h2>
+      <p class="frame-subtitle">Feedback</p>
+    </div>
+    <div class="frame-content">
+      <p>We need to avoid some pitfalls related to:</p>
+      <ol>
+        <li class="overlay" data-overlay="1">The definition of a good.</li>
+        <li class="overlay" data-overlay="2"><em>De gustibus non disputandum est.</em></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame 5: Limitations (source: lines 222-228) -->
+  <section class="frame" id="limitations">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Limitations of the Standard Model Assumptions</h2>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li>Completeness rules out <em>incomplete preferences</em>.<br>(being unable to judge is not possible).</li>
+        <li>Invariance rules out <em>framing effects</em>.</li>
+        <li>Stability rules out <em>reference dependent preferences</em>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame 6: Utility functions (source: lines 231-238) -->
+  <section class="frame" id="utility-functions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Utility Functions</h2>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li>An utility function $u_i$ is a scale for some preference $\succeq_i$. An utility function is just a convenient way of converting the rankings given by the preference to some <strong style="color: #c17900;">numerical scale</strong>.</li>
+        <li>We say that the utility function $u_i$ <strong style="color: #c17900;">represents</strong> the preference $\succeq_i$ if for any two baskets $\mathbf{a}$ and $\mathbf{b}$:
+          $$\mathbf{a}\succeq_i \mathbf{b}\Leftrightarrow u_i(\mathbf{a})\ge u_i(\mathbf{b}).$$
+        </li>
+        <li>As there are many temperature scales (Fahrenheit, Celcius, Kelvin, etc.), there are also infinitely many possible different scales (utility functions) that represent the same preference.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 7: Representation Theorems (source: lines 240-245)
+       Uses [<+->] incremental enumerate -->
+  <section class="frame overlay-frame" id="representation">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Representation Theorems</h2>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li class="overlay" data-overlay="1">If the set of all available baskets is finite and preferences satisfy: ability to rank and coherence then there is a utility representation.</li>
+        <li class="overlay" data-overlay="2">If the set of all available baskets is convex (i.e., any basket on the line connecting two available baskets is also available) and preferences satisfy: ability to rank, coherence, more is better and continuity then there is an utility representation.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame 8: Extracting Utility (source: lines 246-284)
+       TikZ diagram — PLACEHOLDER -->
+  <section class="frame" id="extracting-utility">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Extracting (an) Utility From the Preferences</h2>
+      <p class="frame-subtitle">A Recipe</p>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li>For any basket in the diagonal $(x,x)$ its utility is equal to $u(x,x)=x$.</li>
+        <li>For any other basket $c$, find a basket in the diagonal $d$ such that $c\sim d$ and set $u(c)=u(d)$.</li>
+      </ol>
+      <!-- PLACEHOLDER: TikZ diagram (source: lines 251-283)
+           Indifference diagram with kit-kat (X-axis) vs. banana (Y-axis),
+           diagonal y=x line with points at (2,1), (4,2), (6,3),
+           and a basket c=(2,3.5) connected to d=(4,2) by indifference. -->
+      <div style="margin: 1rem auto; padding: 2rem; border: 2px dashed #999; background: #fdf6e3; text-align: center; max-width: 480px; color: #586e75; font-style: italic;">
+        [TikZ placeholder &mdash; indifference diagram with diagonal $u(x,x)=x$, points $c=(2,3.5)$ and $d=(4,2)$ on same indifference curve]
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 9: What means for an agent to be rational? (source: lines 304-307) -->
+  <section class="frame" id="rationality">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">What means for an economic agent to be rational?</h2>
+    </div>
+    <div class="frame-content">
+      <p>We say that an economic agent is rational if her choices can be explained (are compatible) with some preference that satisfy: ability to rank, coherence, more is better, and continuity.</p>
+    </div>
+  </section>
+
+  <!-- Frame 10: Data (source: lines 310-314) -->
+  <section class="frame" id="revealed-data">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Revealed Preferences</h2>
+      <p class="frame-subtitle">Data</p>
+    </div>
+    <div class="frame-content">
+      <p>We want to test whether a consumer's choices are rational. So we consider a sequence of prices and choices $(\mathbf{p}^t, \mathbf{x}^t)$, $t=1,\ldots,T$ that the consumer made over time.</p>
+      <p>Notice that $\mathbf{p}^t$ is a list of prices prevailing at time $t$. For example, in the case of two goods, X and Y: $\mathbf{p}^t=(p^t_{x},p^t_{y})$ and $\mathbf{x}^t=(x^{t},y^{t})$ is the basket chosen by the consumer at period $t$.</p>
+      <p>To save notation, we write $\mathbf{p}^t\cdot \mathbf{x}^t$ for the value of the basket under the prices, so $\mathbf{p}^t\cdot \mathbf{x}^t=p^t_{x}x^{t}+p^t_{y}y^{t}$.</p>
+    </div>
+  </section>
+
+  <!-- Frame 11: Revealed Preferences Definitions (source: lines 315-327) -->
+  <section class="frame" id="revealed-defs">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Revealed Preferences</h2>
+      <p class="frame-subtitle">Definitions</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider a sequence of prices and choices $(\mathbf{p}^t, \mathbf{x}^t)$, $t=1,\ldots,T$.</p>
+
+      <div class="block">
+        <div class="block-title">Definition (Direct Revelation)</div>
+        <div class="block-body">
+          If $\mathbf{p}^t \cdot \mathbf{x}^s \le \mathbf{p}^t \cdot \mathbf{x}^t$ then $\mathbf{x}^t$ is <em>directly revealed to be preferred to</em> $\mathbf{x}^s$. We write this as $\mathbf{x}^t \succeq_{DR} \mathbf{x}^s$.
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Definition (Strict Direct Revelation)</div>
+        <div class="block-body">
+          If $\mathbf{p}^t \cdot \mathbf{x}^s \lt \mathbf{p}^t \cdot \mathbf{x}^t$ then $\mathbf{x}^t$ is <em>strictly directly revealed to be preferred to</em> $\mathbf{x}^s$. We write this as $\mathbf{x}^t \succ_{SDR} \mathbf{x}^s$.
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Definition (Indirect Revelation)</div>
+        <div class="block-body">
+          If $\mathbf{x}_{k} \succeq_{DR} \mathbf{x}_{k+1}$ for $k=0,1,2,\ldots,K-1$, we say that $\mathbf{x}_0$ is <em>indirectly revealed to be preferred to</em> $\mathbf{x}_K$. We write this as $\mathbf{x}_0\succeq_{IR} \mathbf{x}_K$.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 12: Revealed Preferences / GARP (source: lines 329-334) -->
+  <section class="frame" id="garp">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Revealed Preferences</h2>
+      <p class="frame-subtitle">GARP</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider a sequence of prices and choices $(\mathbf{p}^t, \mathbf{x}^t)$, $t=1,\ldots,T$.</p>
+      <p>If $\mathbf{x} \succeq_{DR} \mathbf{y}$ or $\mathbf{x} \succeq_{IR} \mathbf{y}$ we say that $\mathbf{x}$ is <em>revealed</em> to be preferred to $\mathbf{y}$ and write $\mathbf{x} \succeq_R \mathbf{y}$.</p>
+
+      <div class="block">
+        <div class="block-title">GARP (Generalized Axiom of Revealed Preference)</div>
+        <div class="block-body">
+          If $\mathbf{x} \succeq_R \mathbf{y}$ then it is NOT the case that $\mathbf{y} \succ_{SDR} \mathbf{x}$.
+        </div>
+      </div>
+
+      <p><strong>Main results:</strong></p>
+      <ol>
+        <li>If GARP is satisfied for all the choices in the data then there is a preference that satisfies all the standard assumptions (ability to rank, coherence, more is better and continuity) and that also generates these choices.</li>
+        <li>If GARP is violated, there are no rational preferences that can rationalize the data.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame 13: GARP Example 1 (source: lines 336-360)
+       TikZ diagram + uncover<2-> notes — PLACEHOLDER for graph; reveal text -->
+  <section class="frame overlay-frame" id="garp-example-1">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Revealed Preferences</h2>
+      <p class="frame-subtitle">Example 1 &mdash; GARP not violated</p>
+    </div>
+    <div class="frame-content">
+      <!-- PLACEHOLDER: TikZ diagram (source: lines 337-359)
+           Three budget lines (red 0,5→3,0; blue 0,3→5,0; green 0,4→20/3,0)
+           and chosen baskets a (red), b (blue), c (green) on each. -->
+      <div style="margin: 1rem auto; padding: 2rem; border: 2px dashed #999; background: #fdf6e3; text-align: center; max-width: 480px; color: #586e75; font-style: italic;">
+        [TikZ placeholder &mdash; three budget lines (red, blue, green) with chosen baskets $a$, $b$, $c$]
+      </div>
+
+      <ul>
+        <li class="overlay" data-overlay="1">When our consumer faces the red budget line, she picks $a$; when she faces the blue budget line, she picks $b$; at the green budget line, she picks $c$.</li>
+        <li class="overlay" data-overlay="2">Although $a\succeq_{DR} c\succeq_{DR} b$, we have that $a\not\succeq_{DR} b$. Thus, $a\succeq_{IR} b$ (not direct but indirect revelation).</li>
+        <li class="overlay" data-overlay="3">This example does NOT violate GARP, can you explain why?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 14: GARP Example 2 (source: lines 361-383)
+       TikZ + simple text — PLACEHOLDER -->
+  <section class="frame" id="garp-example-2">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Revealed Preferences</h2>
+      <p class="frame-subtitle">Example 2 &mdash; GARP violated</p>
+    </div>
+    <div class="frame-content">
+      <!-- PLACEHOLDER: TikZ diagram (source: lines 362-382)
+           Three budget lines, baskets a, b, c chosen such that GARP is violated. -->
+      <div style="margin: 1rem auto; padding: 2rem; border: 2px dashed #999; background: #fdf6e3; text-align: center; max-width: 480px; color: #586e75; font-style: italic;">
+        [TikZ placeholder &mdash; three budget lines with baskets $a$, $b$, $c$ violating GARP]
+      </div>
+      <p>In this other example, GARP is violated. Can you explain why?</p>
+    </div>
+  </section>
+
+  <!-- Frame 15: Behavioral Rules (source: lines 422-429) -->
+  <section class="frame" id="behavioral-rules">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Behavioral Rules</h2>
+    </div>
+    <div class="frame-content">
+      <p>Assume two goods (X and Y) for simplicity and imagine that instead of maximizing some utility, the consumer chooses her optimal basket according to one of the behavioral rules below &mdash; we are assuming our consumer follows just one of the rules. We cannot dismiss the consumer as being irrational because perhaps the behavioral rule can be generated by rational preferences.</p>
+      <ol>
+        <li>Spend 30% of income on good X and 70% of income on good Y.</li>
+        <li>Spend 20% of income on the cheapest good and 80% on the more expensive good.</li>
+        <li>Spend 90% of income on the cheapest good and 10% on the more expensive good.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame 16: Two distinct benchmarks (source: lines 431-437) -->
+  <section class="frame overlay-frame" id="benchmarks">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Two Distinct Benchmarks for Evaluating Economic Theory</h2>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li class="overlay" data-overlay="1">Descriptive: <span class="overlay" data-overlay="2">what people do...</span></li>
+        <li class="overlay" data-overlay="1">Normative: <span class="overlay" data-overlay="2">what people should do...</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="intro.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Introduction</a>
+    <a href="behavioral-choice.html" style="color: var(--crane-blue); text-decoration: none;">Behavioral Choice &rarr;</a>
+  </div>
+
+  <!-- KaTeX JS -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.querySelectorAll('.overlay-frame').forEach(frame => {
+      const overlays = frame.querySelectorAll('.overlay');
+      const count = overlays.length;
+      if (count === 0) return;
+      overlays[0].classList.add('revealed');
+      const scrollPerOverlay = window.innerHeight * 0.5;
+      const totalScroll = scrollPerOverlay * (count - 1);
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: `+=${totalScroll}`,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const currentStep = Math.floor(progress * count);
+          overlays.forEach((overlay, i) => {
+            const isOnly = overlay.hasAttribute('data-overlay-only');
+            if (isOnly) {
+              overlay.classList.toggle('revealed', i === currentStep);
+            } else {
+              overlay.classList.toggle('revealed', i <= currentStep);
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
