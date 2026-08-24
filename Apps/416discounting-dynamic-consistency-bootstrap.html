@@ -11,6 +11,17 @@
     <!-- Shared Educational Styles -->
     <link rel="stylesheet" href="shared-bootstrap-edu.css">
 
+    <!-- Icons -->
+    <link rel="icon" href="../favicon.ico" sizes="48x48 32x32 16x16">
+    <link rel="icon" type="image/png" href="../img/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+    <meta name="theme-color" content="#171310">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
     <!-- KaTeX CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
@@ -71,6 +82,150 @@
             margin: 8px 0;
             padding-left: 20px;
         }
+
+/* ==========================================================================
+   ATTIC RED-FIGURE OVERRIDE
+   Appended after shared-bootstrap-edu.css, so these win.
+
+   Purely presentational: no markup, ids, classes or script were touched.
+   The shared sheet and this app both drive every colour through the Solarized
+   custom properties, so remapping those repaints the whole app. Only the three
+   feedback tints and Bootstrap's own dark chevrons are hardcoded upstream and
+   need naming explicitly below.
+
+   shared-bootstrap-edu.css itself is left untouched, so it stays comparable
+   with the 510 and 101 copies of the same file.
+   ========================================================================== */
+
+:root {
+    /* Ink. Solarized runs dark-on-light; the mapping inverts it.
+       base01 doubles as a FILL (table headers, button hover), where cream
+       ground with base3 text reads as a deliberate inverted header. */
+    --base03: #E6D1AD;
+    --base02: #E6D1AD;
+    --base01: #E6D1AD;
+    --base00: #E6D1AD;
+    --base0:  #B79D82;   /* placeholders, muted */
+
+    --base1:  #71311F;   /* every border in the sheet */
+    --base2:  #2B211B;   /* raised surface: headers, wells, table stripes */
+    --base3:  #171310;   /* ground — and the dark text that sits on a fill */
+
+    --orange:  #B55232;  /* h1 */
+    --blue:    #D07852;  /* links, h2, accents, selected buttons */
+    --cyan:    #E6D1AD;  /* h3, link hover */
+    --magenta: #D07852;  /* h4, h5 */
+    --violet:  #D07852;  /* h6, blockquote rule */
+    --green:   #8CA85E;  /* laurel */
+    --red:     #D0603A;
+    --yellow:  #C9922E;  /* yellow ochre */
+
+    --attic-black:    #171310;
+    --soot:           #2B211B;
+    --terracotta:     #B55232;
+    --clay-highlight: #D07852;
+    --deep-oxide:     #71311F;
+    --ancient-cream:  #E6D1AD;
+
+    --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+    --font-body:    'EB Garamond', Georgia, 'Times New Roman', serif;
+
+    /* Bootstrap keeps its own copies of these. The shared sheet restyles
+       body and .accordion-item backgrounds but never their colour, so any
+       text without an explicit rule of its own kept Bootstrap's near-black
+       default and vanished — the label beside the discount factor among them. */
+    --bs-body-color:      #E6D1AD;
+    --bs-body-bg:         #171310;
+    --bs-emphasis-color:  #E6D1AD;
+    --bs-secondary-color: #B79D82;
+    --bs-border-color:    #71311F;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* The container matched the body once both went dark, losing its edge; the
+   shadow it relied on is invisible on a fired ground. */
+.container {
+    border: 1px solid var(--deep-oxide);
+    box-shadow: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+
+h1 { letter-spacing: 0.1em; }
+
+.accordion-button,
+.btn,
+.pref-button,
+.consistency-button {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+}
+
+.accordion-button { font-size: 0.95rem; }
+.btn { font-size: 0.78rem; border-radius: 0; }
+
+/* text-transform rewrites KaTeX's glyph spans, so the maths keeps its case. */
+.katex { text-transform: none; letter-spacing: normal; }
+
+/* Bootstrap ships its chevrons as dark SVG data URIs, invisible on soot. */
+.accordion {
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23E6D1AD'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23171310'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3e%3c/svg%3e");
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 2px var(--clay-highlight);
+    --bs-accordion-color: var(--ancient-cream);
+    --bs-accordion-btn-color: var(--ancient-cream);
+    --bs-accordion-active-color: var(--attic-black);
+    --bs-accordion-active-bg: var(--terracotta);
+}
+
+/* The open panel takes terracotta, as the accordion does everywhere else on
+   the site. */
+.accordion-button:not(.collapsed) {
+    background-color: var(--terracotta);
+    color: var(--attic-black);
+}
+
+/* Bootstrap's own button variants never went through the shared sheet. */
+.btn-primary {
+    background-color: transparent;
+    border: 1px solid var(--deep-oxide);
+    color: var(--ancient-cream);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--terracotta);
+    border-color: var(--terracotta);
+    color: var(--attic-black);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    background-color: var(--terracotta);
+    border-color: var(--terracotta);
+    color: var(--attic-black);
+}
+
+/* The three feedback tints are near-white literals upstream. */
+.edu-success { background: rgba(140, 168, 94, 0.14); }
+.edu-error   { background: rgba(208, 96, 58, 0.14); }
+.edu-warning { background: rgba(201, 146, 46, 0.14); }
+
+.form-control::placeholder { color: var(--base0); opacity: 1; }
+
+:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 2px; }
     </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
