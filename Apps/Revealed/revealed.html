@@ -2,153 +2,400 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Revealed Preference App</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
-    }
-    #left-panel {
-      width: 50%;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    #svg-container {
-      width: 100%;
-      height: 500px;
-      border: 1px solid #ccc;
-    }
-    #right-panel {
-      width: 45%;
-      padding: 5px;
-      box-sizing: border-box;
-      overflow-y: auto;
-    }
-    .statement {
-      display: flex;
-      align-items: center;
-      font-size: 1em;
-    }
-    .statement input {
-      margin-right: 0.5em;
-    }
+  <title>Budget Sets and Chosen Baskets | ECON 416</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171310">
 
-   #statements {
+  <link rel="icon" href="../../favicon.ico" sizes="48x48 32x32 16x16">
+  <link rel="icon" type="image/png" href="../../img/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../../img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+/* ==========================================================================
+   ECON 416 — Budget Sets and Chosen Baskets
+   Attic red-figure theme, after css/theme.css on the course site.
+   ========================================================================== */
+
+:root {
+  --attic-black:    #171310;
+  --soot:           #2B211B;
+  --panel-ground:   #12100E;
+  --terracotta:     #B55232;
+  --clay-highlight: #D07852;
+  --deep-oxide:     #71311F;
+  --ancient-cream:  #E6D1AD;
+  --text-muted:     #B79D82;
+
+  /* The three budgets keep their r / b / g identities — the statements name
+     them by letter — but shifted into pigments that live on a fired ground. */
+  --budget-r: #D0603A;
+  --budget-b: #5B96BC;
+  --budget-g: #8CA85E;
+
+  --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-body:    'EB Garamond', Georgia, 'Times New Roman', serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 0 3rem;
+  background: var(--attic-black);
+  color: var(--ancient-cream);
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.28rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 3.5vw, 2.25rem);
+}
+
+/* --------------------------------------------------------------- masthead */
+
+.masthead {
+  background: var(--soot);
+  border-bottom: 2px solid var(--deep-oxide);
+  padding: 1.3rem 0 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0 0 0.6rem;
+}
+
+h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--terracotta);
+  margin: 0 0 0.3rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ stage */
+
+.stage {
   display: grid;
-  grid-auto-flow: column;             /* Fill down columns first */
-  grid-template-rows: repeat(6, auto); /* 18 items ÷ 3 columns = 6 rows */
-  gap: 6px 16px;
-  justify-content: center;
-  }
-    .correct {
-      color: green;
-      margin-left: 10px;
-    }
-.incorrect {
-  color: red;
-  margin-left: 10px;
+  grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  align-items: stretch;
+}
+
+@media (max-width: 1040px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ------------------------------------------------------------------- plot */
+
+.plot-frame {
+  width: 100%;
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+  padding: 0.5rem;
+  align-self: start;
+}
+
+#svg-container { display: block; width: 100%; height: auto; }
+
+.axis-line { stroke: var(--ancient-cream); stroke-width: 0.8; }
+.tick-mark { stroke: var(--ancient-cream); stroke-width: 0.5; }
+.tick      { fill: var(--text-muted); font-size: 3.2px; font-family: 'EB Garamond', Georgia, serif; }
+.axis-name { fill: var(--ancient-cream); font-size: 4.6px; font-style: italic; font-family: 'EB Garamond', Georgia, serif; }
+.grid-line { stroke: rgba(230, 209, 173, 0.06); stroke-width: 0.3; }
+
+.budget-line { stroke-width: 1.3; fill: none; }
+.chosen-dot  { stroke: var(--panel-ground); stroke-width: 0.5; }
+
+.basket-label {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 5px;
+  paint-order: stroke;
+  stroke: var(--panel-ground);
+  stroke-width: 1.3px;
+  stroke-linejoin: round;
+}
+
+.leader { stroke-width: 0.4; opacity: 0.65; }
+
+/* ------------------------------------------------------------------- rail */
+
+.rail { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.card {
+  background: var(--soot);
+  border: 1px solid var(--deep-oxide);
+  padding: 0.8rem 1rem;
+}
+
+.card h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 0.55rem;
+}
+
+/* ------------------------------------------------------------- statements */
+
+#statements {
+  display: grid;
+  grid-auto-flow: column;              /* one column per relation type */
+  grid-template-rows: repeat(6, auto);
+  gap: 4px 18px;
+  justify-content: start;
+}
+
+.statement {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.95rem;
+}
+
+.statement label {
+  display: flex;
+  align-items: center;
+  gap: 0.15em;
   cursor: pointer;
 }
-    #done-btn {
-      margin-top: 1em;
-      padding: 0.5em 1em;
-      font-size: 1em;
-    }
-    #score {
-      font-weight: bold;
-      margin-bottom: 1em;
-    }
-    /* Add these new styles */
-#feedback-window {
-  background-color: #f9f9f9;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin: 15px 0;
-  min-height: 80px;
-  display: none;
+
+/* The relation glyphs are LaTeX-traced paths with no fill of their own, so
+   they default to black and vanish on a fired ground. currentColor puts them
+   back in the ink of the surrounding text. */
+.statement svg { fill: currentColor; vertical-align: middle; }
+
+.statement input[type="checkbox"] {
+  accent-color: var(--terracotta);
+  width: 0.95em;
+  height: 0.95em;
+  cursor: pointer;
 }
 
-#feedback-window.show {
-  display: block;
+.correct   { color: var(--budget-g); margin-left: 6px; }
+.incorrect { color: var(--budget-r); margin-left: 6px; cursor: pointer; }
+
+/* --------------------------------------------------------------- feedback */
+
+#feedback-window { display: none; border-left: 3px solid var(--budget-r); }
+#feedback-window.show { display: block; }
+#feedback-title { color: var(--budget-r); }
+#feedback-content { color: var(--ancient-cream); font-size: 0.95rem; }
+#feedback-content .lede { color: var(--text-muted); }
+
+/* --------------------------------------------------------------- controls */
+
+.controls-card { margin-top: auto; }
+.controls { display: flex; gap: 0.5rem; }
+
+button {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.74rem;
+  color: var(--ancient-cream);
+  background: transparent;
+  border: 1px solid var(--deep-oxide);
+  border-radius: 0;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  flex: 1;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-#feedback-title {
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
+button:hover, button:focus-visible {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  color: var(--attic-black);
 }
 
-#feedback-content {
-  color: #666;
-  line-height: 1.4;
+#score {
+  margin: 0.7rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
-.feedback-error {
-  background-color: #fee;
-  border-color: #fcc;
+/* ----------------------------------------------------------------- footer */
+
+footer {
+  border-top: 1px solid var(--deep-oxide);
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
-.feedback-error #feedback-title {
-  color: #a00;
-}
+:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 2px; }
 
-.feedback-error #feedback-content {
-  color: #800;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
 }
   </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
 </head>
 <body>
-  <div id="left-panel">
-    <h2>Budget Sets and Chosen Baskets</h2>
-    <svg id="svg-container" viewBox="0 -5 110 110"></svg>
+
+<header class="masthead">
+  <div class="container">
+    <p class="eyebrow">ECON 416 &middot; Behavioral Economics</p>
+    <h1>Budget Sets and Chosen Baskets</h1>
+    <p class="subtitle">Revealed preference</p>
+  </div>
+</header>
+
+<main class="container">
+  <div class="stage">
+
+    <div class="plot-frame">
+      <svg id="svg-container" viewBox="-15 -12 130 132"
+           aria-label="Three budget lines and the basket chosen under each."></svg>
+    </div>
+
+    <aside class="rail">
+
+      <section class="card">
+        <h2>Tick every statement that holds</h2>
+        <div id="statements"></div>
+      </section>
+
+      <section class="card" id="feedback-window">
+        <h2 id="feedback-title"></h2>
+        <div id="feedback-content"></div>
+      </section>
+
+      <section class="card controls-card">
+        <h2>Controls</h2>
+        <div class="controls">
+          <button id="done-btn" type="button">Check answers</button>
+          <button id="new-btn" type="button">New problem</button>
+        </div>
+        <p id="score"></p>
+      </section>
+
+    </aside>
   </div>
 
-  <div id="right-panel">
-    <div id="score">Score: </div>
-    <div id="statements"></div>
-    <button id="done-btn">Done</button>
-    <div id="feedback-window">
-    <div id="feedback-title"></div>
-    <div id="feedback-content"></div>
-    </div>
-  </div>
+  <footer>
+    <p>Department of Economics &middot; University of North Carolina at Chapel Hill</p>
+  </footer>
+</main>
 
   <script>
     let budgets = null; // Store budgets globally for feedback
 
-    function getBudgetsAndChoices() {
-      function randomBudget() {
-        const px = Math.random() * 6 + 0.75;
-        const py = Math.random() * 6 + 0.75;
-        const income = Math.random() * 70 + 70;
+    /* ----------------------------------------------------------------
+       Problem generation.
 
-        const xMinBudget = (income - 95 * py) / px;
-        const xMaxBudget = (income - 5 * py) / px;
+       The chosen basket is picked as a fraction along its own budget line
+       rather than at an absolute coordinate, so it stays clear of both axes
+       whatever the price level happens to be.
 
-        const xMin = Math.max(5, xMinBudget);
-        const xMax = Math.min(95, xMaxBudget);
+       Draws whose baskets would overlap once scaled are rejected and redrawn
+       (D). The test is done in view units, because whether two baskets look
+       crowded depends on the frame they end up in, not on their raw distance.
+       ---------------------------------------------------------------- */
 
-        if (xMax < xMin) {
-          // fallback: center of budget line
-          const x = income / (2 * px);
-          const y = (income - px * x) / py;
-          return { px, py, income, chosen: { x, y } };
+    const PAD = 1.08;              // headroom past the largest intercept
+    const MIN_SEPARATION = 11;     // view units, out of 100
+    const MAX_SCALE_RATIO = 2.5;   // largest : smallest intercept, per axis
+    const MAX_DRAWS = 400;
+
+    let frame = { xMax: 100, yMax: 100 };
+
+    function randomBudget() {
+      const px = Math.random() * 6 + 0.75;
+      const py = Math.random() * 6 + 0.75;
+      const income = Math.random() * 70 + 70;
+      const t = 0.15 + Math.random() * 0.70;      // position along the line
+      const x = t * income / px;
+      const y = (1 - t) * income / py;
+      return { px, py, income, chosen: { x, y } };
+    }
+
+    /* The frame is the largest intercept on each axis, padded (A). */
+    function frameFor(budgets) {
+      let xMax = 0, yMax = 0;
+      for (const k of labels) {
+        const b = budgets[k];
+        xMax = Math.max(xMax, b.income / b.px);
+        yMax = Math.max(yMax, b.income / b.py);
+      }
+      return { xMax: xMax * PAD, yMax: yMax * PAD };
+    }
+
+    function minSeparation(budgets) {
+      const f = frameFor(budgets);
+      const pts = labels.map(k => ({
+        vx: budgets[k].chosen.x / f.xMax * 100,
+        vy: 100 - budgets[k].chosen.y / f.yMax * 100
+      }));
+      let worst = Infinity;
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          worst = Math.min(worst, Math.hypot(pts[i].vx - pts[j].vx, pts[i].vy - pts[j].vy));
         }
+      }
+      return worst;
+    }
 
-        const x = Math.random() * (xMax - xMin) + xMin;
-        const y = (income - px * x) / py;
+    /* Fitting the frame to the largest intercept exposed a second problem the
+       fixed axes had been hiding: when one budget is several times the size of
+       another, the small ones collapse into the corner. Unaided, two thirds of
+       draws have one budget at least three times another. Comparable budgets
+       also cross more often, which is what makes the relations worth asking
+       about at all — a budget that sits entirely outside another decides every
+       comparison by itself. */
+    function scaleRatio(budgets) {
+      const xs = labels.map(k => budgets[k].income / budgets[k].px);
+      const ys = labels.map(k => budgets[k].income / budgets[k].py);
+      return Math.max(
+        Math.max(...xs) / Math.min(...xs),
+        Math.max(...ys) / Math.min(...ys)
+      );
+    }
 
-  return { px, py, income, chosen: { x, y } };
-  }
-      return { r: randomBudget(), b: randomBudget(), g: randomBudget() };
+    function getBudgetsAndChoices() {
+      let best = null, bestScore = -Infinity;
+      for (let i = 0; i < MAX_DRAWS; i++) {
+        const cand = { r: randomBudget(), b: randomBudget(), g: randomBudget() };
+        const gap = minSeparation(cand);
+        const ratio = scaleRatio(cand);
+        if (gap >= MIN_SEPARATION && ratio <= MAX_SCALE_RATIO) return cand;
+
+        // Otherwise remember whichever draw comes closest to satisfying both,
+        // so a hard seed degrades gracefully instead of hanging.
+        const score = Math.min(gap / MIN_SEPARATION, MAX_SCALE_RATIO / ratio);
+        if (score > bestScore) { bestScore = score; best = cand; }
+      }
+      return best;
     }
 
     const labels = ['r', 'b', 'g'];
@@ -272,72 +519,120 @@
       return false;
     }
 
+    const SVGNS = "http://www.w3.org/2000/svg";
+    const COLOR = { r: 'var(--budget-r)', b: 'var(--budget-b)', g: 'var(--budget-g)' };
+
+    function svgEl(tag, attrs) {
+      const n = document.createElementNS(SVGNS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      return n;
+    }
+
+    function dataToView(x, y) {
+      return { vx: x / frame.xMax * 100, vy: 100 - y / frame.yMax * 100 };
+    }
+
+    /* A round number close to range/6, so the ticks read 0, 10, 20 ... rather
+       than 0, 13.7, 27.4 ... whatever the frame turns out to be (B). */
+    function niceStep(range) {
+      const raw = range / 6;
+      const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+      const n = raw / mag;
+      const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+      return step * mag;
+    }
+
     function drawBudgetLines(budgets) {
       const svg = document.getElementById("svg-container");
       svg.innerHTML = '';
-      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      frame = frameFor(budgets);
+
+      const defs = svgEl('defs', {});
       defs.innerHTML = `
-        <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M 0 0 L 6 3 L 0 6 Z" fill="black" />
-        </marker>
-      `;
+        <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3"
+                orient="auto" markerUnits="strokeWidth">
+          <path d="M 0 0 L 6 3 L 0 6 Z" fill="#E6D1AD" />
+        </marker>`;
       svg.appendChild(defs);
 
-      // Create a group with transform
-      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      group.setAttribute("transform", "translate(10, 0)");
-      svg.appendChild(group);
+      const gGrid   = svgEl('g', {});
+      const gAxes   = svgEl('g', {});
+      const gLines  = svgEl('g', {});
+      const gPoints = svgEl('g', {});
+      [gGrid, gAxes, gLines, gPoints].forEach(g => svg.appendChild(g));
 
-      // Axes
-      const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      xAxis.setAttribute("x1", 0);
-      xAxis.setAttribute("y1", 100);
-      xAxis.setAttribute("x2", 90); // now ends at 90 instead of 100
-      xAxis.setAttribute("y2", 100);
-      xAxis.setAttribute("stroke", "black");
-      xAxis.setAttribute("marker-end", "url(#arrowhead)");
-      group.appendChild(xAxis);
+      // ---- ticks and grid (B)
+      const xStep = niceStep(frame.xMax), yStep = niceStep(frame.yMax);
 
-      const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      yAxis.setAttribute("x1", 0);
-      yAxis.setAttribute("y1", 100);
-      yAxis.setAttribute("x2", 0);
-      yAxis.setAttribute("y2", 0);
-      yAxis.setAttribute("stroke", "black");
-      yAxis.setAttribute("marker-end", "url(#arrowhead)");
-      group.appendChild(yAxis);
+      for (let x = xStep; x <= frame.xMax; x += xStep) {
+        const p = dataToView(x, 0);
+        gGrid.appendChild(svgEl('line', { x1: p.vx, y1: 0, x2: p.vx, y2: 100, class: 'grid-line' }));
+        gAxes.appendChild(svgEl('line', { x1: p.vx, y1: 100, x2: p.vx, y2: 101.6, class: 'tick-mark' }));
+        const t = svgEl('text', { x: p.vx, y: 105.5, class: 'tick', 'text-anchor': 'middle' });
+        t.textContent = Math.round(x);
+        gAxes.appendChild(t);
+      }
+      for (let y = yStep; y <= frame.yMax; y += yStep) {
+        const p = dataToView(0, y);
+        gGrid.appendChild(svgEl('line', { x1: 0, y1: p.vy, x2: 100, y2: p.vy, class: 'grid-line' }));
+        gAxes.appendChild(svgEl('line', { x1: -1.6, y1: p.vy, x2: 0, y2: p.vy, class: 'tick-mark' }));
+        const t = svgEl('text', { x: -3, y: p.vy + 1.2, class: 'tick', 'text-anchor': 'end' });
+        t.textContent = Math.round(y);
+        gAxes.appendChild(t);
+      }
+      const zero = svgEl('text', { x: -3, y: 105.5, class: 'tick', 'text-anchor': 'middle' });
+      zero.textContent = '0';
+      gAxes.appendChild(zero);
 
+      // ---- axes
+      gAxes.appendChild(svgEl('line', { x1: 0, y1: 100, x2: 104, y2: 100, class: 'axis-line', 'marker-end': 'url(#arrowhead)' }));
+      gAxes.appendChild(svgEl('line', { x1: 0, y1: 100, x2: 0, y2: -4, class: 'axis-line', 'marker-end': 'url(#arrowhead)' }));
+
+      const xn = svgEl('text', { x: 106, y: 101.6, class: 'axis-name' }); xn.textContent = 'x';
+      const yn = svgEl('text', { x: 0, y: -7, class: 'axis-name', 'text-anchor': 'middle' }); yn.textContent = 'y';
+      gAxes.appendChild(xn); gAxes.appendChild(yn);
+
+      // ---- budgets
       for (const key of labels) {
         const { px, py, income, chosen } = budgets[key];
-        const color = key === 'r' ? 'red' : key === 'b' ? 'blue' : 'green';
+        const colour = COLOR[key];
 
-        const x0 = 0;
-        const y0 = income / py;
-        const x1 = income / px;
-        const y1 = 0;
+        const p0 = dataToView(0, income / py);       // y-intercept
+        const p1 = dataToView(income / px, 0);       // x-intercept
 
-        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("x1", x0);
-        line.setAttribute("y1", 100 - y0);
-        line.setAttribute("x2", x1);
-        line.setAttribute("y2", 100 - y1);
-        line.setAttribute("stroke", color);
-        line.setAttribute("stroke-width", "1.5");
-        group.appendChild(line);
+        gLines.appendChild(svgEl('line', {
+          x1: p0.vx, y1: p0.vy, x2: p1.vx, y2: p1.vy,
+          class: 'budget-line', stroke: colour
+        }));
 
-        const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        dot.setAttribute("cx", chosen.x);
-        dot.setAttribute("cy", 100 - chosen.y);
-        dot.setAttribute("r", 1.5);
-        dot.setAttribute("fill", color);
-        group.appendChild(dot);
+        const d = dataToView(chosen.x, chosen.y);
+        gPoints.appendChild(svgEl('circle', { cx: d.vx, cy: d.vy, r: 1.5, class: 'chosen-dot', fill: colour }));
 
-        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        label.setAttribute("x", chosen.x + 1);
-        label.setAttribute("y", 100 - chosen.y - 1);
-        label.setAttribute("font-size", "4");
+        /* Each label is pushed along its own line's outward normal (C). Three
+           budgets with three slopes therefore send their labels three different
+           ways, which is what stops them stacking when the baskets are close. */
+        let nx = p1.vy - p0.vy, ny = -(p1.vx - p0.vx);
+        const len = Math.hypot(nx, ny) || 1;
+        nx /= len; ny /= len;
+        if ((d.vx - 0) * nx + (d.vy - 100) * ny < 0) { nx = -nx; ny = -ny; }
+
+        const OFF = 6;
+        const lx = d.vx + nx * OFF, ly = d.vy + ny * OFF;
+
+        gPoints.appendChild(svgEl('line', {
+          x1: d.vx + nx * 2, y1: d.vy + ny * 2,
+          x2: lx - nx * 1.4, y2: ly - ny * 1.4,
+          class: 'leader', stroke: colour
+        }));
+
+        const label = svgEl('text', {
+          x: lx, y: ly, class: 'basket-label', fill: colour,
+          'text-anchor': nx >= 0 ? 'start' : 'end',
+          'dominant-baseline': 'central'
+        });
+        label.setAttribute('dx', nx >= 0 ? 0.6 : -0.6);
         label.textContent = key;
-        group.appendChild(label);
+        gPoints.appendChild(label);
       }
     }
 
@@ -361,21 +656,25 @@ function showFeedback(stmt, explanation) {
   const feedbackTitle = document.getElementById('feedback-title');
   const feedbackContent = document.getElementById('feedback-content');
   
-  feedbackTitle.innerHTML = `Incorrect: ${stmt.left} ${stmt.symbol} ${stmt.right}`;
+  feedbackTitle.innerHTML = `Not true: ${stmt.left} ${stmt.symbol} ${stmt.right}`;
   feedbackContent.textContent = explanation;
-  
-  feedbackWindow.className = 'feedback-error show';
+  feedbackWindow.classList.add('show');
 }
 
 function hideFeedback() {
-  const feedbackWindow = document.getElementById('feedback-window');
-  feedbackWindow.className = '';
+  document.getElementById('feedback-window').classList.remove('show');
 }
+    let statements = [];
+
     function renderApp() {
       budgets = getBudgetsAndChoices();
       drawBudgetLines(budgets);
 
-      const statements = generateStatements();
+      statements = generateStatements();
+      selectedStatements.clear();
+      hideFeedback();
+      document.getElementById('score').textContent = '';
+
       const container = document.getElementById('statements');
       container.innerHTML = '';
 
@@ -398,53 +697,51 @@ function hideFeedback() {
         div.appendChild(label);
         container.appendChild(div);
       }
-
-    document.getElementById('done-btn').addEventListener('click', () => {
-  let correct = 0;
-  let total = selectedStatements.size;
-  let firstIncorrect = null;
-
-  // Clear previous marks
-  const marks = document.querySelectorAll('.correct, .incorrect');
-  marks.forEach(mark => mark.remove());
-
-  for (const idx of selectedStatements) {
-    const stmt = statements[idx];
-    const div = document.getElementById(`stmt-${idx}`).parentElement;
-    const result = evaluateStatement(stmt, budgets);
-
-    const mark = document.createElement('span');
-    mark.className = result ? 'correct' : 'incorrect';
-    mark.textContent = result ? '✓' : '❌';
-
-    // Add hover functionality for incorrect answers
-    if (!result) {
-      mark.addEventListener('mouseenter', () => {
-        showFeedback(stmt, getExplanation(stmt, budgets));
-      });
-      mark.addEventListener('mouseleave', () => {
-        hideFeedback();
-      });
-      
-      if (!firstIncorrect) {
-        firstIncorrect = { stmt, explanation: getExplanation(stmt, budgets) };
-      }
     }
 
-    div.appendChild(mark);
-    if (result) correct++;
-  }
+    function checkAnswers() {
+      let correct = 0;
+      const total = selectedStatements.size;
+      let firstIncorrect = null;
 
-  // Show first incorrect immediately
-  if (firstIncorrect) {
-    showFeedback(firstIncorrect.stmt, firstIncorrect.explanation);
-  }
+      document.querySelectorAll('.correct, .incorrect').forEach(m => m.remove());
 
-  const score = total > 0 ? Math.round((correct / total) * 100) : 0;
-  document.getElementById('score').textContent = `Score: ${score}% correct`;
-});
-}
-    window.addEventListener('load', renderApp);
+      for (const idx of selectedStatements) {
+        const stmt = statements[idx];
+        const div = document.getElementById(`stmt-${idx}`).parentElement;
+        const result = evaluateStatement(stmt, budgets);
+
+        const mark = document.createElement('span');
+        mark.className = result ? 'correct' : 'incorrect';
+        mark.textContent = result ? '\u2713' : '\u2715';
+
+        if (!result) {
+          const explanation = getExplanation(stmt, budgets);
+          mark.addEventListener('mouseenter', () => showFeedback(stmt, explanation));
+          mark.addEventListener('mouseleave', hideFeedback);
+          if (!firstIncorrect) firstIncorrect = { stmt, explanation };
+        }
+
+        div.appendChild(mark);
+        if (result) correct++;
+      }
+
+      if (firstIncorrect) showFeedback(firstIncorrect.stmt, firstIncorrect.explanation);
+      else hideFeedback();
+
+      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+      document.getElementById('score').textContent =
+        total === 0 ? 'Nothing ticked yet.' : `${correct} of ${total} ticked statements hold \u2014 ${score}%.`;
+    }
+
+    // Bound once, not per problem: re-binding inside renderApp would stack a
+    // fresh listener on every new problem.
+    window.addEventListener('load', () => {
+      renderApp();
+      document.getElementById('done-btn').addEventListener('click', checkAnswers);
+      document.getElementById('new-btn').addEventListener('click', renderApp);
+    });
+
   </script>
 </body>
 </html>
