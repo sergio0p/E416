@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finding the Utility of c | ECON 416</title>
+<meta name="description" content="Squeeze the utility of a basket by asking a preference relation one question at a time.">
+<meta name="theme-color" content="#171310">
+
+<!-- Icons: the ship's apotropaic eye, lifted from the vase -->
+<link rel="icon" href="../favicon.ico" sizes="48x48 32x32 16x16">
+<link rel="icon" type="image/png" href="../img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+
+<!-- Google Analytics -->
+<script async src="/E416/js/ga.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+/* ==========================================================================
+   ECON 416 — Finding the utility of c
+   Attic red-figure theme, after css/theme.css on the course site.
+
+   The conceit: on Attic red-figure pottery the ground is fired black and the
+   figure is the reserved clay left unpainted. Here the goods space starts as
+   fired black; every answer the student gives paints a slip wash over a
+   quadrant, and the indifference curve through c emerges as the reserved
+   band between the terracotta above and the Egyptian blue below. The figure
+   is what you do not paint.
+   ========================================================================== */
+
+:root {
+  /* Attic red-figure palette, from the Siren Vase */
+  --attic-black:    #171310;
+  --soot:           #2B211B;
+  --panel-ground:   #12100E;
+  --terracotta:     #B55232;
+  --clay-highlight: #D07852;
+  --deep-oxide:     #71311F;
+  --ancient-cream:  #E6D1AD;
+  --text-muted:     #B79D82;
+
+  /* Egyptian blue — the oldest synthetic pigment, and the one cool colour
+     that belongs in this world alongside fired clay. */
+  --egyptian:       #3E6E8E;
+  --egyptian-light: #6FA3C0;
+
+  --wash-better: rgba(181, 82, 50, 0.40);
+  --wash-worse:  rgba(62, 110, 142, 0.44);
+
+  --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-body:    'EB Garamond', Georgia, 'Times New Roman', serif;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 0 3rem;
+  background: var(--attic-black);
+  color: var(--ancient-cream);
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.28rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 3.5vw, 2.25rem);
+}
+
+/* --------------------------------------------------------------- masthead */
+
+.masthead {
+  background: var(--soot);
+  border-bottom: 2px solid var(--deep-oxide);
+  padding: 1.3rem 0 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0 0 0.6rem;
+}
+
+h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--terracotta);
+  margin: 0 0 0.3rem;
+  line-height: 1.2;
+}
+
+/* KaTeX inside the display face has to be pulled back to the surrounding
+   size — its own 1.21em default reads as a typo next to inscriptional caps. */
+h1 .katex { font-size: 0.92em; color: var(--clay-highlight); }
+
+.subtitle {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ stage */
+
+/* Plot and rail share a baseline at the top, so the readout sits level with
+   the top of the goods space rather than floating above the whole column. */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  align-items: stretch;
+}
+
+/* The plot keeps its own height; only the rail stretches. */
+.plot-frame { align-self: start; }
+
+.controls-card { margin-top: auto; }
+
+@media (max-width: 940px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ------------------------------------------------------------------- plot */
+
+.plot-frame {
+  width: 100%;
+  max-width: 680px;
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+  padding: 0.5rem;
+}
+
+#plot {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: none;
+  user-select: none;
+  cursor: crosshair;
+}
+
+#plot:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 3px; }
+
+.grid-line   { stroke: rgba(230, 209, 173, 0.07); stroke-width: 0.35; }
+.axis-line   { stroke: var(--ancient-cream); stroke-width: 0.8; }
+.tick-mark   { stroke: var(--ancient-cream); stroke-width: 0.6; }
+.tick        { fill: var(--text-muted); font-size: 3.4px; font-family: 'EB Garamond', Georgia, serif; }
+.axis-name   { fill: var(--ancient-cream); font-size: 5px; font-style: italic; font-family: 'EB Garamond', Georgia, serif; }
+
+.diag        { stroke: rgba(230, 209, 173, 0.32); stroke-width: 0.8; }
+.band        { fill: rgba(230, 209, 173, 0.05); }
+
+.guide       { stroke: rgba(230, 209, 173, 0.30); stroke-width: 0.4; stroke-dasharray: 2.5 2; }
+
+.region-better { fill: var(--wash-better); }
+.region-worse  { fill: var(--wash-worse); }
+
+.point-c   { fill: var(--clay-highlight); stroke: var(--ancient-cream); stroke-width: 0.5; }
+.point-b   { fill: var(--ancient-cream); stroke: var(--attic-black); stroke-width: 0.4; }
+/* The basket under question: cream like its siblings, ringed so it stands out
+   without borrowing c's colour. */
+.point-b.is-live { fill: var(--ancient-cream); stroke: var(--clay-highlight); stroke-width: 0.9; }
+
+.plot-label {
+  fill: var(--ancient-cream);
+  font-size: 4.6px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  paint-order: stroke;
+  stroke: var(--panel-ground);
+  stroke-width: 1.1px;
+  stroke-linejoin: round;
+}
+.plot-label.is-c { fill: var(--clay-highlight); font-size: 5.4px; }
+.hover-dot   { fill: var(--ancient-cream); }
+.hover-label { font-style: normal; font-size: 4.2px; }
+.plot-coord { font-size: 3.3px; font-style: normal; fill: var(--text-muted); }
+
+/* The frontier of each wash: the staircase closing in on the indifference curve. */
+.frontier-better { fill: none; stroke: var(--clay-highlight); stroke-width: 0.5; opacity: 0.75; }
+.frontier-worse  { fill: none; stroke: var(--egyptian-light);  stroke-width: 0.5; opacity: 0.75; }
+
+/* The reserved figure: the still-unknown stretch of the diagonal. */
+.bracket-line { stroke: var(--ancient-cream); stroke-width: 2; stroke-linecap: round; }
+.bracket-cap  { stroke: var(--ancient-cream); stroke-width: 1.4; stroke-linecap: round; }
+
+/* ------------------------------------------------------------------- rail */
+
+.rail { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.card {
+  background: var(--soot);
+  border: 1px solid var(--deep-oxide);
+  padding: 0.8rem 1rem;
+}
+
+.card h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 0.55rem;
+}
+
+/* ---- the readout is the thesis of the page, so it is set largest ---- */
+
+.readout { border-left: 3px solid var(--terracotta); }
+
+#bounds {
+  color: var(--ancient-cream);
+  display: flex;
+  align-items: center;
+}
+#bounds.is-solved { color: var(--clay-highlight); }
+#bounds .katex { font-size: 1.5rem; }
+
+/* ---- prompt ---- */
+
+#panel p { margin: 0; }
+#panel .katex { font-size: 1.05em; }
+
+.prompt-question {
+  margin: 0 0 0.85rem !important;
+  color: var(--ancient-cream);
+}
+
+.choices { display: flex; flex-direction: column; gap: 0.5rem; }
+
+button {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.74rem;
+  color: var(--ancient-cream);
+  background: transparent;
+  border: 1px solid var(--deep-oxide);
+  border-radius: 0;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+button:hover, button:focus-visible {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  color: var(--attic-black);
+}
+
+button:hover .katex, button:focus-visible .katex { color: var(--attic-black); }
+
+/* Cinzel is set in caps, but text-transform rewrites KaTeX's glyph spans too —
+   b_6 comes out as B_6. Maths keeps its own case everywhere. */
+.katex { text-transform: none; letter-spacing: normal; }
+button .katex { font-size: 1.12em; color: var(--ancient-cream); transition: color 0.15s; }
+
+/* The maths grows inside a box of unchanged height: the button is given a
+   fixed height and centres its content, so type size and box size are
+   decoupled instead of the glyphs pushing the padding outwards. */
+.choice {
+  display: flex;
+  align-items: center;
+  min-height: 2.9rem;
+  padding: 0 0.95rem;
+  line-height: 1;
+  text-align: left;
+}
+#panel .choice .katex { font-size: 1.6rem; }
+
+button[disabled] { opacity: 0.4; cursor: default; }
+button[disabled]:hover { background: transparent; border-color: var(--deep-oxide); color: var(--ancient-cream); }
+
+.controls { display: flex; gap: 0.5rem; }
+.controls button { flex: 1; }
+
+/* ---- ledger: what undo will take back ---- */
+
+.ledger-list { list-style: none; margin: 0; padding: 0; font-size: 0.9rem; }
+
+.ledger-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(113, 49, 31, 0.4);
+  color: var(--text-muted);
+}
+.ledger-list li:last-child { border-bottom: 0; }
+
+.ledger-list li.is-next-undo { color: var(--ancient-cream); }
+.ledger-list li.is-next-undo .swatch { box-shadow: 0 0 0 2px var(--clay-highlight); }
+
+.swatch { width: 0.7rem; height: 0.7rem; flex: 0 0 auto; display: inline-block; }
+.swatch.better { background: var(--terracotta); }
+.swatch.worse  { background: var(--egyptian); }
+
+.ledger-list .katex { font-size: 0.95em; }
+
+.hint { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+
+.empty { color: var(--text-muted); font-style: italic; }
+
+/* --------------------------------------------------------------- footer */
+
+footer {
+  border-top: 1px solid var(--deep-oxide);
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ------------------------------------------------------------ a11y/motion */
+
+:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 2px; }
+
+.region-better, .region-worse, .bracket-line, .bracket-cap {
+  transition: opacity 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 940px) {
+  .stage { gap: 1.25rem; }
+  #bounds .katex { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="container">
+    <p class="eyebrow">ECON 416 &middot; Behavioral Economics</p>
+    <h1>Finding the Utility of&nbsp;<span id="title-c"></span></h1>
+    <p class="subtitle">Extracting a utility from preferences</p>
+  </div>
+</header>
+
+<main class="container">
+  <div class="stage">
+
+    <div class="plot-frame">
+      <svg id="plot" viewBox="-15 -12 130 132" tabindex="0"
+           aria-label="Goods space. Click a basket to compare it with c."></svg>
+    </div>
+
+    <aside class="rail">
+
+      <section class="card readout" aria-live="polite">
+        <h2>What we know</h2>
+        <div id="bounds"></div>
+      </section>
+
+      <section class="card" id="panel-card">
+        <h2 id="panel-heading">Where to click</h2>
+        <div id="panel" aria-live="polite"></div>
+      </section>
+
+      <section class="card">
+        <h2>Answers so far</h2>
+        <ul class="ledger-list" id="ledger"></ul>
+      </section>
+
+      <section class="card controls-card">
+        <h2>Controls</h2>
+        <div class="controls">
+          <button id="undoBtn" type="button" title="Remove the last basket (Option + Left Arrow)">Undo</button>
+          <button id="clearBtn" type="button" title="Remove every basket and start over">Clear</button>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+
+  <footer>
+    <p>Department of Economics &middot; University of North Carolina at Chapel Hill</p>
+  </footer>
+</main>
+
+<script>
+/* ==========================================================================
+   CONFIG
+   ========================================================================== */
+
+const DOMAIN = { xmin: 0, xmax: 10, ymin: 0, ymax: 10 };
+const TICK_STEP = 1;
+const SHOW_GRID = true;
+
+/* Half-width of the diagonal band, in data units of PERPENDICULAR distance.
+   This single number drives both the drawn band and the click target, so what
+   the student sees is exactly what they can hit. */
+const BAND_HALF_WIDTH = 0.42;
+
+/* c must land clearly outside the band, or the picture reads as a point sitting
+   on the diagonal whose utility we already know. */
+const C_MIN_CLEARANCE = BAND_HALF_WIDTH * 3;
+
+/* View units per data unit — x and y both map 0..10 onto 0..100. */
+const VIEW_PER_DATA = 100 / (DOMAIN.xmax - DOMAIN.xmin);
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+/* ==========================================================================
+   STATE
+
+   Everything on screen is a pure function of C and moves[]. Nothing is patched
+   in place: answering, undoing and clearing all just change this and redraw.
+   That is what makes undo correct rather than approximately correct.
+   ========================================================================== */
+
+const C = makeC();
+
+let moves   = [];   // [{ k, x, y, better }]  better === true  =>  b_k > c
+let pending = null; // { k, x, y } — placed, not yet answered
+let kCounter = 0;
+let gHover = null;
+
+function round2(v) { return Math.round(v * 100) / 100; }
+
+function makeC() {
+  let x, y;
+  do {
+    x = round2(1.6 + 6.8 * Math.random());
+    y = round2(1.6 + 6.8 * Math.random());
+  } while (perpDistance(x, y) < C_MIN_CLEARANCE);
+  return { x, y };
+}
+
+/* Perpendicular distance from (x,y) to the 45-degree line, in data units. */
+function perpDistance(x, y) { return Math.abs(y - x) / Math.SQRT2; }
+
+/* ==========================================================================
+   GEOMETRY
+   ========================================================================== */
+
+function dataToView(x, y) {
+  return {
+    vx: (x - DOMAIN.xmin) * VIEW_PER_DATA,
+    vy: 100 - (y - DOMAIN.ymin) * VIEW_PER_DATA
+  };
+}
+
+function viewToData(vx, vy) {
+  return {
+    x: DOMAIN.xmin + vx / VIEW_PER_DATA,
+    y: DOMAIN.ymin + (100 - vy) / VIEW_PER_DATA
+  };
+}
+
+function inDomain(x, y) {
+  return x >= DOMAIN.xmin && x <= DOMAIN.xmax && y >= DOMAIN.ymin && y <= DOMAIN.ymax;
+}
+
+/* ==========================================================================
+   WHAT THE ANSWERS IMPLY
+
+   Every answer paints a quadrant, and each quadrant covers a stretch of the
+   diagonal. A blue (worse) quadrant anchored at (x,y) covers the diagonal up
+   to min(x,y); a terracotta (better) quadrant covers it from max(x,y) up.
+   Utility on the diagonal is u(t,t) = t, so those crossings are bounds on u(c).
+
+   c's own quadrants are always in play — monotonicity gives them for free.
+   ========================================================================== */
+
+function quadrants() {
+  const list = [
+    { better: true,  x: C.x, y: C.y, owner: 'c' },
+    { better: false, x: C.x, y: C.y, owner: 'c' }
+  ];
+  for (const m of moves) list.push({ better: m.better, x: m.x, y: m.y, owner: m.k });
+  return list;
+}
+
+function bounds() {
+  let lo = Math.min(C.x, C.y);   // SW of c is worse than c
+  let hi = Math.max(C.x, C.y);   // NE of c is better than c
+  for (const m of moves) {
+    if (m.better) hi = Math.min(hi, Math.max(m.x, m.y));
+    else          lo = Math.max(lo, Math.min(m.x, m.y));
+  }
+  return { lo, hi };
+}
+
+/* A basket is settled when some painted quadrant already contains it: its
+   ranking against c follows from earlier answers, so asking again is noise. */
+function isSettled(x, y) {
+  for (const q of quadrants()) {
+    if (q.better) { if (x >= q.x && y >= q.y) return true; }
+    else          { if (x <= q.x && y <= q.y) return true; }
+  }
+  return false;
+}
+
+/* ==========================================================================
+   SVG HELPERS
+   ========================================================================== */
+
+const svg      = document.getElementById('plot');
+const panel    = document.getElementById('panel');
+const boundsEl = document.getElementById('bounds');
+const ledgerEl = document.getElementById('ledger');
+const headingEl = document.getElementById('panel-heading');
+const undoBtn  = document.getElementById('undoBtn');
+const clearBtn = document.getElementById('clearBtn');
+
+function el(tag, attrs = {}) {
+  const node = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  return node;
+}
+
+function group(id) { return el('g', { id }); }
+
+function line(parent, x1, y1, x2, y2, cls) {
+  parent.appendChild(el('line', { x1, y1, x2, y2, class: cls }));
+}
+
+function circle(parent, cx, cy, r, cls) {
+  parent.appendChild(el('circle', { cx, cy, r, class: cls }));
+}
+
+function text(parent, x, y, str, cls, anchor) {
+  const node = el('text', { x, y, class: cls });
+  if (anchor) node.setAttribute('text-anchor', anchor);
+  node.textContent = str;
+  parent.appendChild(node);
+  return node;
+}
+
+function tex(target, latex, display = false) {
+  katex.render(latex, target, { throwOnError: false, displayMode: display });
+}
+
+function texSpan(latex) {
+  const span = document.createElement('span');
+  tex(span, latex);
+  return span;
+}
+
+/* Subscripted basket name, as SVG tspans — KaTeX cannot live inside <svg>. */
+function basketLabel(parent, x, y, k, coords, anchor) {
+  const node = el('text', { x, y, class: 'plot-label' });
+  if (anchor) node.setAttribute('text-anchor', anchor);
+  const base = el('tspan'); base.textContent = 'b';
+  const sub  = el('tspan', { 'baseline-shift': 'sub', 'font-size': '68%' });
+  sub.textContent = String(k);
+  node.appendChild(base);
+  node.appendChild(sub);
+  if (coords) {
+    const c = el('tspan', { class: 'plot-coord', dx: '1.2' });
+    c.textContent = `(${coords.x.toFixed(2)}, ${coords.y.toFixed(2)})`;
+    node.appendChild(c);
+  }
+  parent.appendChild(node);
+  return node;
+}
+
+/* ==========================================================================
+   DRAW
+
+   Layer order is paint order: ground, then washes, then the diagonal and its
+   band, then the bracket, then points and labels on top.
+   ========================================================================== */
+
+function redraw() {
+  svg.textContent = '';
+
+  const defs = el('defs');
+  const clip = el('clipPath', { id: 'plot-clip' });
+  clip.appendChild(el('rect', { x: 0, y: 0, width: 100, height: 100 }));
+  defs.appendChild(clip);
+  svg.appendChild(defs);
+
+  const gGrid    = group('grid');
+  const gBand    = group('band');
+  gBand.setAttribute('clip-path', 'url(#plot-clip)');
+  const gRegions = group('regions');
+  const gAxes    = group('axes');
+  const gGuides  = group('guides');
+  const gBracket = group('bracket');
+  const gPoints  = group('points');
+  const gLabels  = group('labels');
+  gHover = group('hover');
+
+  [gGrid, gBand, gRegions, gAxes, gGuides, gBracket, gPoints, gLabels, gHover]
+    .forEach(g => svg.appendChild(g));
+
+  if (SHOW_GRID) drawGrid(gGrid);
+  drawDiagonalAndBand(gBand);
+  drawRegions(gRegions);
+  drawAxes(gAxes);
+  drawDiagonalLine(gBracket);
+  drawBracket(gBracket);
+  drawC(gPoints, gLabels, gGuides);
+  drawBaskets(gPoints, gLabels);
+
+  renderBounds();
+  renderLedger();
+  undoBtn.disabled = moves.length === 0 && !pending;
+  clearBtn.disabled = moves.length === 0 && !pending;
+}
+
+function drawGrid(g) {
+  for (let x = DOMAIN.xmin; x <= DOMAIN.xmax + 1e-9; x += TICK_STEP) {
+    const a = dataToView(x, DOMAIN.ymin), b = dataToView(x, DOMAIN.ymax);
+    line(g, a.vx, a.vy, b.vx, b.vy, 'grid-line');
+  }
+  for (let y = DOMAIN.ymin; y <= DOMAIN.ymax + 1e-9; y += TICK_STEP) {
+    const a = dataToView(DOMAIN.xmin, y), b = dataToView(DOMAIN.xmax, y);
+    line(g, a.vx, a.vy, b.vx, b.vy, 'grid-line');
+  }
+}
+
+function drawAxes(g) {
+  const o  = dataToView(DOMAIN.xmin, DOMAIN.ymin);
+  const xE = dataToView(DOMAIN.xmax, DOMAIN.ymin);
+  const yE = dataToView(DOMAIN.xmin, DOMAIN.ymax);
+
+  line(g, o.vx, o.vy, xE.vx, xE.vy, 'axis-line');
+  line(g, o.vx, o.vy, yE.vx, yE.vy, 'axis-line');
+
+  for (let x = DOMAIN.xmin; x <= DOMAIN.xmax + 1e-9; x += TICK_STEP) {
+    const p = dataToView(x, DOMAIN.ymin);
+    line(g, p.vx, p.vy, p.vx, p.vy + 1.6, 'tick-mark');
+    if (x > DOMAIN.xmin) text(g, p.vx, p.vy + 6, String(x), 'tick', 'middle');
+  }
+  for (let y = DOMAIN.ymin; y <= DOMAIN.ymax + 1e-9; y += TICK_STEP) {
+    const p = dataToView(DOMAIN.xmin, y);
+    line(g, p.vx, p.vy, p.vx - 1.6, p.vy, 'tick-mark');
+    if (y > DOMAIN.ymin) text(g, p.vx - 3, p.vy + 1.2, String(y), 'tick', 'end');
+  }
+  text(g, o.vx - 3, o.vy + 6, '0', 'tick', 'middle');
+
+  text(g, xE.vx + 4.5, xE.vy + 1.6, 'x', 'axis-name', 'middle');
+  text(g, yE.vx, yE.vy - 5, 'y', 'axis-name', 'middle');
+}
+
+function drawDiagonalAndBand(g) {
+  const a = dataToView(DOMAIN.xmin, DOMAIN.ymin);
+  const b = dataToView(DOMAIN.xmax, DOMAIN.ymax);
+
+  /* The band is the diagonal swept perpendicular by BAND_HALF_WIDTH. In view
+     space the diagonal runs (0,100)->(100,0), so the unit normal is (1,1)/root2. */
+  const w  = BAND_HALF_WIDTH * VIEW_PER_DATA;
+  const nx = w / Math.SQRT2, ny = w / Math.SQRT2;
+
+  g.appendChild(el('polygon', {
+    class: 'band',
+    points: [
+      [a.vx + nx, a.vy + ny], [b.vx + nx, b.vy + ny],
+      [b.vx - nx, b.vy - ny], [a.vx - nx, a.vy - ny]
+    ].map(p => p.join(',')).join(' ')
+  }));
+
+}
+
+function drawDiagonalLine(g) {
+  const a = dataToView(DOMAIN.xmin, DOMAIN.ymin);
+  const b = dataToView(DOMAIN.xmax, DOMAIN.ymax);
+  line(g, a.vx, a.vy, b.vx, b.vy, 'diag');
+}
+
+/* Overlapping quadrants painted one on top of another stack their alpha into
+   visible bands, which reads as noise rather than as knowledge. Each side is
+   therefore reduced to the anchors that actually carry it — the rest are
+   contained in those — and drawn as a single staircase polygon at one opacity.
+   The staircase IS the frontier converging on the indifference curve. */
+
+function minimalAnchors(list, better) {
+  const kept = list.filter(a => !list.some(b =>
+    b !== a && (better ? (b.x <= a.x && b.y <= a.y) : (b.x >= a.x && b.y >= a.y))
+              && (b.x !== a.x || b.y !== a.y)
+  ));
+  // Ties can survive the filter twice; drop exact duplicates.
+  const seen = new Set();
+  const uniq = kept.filter(a => {
+    const key = a.x + ':' + a.y;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return uniq.sort((a, b) => a.x - b.x);
+}
+
+function betterUnionPath(anchors) {
+  // For x in [x_i, x_{i+1}) the region is y >= y_i, with y strictly decreasing.
+  const pts = [[anchors[0].x, DOMAIN.ymax]];
+  anchors.forEach((a, i) => {
+    pts.push([a.x, a.y]);
+    const nextX = i + 1 < anchors.length ? anchors[i + 1].x : DOMAIN.xmax;
+    pts.push([nextX, a.y]);
+  });
+  pts.push([DOMAIN.xmax, DOMAIN.ymax]);
+  return pts;
+}
+
+function worseUnionPath(anchors) {
+  // For x in (x_{i-1}, x_i] the region is y <= y_i, with y strictly decreasing.
+  const pts = [[DOMAIN.xmin, anchors[0].y]];
+  anchors.forEach((a, i) => {
+    pts.push([a.x, a.y]);
+    const nextY = i + 1 < anchors.length ? anchors[i + 1].y : DOMAIN.ymin;
+    pts.push([a.x, nextY]);
+  });
+  pts.push([DOMAIN.xmin, DOMAIN.ymin]);
+  return pts;
+}
+
+function drawRegions(g) {
+  const all = quadrants();
+
+  for (const better of [false, true]) {
+    const side = all.filter(q => q.better === better);
+    if (!side.length) continue;
+
+    const anchors = minimalAnchors(side, better);
+    const pts = better ? betterUnionPath(anchors) : worseUnionPath(anchors);
+    const view = pts.map(([x, y]) => { const v = dataToView(x, y); return v.vx + ',' + v.vy; });
+
+    g.appendChild(el('polygon', {
+      points: view.join(' '),
+      class: better ? 'region-better' : 'region-worse'
+    }));
+
+    // The frontier alone, without the closing edges along the plot border.
+    const frontier = better
+      ? pts.slice(1, pts.length - 1)
+      : pts.slice(1, pts.length - 1);
+    g.appendChild(el('polyline', {
+      points: frontier.map(([x, y]) => { const v = dataToView(x, y); return v.vx + ',' + v.vy; }).join(' '),
+      class: better ? 'frontier-better' : 'frontier-worse'
+    }));
+  }
+}
+
+/* The reserved figure: the stretch of diagonal still consistent with u(c). */
+function drawBracket(g) {
+  const { lo, hi } = bounds();
+  if (hi - lo < 1e-9) return;
+
+  const a = dataToView(lo, lo);
+  const b = dataToView(hi, hi);
+  line(g, a.vx, a.vy, b.vx, b.vy, 'bracket-line');
+
+  /* Caps drawn perpendicular to the diagonal, so they read as end-stops. */
+  const capHalf = 2.0, cx = capHalf / Math.SQRT2, cy = capHalf / Math.SQRT2;
+  line(g, a.vx - cx, a.vy - cy, a.vx + cx, a.vy + cy, 'bracket-cap');
+  line(g, b.vx - cx, b.vy - cy, b.vx + cx, b.vy + cy, 'bracket-cap');
+}
+
+function drawC(gPoints, gLabels, gGuides) {
+  const p = dataToView(C.x, C.y);
+  const xAxis = dataToView(C.x, DOMAIN.ymin);
+  const yAxis = dataToView(DOMAIN.xmin, C.y);
+
+  line(gGuides, p.vx, xAxis.vy, p.vx, p.vy, 'guide');
+  line(gGuides, yAxis.vx, p.vy, p.vx, p.vy, 'guide');
+
+  circle(gPoints, p.vx, p.vy, 1.7, 'point-c');
+  text(gLabels, p.vx + 2.6, p.vy - 2.2, 'c', 'plot-label is-c');
+}
+
+function drawBaskets(gPoints, gLabels) {
+  const all = pending ? [...moves, pending] : moves;
+  all.forEach(m => {
+    const live = pending && m.k === pending.k;
+    const p = dataToView(m.x, m.y);
+    circle(gPoints, p.vx, p.vy, live ? 1.5 : 1.15, 'point-b' + (live ? ' is-live' : ''));
+    // Labels lean away from the 45-degree line, which is where the bracket and
+    // the band already are — otherwise every basket near the diagonal collides.
+    const above = m.y > m.x;
+    basketLabel(
+      gLabels,
+      p.vx + (above ? -2.4 : 2.4),
+      p.vy + (above ? -2.6 : 4.4),
+      m.k,
+      live ? m : null,
+      above ? 'end' : 'start'
+    );
+  });
+}
+
+/* ==========================================================================
+   RAIL RENDERING
+   ========================================================================== */
+
+function renderBounds() {
+  const { lo, hi } = bounds();
+  boundsEl.textContent = '';
+  boundsEl.classList.toggle('is-solved', hi - lo < 0.005);
+  tex(boundsEl, hi - lo < 0.005
+    ? `u(c) = ${lo.toFixed(2)}`
+    : `${lo.toFixed(2)} \\;\\le\\; u(c) \\;\\le\\; ${hi.toFixed(2)}`);
+}
+
+function renderLedger() {
+  ledgerEl.textContent = '';
+
+  if (moves.length === 0) {
+    const li = document.createElement('li');
+    li.className = 'empty';
+    li.textContent = 'No comparisons yet.';
+    ledgerEl.appendChild(li);
+    return;
+  }
+
+  moves.forEach((m, i) => {
+    const li = document.createElement('li');
+    if (i === moves.length - 1) li.className = 'is-next-undo';
+
+    const sw = document.createElement('span');
+    sw.className = 'swatch ' + (m.better ? 'better' : 'worse');
+    li.appendChild(sw);
+
+    li.appendChild(texSpan(m.better ? `b_{${m.k}} \\succeq c` : `c \\succeq b_{${m.k}}`));
+
+    const at = document.createElement('span');
+    at.style.marginLeft = 'auto';
+    at.style.fontVariantNumeric = 'tabular-nums';
+    at.textContent = `(${m.x.toFixed(2)}, ${m.y.toFixed(2)})`;
+    li.appendChild(at);
+
+    ledgerEl.appendChild(li);
+  });
+}
+
+function setPanel(heading, html) {
+  headingEl.textContent = heading;
+  panel.innerHTML = html;
+}
+
+function showIdlePanel() {
+  setPanel('Where to click', '<p class="hint">Click a basket in the goods space to compare it with '
+    + '<span id="idle-c"></span>.</p>');
+  tex(document.getElementById('idle-c'), 'c');
+}
+
+function showPrompt(k) {
+  setPanel('Next question',
+    '<p class="prompt-question">How does <span id="q-b"></span> rank against <span id="q-c"></span>?</p>'
+    + '<div class="choices">'
+    + '<button class="choice" id="betterBtn" type="button"></button>'
+    + '<button class="choice" id="worseBtn" type="button"></button>'
+    + '</div>'
+    + '<p class="hint" style="margin-top:0.7rem;">Click elsewhere to move the basket.</p>'
+  );
+  tex(document.getElementById('q-b'), `b_{${k}}`);
+  tex(document.getElementById('q-c'), 'c');
+  tex(document.getElementById('betterBtn'), `b_{${k}} \\succeq c`);
+  tex(document.getElementById('worseBtn'),  `c \\succeq b_{${k}}`);
+
+  document.getElementById('betterBtn').addEventListener('click', () => answer(true));
+  document.getElementById('worseBtn') .addEventListener('click', () => answer(false));
+}
+
+function showSettledNote() {
+  setPanel('Already settled', '<p class="hint">That basket is already settled — earlier answers and '
+    + 'monotonicity fix its ranking, so asking again would add nothing. '
+    + 'Pick one in the unpainted region.</p>');
+}
+
+/* ==========================================================================
+   INTERACTION
+   ========================================================================== */
+
+svg.addEventListener('pointerdown', onPointer);
+svg.addEventListener('pointermove', onHover);
+svg.addEventListener('pointerleave', clearHover);
+
+/* Utility on the diagonal is the coordinate itself, so hovering it just says
+   so. Nothing announces this — the reading appears where the pointer already
+   is, which is the whole explanation. */
+function clearHover() { if (gHover) gHover.textContent = ''; }
+
+function onHover(evt) {
+  if (!gHover) return;
+  clearHover();
+  const { x, y } = pointFromEvent(evt);
+  if (!inDomain(x, y) || perpDistance(x, y) > BAND_HALF_WIDTH) return;
+  const t = round2((x + y) / 2);
+  const p = dataToView(t, t);
+  circle(gHover, p.vx, p.vy, 1.1, 'hover-dot');
+  // Italic variable, upright number — the convention the rest of the app keeps.
+  const node = el('text', { x: p.vx - 3.2, y: p.vy - 3.2, class: 'plot-label hover-label', 'text-anchor': 'end' });
+  const v = el('tspan', { 'font-style': 'italic' }); v.textContent = 'u';
+  const rest = el('tspan'); rest.textContent = ` = ${t.toFixed(2)}`;
+  node.appendChild(v); node.appendChild(rest);
+  gHover.appendChild(node);
+}
+
+undoBtn.addEventListener('click', undo);
+clearBtn.addEventListener('click', clearAll);
+
+window.addEventListener('keydown', evt => {
+  if (evt.altKey && evt.key === 'ArrowLeft') { evt.preventDefault(); undo(); }
+});
+
+function pointFromEvent(evt) {
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX;
+  pt.y = evt.clientY;
+  const sp = pt.matrixTransform(svg.getScreenCTM().inverse());
+  const d = viewToData(sp.x, sp.y);
+  return { x: round2(d.x), y: round2(d.y) };
+}
+
+function onPointer(evt) {
+  const { x, y } = pointFromEvent(evt);
+  if (!inDomain(x, y)) return;
+
+  if (isSettled(x, y)) {
+    dropPending();
+    redraw();
+    showSettledNote();
+    return;
+  }
+
+  /* An unanswered basket is moved rather than multiplied. */
+  const k = pending ? pending.k : ++kCounter;
+  pending = { k, x, y };
+  redraw();
+  showPrompt(k);
+}
+
+/* A basket that never got answered gives its number back, so the labels stay
+   b1, b2, b3 rather than skipping the ones the student thought better of. */
+function dropPending() {
+  if (!pending) return;
+  pending = null;
+  kCounter = Math.max(moves.length, kCounter - 1);
+}
+
+function answer(better) {
+  if (!pending) return;
+  moves.push({ k: pending.k, x: pending.x, y: pending.y, better });
+  pending = null;
+  redraw();
+  showIdlePanel();
+}
+
+function undo() {
+  if (pending) {
+    dropPending();
+  } else if (moves.length) {
+    moves.pop();
+    kCounter = Math.max(0, kCounter - 1);
+  } else {
+    return;
+  }
+  redraw();
+  showIdlePanel();
+}
+
+function clearAll() {
+  moves = [];
+  pending = null;
+  kCounter = 0;
+  redraw();
+  showIdlePanel();
+}
+
+/* ==========================================================================
+   START
+   ========================================================================== */
+
+tex(document.getElementById('title-c'), `c = (${C.x.toFixed(2)},\\, ${C.y.toFixed(2)})`);
+redraw();
+showIdlePanel();
+</script>
+</body>
+</html>
