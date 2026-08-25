@@ -662,3 +662,27 @@ dl.beamer-description dt:first-of-type + dd {
     height: 480px;
   }
 }
+
+/* ============================================
+   Dropbox-hosted video (share link + &raw=1)
+   ============================================ */
+.dropbox-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+  background: #000;
+}
+
+/* Rationality frame — drop the clip so its top is level with the third bullet.
+   Tuned at 1440px viewport; below the stacking breakpoint the offset is dropped. */
+#rationality .dropbox-video {
+  margin-top: 375px;
+}
+
+@media (max-width: 768px) {
+  #rationality .dropbox-video {
+    margin-top: 0;
+  }
+}
