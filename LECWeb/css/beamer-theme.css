@@ -668,21 +668,27 @@ dl.beamer-description dt:first-of-type + dd {
    ============================================ */
 .dropbox-video {
   width: 100%;
+  max-width: 440px;
   height: auto;
   display: block;
+  margin-inline: auto;
   border-radius: 8px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
   background: #000;
 }
 
-/* Rationality frame — drop the clip so its top is level with the third bullet.
-   Tuned at 1440px viewport; below the stacking breakpoint the offset is dropped. */
-#rationality .dropbox-video {
-  margin-top: 375px;
+/* Phantom copy of the opening bullet, sitting above the Rationality clip. It is
+   hidden but still occupies space, so it reserves the height of the text beside
+   it and drops the clip to the foot of the list — tracking text wrapping at any
+   width without a hard-coded offset. Dropped once the columns stack. */
+.clip-spacer {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
 }
 
 @media (max-width: 768px) {
-  #rationality .dropbox-video {
-    margin-top: 0;
+  .clip-spacer {
+    display: none;
   }
 }
