@@ -438,15 +438,46 @@ footer {
       return gap >= TIE_NEAR_GAP || viewAngle(cand, A, B) >= TIE_MIN_ANGLE;
     }
 
+    /* A basket that lands a hair inside another budget line is strictly
+       affordable to the arithmetic but looks like a tie to the eye, and the
+       app then marks SDR as true for something the picture calls DR. Except
+       for the one planted tie, every basket must clear every other budget
+       line by a visible margin, measured on screen. */
+    const MIN_LINE_CLEARANCE = 4;  // view units, out of 100
+
+    function clearOfOtherLines(cand, exempt) {
+      const f = frameFor(cand);
+      for (const i of labels) {
+        const c = cand[i];
+        // line i in view space: through (xInt, 100) and (0, 100 - yInt)
+        const xInt = c.income / c.px / f.xMax * 100;
+        const yInt = c.income / c.py / f.yMax * 100;
+        const norm = Math.hypot(yInt, xInt);
+        for (const j of labels) {
+          if (i === j) continue;
+          if (exempt && exempt.A === i && exempt.B === j) continue;
+          const vx = cand[j].chosen.x / f.xMax * 100;
+          const vy = 100 - cand[j].chosen.y / f.yMax * 100;
+          // distance from (vx, vy) to the line through (xInt, 100) and
+          // (0, 100 - yInt):  yInt*x - xInt*y + xInt*(100 - yInt) = 0
+          const d = Math.abs(yInt * vx - xInt * vy + xInt * (100 - yInt)) / norm;
+          if (d < MIN_LINE_CLEARANCE) return false;
+        }
+      }
+      return true;
+    }
+
     function getBudgetsAndChoices() {
       let best = null, bestScore = -Infinity;
       const tie = Math.random() < TIE_PROB;
       for (let i = 0; i < MAX_DRAWS; i++) {
         const cand = { r: randomBudget(), b: randomBudget(), g: randomBudget() };
+        let planted = null;
         if (tie) {
-          const { A, B } = plantTie(cand);
-          if (!tieLegible(cand, A, B)) continue;
+          planted = plantTie(cand);
+          if (!tieLegible(cand, planted.A, planted.B)) continue;
         }
+        if (!clearOfOtherLines(cand, planted)) continue;
         const gap = minSeparation(cand);
         const ratio = scaleRatio(cand);
         if (gap >= MIN_SEPARATION && ratio <= MAX_SCALE_RATIO) return cand;
