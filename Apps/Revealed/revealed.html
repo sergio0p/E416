@@ -207,6 +207,14 @@ h1 {
 #feedback-window { display: none; border-left: 3px solid var(--budget-r); }
 #feedback-window.show { display: block; }
 #feedback-title { color: var(--budget-r); }
+/* Basket names are lower-case everywhere else; keep them out of the heading's
+   uppercase transform and set them in the body face, as in the statement list. */
+#feedback-title .basket {
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font-body);
+  font-size: 1.5em;
+}
 #feedback-content { color: var(--ancient-cream); font-size: 0.95rem; }
 #feedback-content .lede { color: var(--text-muted); }
 
@@ -383,10 +391,62 @@ footer {
       );
     }
 
+    /* Left to chance, a basket almost never lands exactly on another budget
+       line, so "A DR B but not A SDR B" — the case that separates the two
+       relations — essentially never appears. With probability TIE_PROB one
+       draw is planted: pick A, then B among the rest, and move B's basket
+       onto A's budget line (B's income is re-solved so the basket still lies
+       on B's own line). Then p_A·x_B = m_A exactly: A DR B holds, A SDR B fails.
+
+       Two baskets on one line with a second line through one of them is the
+       most crowded picture the app draws. When the two baskets sit close
+       together, the two lines must cross at a visible angle; a shallow
+       crossing next to a short gap reads as one line and is rejected. */
+    const TIE_PROB = 0.25;
+    const TIE_NEAR_GAP = 30;       // view units: "close" baskets
+    const TIE_MIN_ANGLE = 25;      // degrees between the two lines when close
+
+    function plantTie(cand) {
+      const A = labels[Math.floor(Math.random() * labels.length)];
+      const rest = labels.filter(k => k !== A);
+      const B = rest[Math.floor(Math.random() * rest.length)];
+      const a = cand[A], b = cand[B];
+      const t = 0.15 + Math.random() * 0.70;
+      b.chosen = { x: t * a.income / a.px, y: (1 - t) * a.income / a.py };
+      b.income = b.px * b.chosen.x + b.py * b.chosen.y;
+      return { A, B };
+    }
+
+    /* Angle in degrees between two budget lines as drawn, i.e. after the
+       frame's axis scaling, which is what the eye sees. */
+    function viewAngle(cand, A, B) {
+      const f = frameFor(cand);
+      const dir = k => {
+        const c = cand[k];
+        return [c.income / c.px / f.xMax, -(c.income / c.py / f.yMax)];
+      };
+      const [ux, uy] = dir(A), [vx, vy] = dir(B);
+      const cos = (ux * vx + uy * vy) / (Math.hypot(ux, uy) * Math.hypot(vx, vy));
+      return Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI;
+    }
+
+    function tieLegible(cand, A, B) {
+      const f = frameFor(cand);
+      const v = k => [cand[k].chosen.x / f.xMax * 100, 100 - cand[k].chosen.y / f.yMax * 100];
+      const [ax, ay] = v(A), [bx, by] = v(B);
+      const gap = Math.hypot(ax - bx, ay - by);
+      return gap >= TIE_NEAR_GAP || viewAngle(cand, A, B) >= TIE_MIN_ANGLE;
+    }
+
     function getBudgetsAndChoices() {
       let best = null, bestScore = -Infinity;
+      const tie = Math.random() < TIE_PROB;
       for (let i = 0; i < MAX_DRAWS; i++) {
         const cand = { r: randomBudget(), b: randomBudget(), g: randomBudget() };
+        if (tie) {
+          const { A, B } = plantTie(cand);
+          if (!tieLegible(cand, A, B)) continue;
+        }
         const gap = minSeparation(cand);
         const ratio = scaleRatio(cand);
         if (gap >= MIN_SEPARATION && ratio <= MAX_SCALE_RATIO) return cand;
@@ -657,7 +717,7 @@ function showFeedback(stmt, explanation) {
   const feedbackTitle = document.getElementById('feedback-title');
   const feedbackContent = document.getElementById('feedback-content');
   
-  feedbackTitle.innerHTML = `Not true: ${stmt.left} ${stmt.symbol} ${stmt.right}`;
+  feedbackTitle.innerHTML = `Not true: <span class="basket">${stmt.left} ${stmt.symbol} ${stmt.right}</span>`;
   feedbackContent.textContent = explanation;
   feedbackWindow.classList.add('show');
 }
@@ -703,7 +763,6 @@ function hideFeedback() {
     function checkAnswers() {
       let correct = 0;
       const total = selectedStatements.size;
-      let firstIncorrect = null;
 
       document.querySelectorAll('.correct, .incorrect').forEach(m => m.remove());
 
@@ -720,15 +779,13 @@ function hideFeedback() {
           const explanation = getExplanation(stmt, budgets);
           mark.addEventListener('mouseenter', () => showFeedback(stmt, explanation));
           mark.addEventListener('mouseleave', hideFeedback);
-          if (!firstIncorrect) firstIncorrect = { stmt, explanation };
         }
 
         div.appendChild(mark);
         if (result) correct++;
       }
 
-      if (firstIncorrect) showFeedback(firstIncorrect.stmt, firstIncorrect.explanation);
-      else hideFeedback();
+      hideFeedback();   // explanations appear only while hovering an ✗
 
       const score = total > 0 ? Math.round((correct / total) * 100) : 0;
       document.getElementById('score').textContent =
