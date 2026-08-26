@@ -189,7 +189,8 @@ h1 {
 /* The relation glyphs are LaTeX-traced paths with no fill of their own, so
    they default to black and vanish on a fired ground. currentColor puts them
    back in the ink of the surrounding text. */
-.statement svg { fill: currentColor; vertical-align: middle; }
+.statement svg,
+#feedback-title svg { fill: currentColor; vertical-align: middle; }
 
 .statement input[type="checkbox"] {
   accent-color: var(--terracotta);
