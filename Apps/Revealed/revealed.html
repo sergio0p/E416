@@ -467,15 +467,57 @@ footer {
       return true;
     }
 
+    /* Left alone, a GARP violation shows up in about one problem in eight
+       (almost all of them inside planted ties). With probability CYCLE_PROB
+       one is planted outright: a random pair A, B in a random order, with
+       x_B strictly inside A's budget and x_A strictly inside B's, i.e.
+       A P0 B and B P0 A — WARP fails, hence GARP fails. With two goods this
+       is the only shape a violation can take: by Rose (1958) WARP and SARP
+       coincide in the plane, so a three-basket cycle with every pair
+       WARP-consistent cannot be drawn here. */
+    const CYCLE_PROB = 0.125;
+
+    function plantCycle(cand) {
+      const A = labels[Math.floor(Math.random() * labels.length)];
+      const B = labels.filter(k => k !== A)[Math.floor(Math.random() * 2)];
+      const a = cand[A], b = cand[B];
+      // x_B strictly inside A's budget, on the far side of A's own basket so
+      // that it is not dominated by x_A (otherwise no prices could make x_A
+      // affordable at B while x_B is chosen there).
+      const tA = a.chosen.x * a.px / a.income;
+      const t = tA < 0.5 ? 0.55 + Math.random() * 0.30 : 0.15 + Math.random() * 0.30;
+      const shrink = 0.6 + Math.random() * 0.3;
+      b.chosen = { x: shrink * t * a.income / a.px, y: shrink * (1 - t) * a.income / a.py };
+      // Choose B's price ratio so that p_B·x_A < p_B·x_B, i.e. x_A lies
+      // strictly inside B's budget through x_B.
+      const dx = a.chosen.x - b.chosen.x, dy = a.chosen.y - b.chosen.y;
+      if (dx >= 0 && dy >= 0) return { A, B, ok: false };
+      const slack = 1.15 + Math.random() * 1.5;
+      if (dx > 0) { b.px = Math.random() * 6 + 0.75; b.py = b.px * (dx / -dy) * slack; }
+      else        { b.py = Math.random() * 6 + 0.75; b.px = b.py * (dy / -dx) * slack; }
+      if (b.px < 0.75 || b.px > 6.75 || b.py < 0.75 || b.py > 6.75) return { A, B, ok: false };
+      b.income = b.px * b.chosen.x + b.py * b.chosen.y;
+      return { A, B, ok: true };
+    }
+
+    function cycleHolds(cand, A, B) {
+      return dot(cand[B], cand[A].chosen) < cand[B].income;   // B P0 A, closing the 2-cycle
+    }
+
     function getBudgetsAndChoices() {
       let best = null, bestScore = -Infinity;
-      const tie = Math.random() < TIE_PROB;
+      const u = Math.random();
+      const tie = u < TIE_PROB;
+      const cycle = !tie && u < TIE_PROB + CYCLE_PROB;
       for (let i = 0; i < MAX_DRAWS; i++) {
         const cand = { r: randomBudget(), b: randomBudget(), g: randomBudget() };
         let planted = null;
         if (tie) {
           planted = plantTie(cand);
           if (!tieLegible(cand, planted.A, planted.B)) continue;
+        } else if (cycle) {
+          const { A, B, ok } = plantCycle(cand);
+          if (!ok || !cycleHolds(cand, A, B)) continue;
         }
         if (!clearOfOtherLines(cand, planted)) continue;
         const gap = minSeparation(cand);
@@ -487,7 +529,9 @@ footer {
         const score = Math.min(gap / MIN_SEPARATION, MAX_SCALE_RATIO / ratio);
         if (score > bestScore) { bestScore = score; best = cand; }
       }
-      return best;
+      if (best) return best;
+      // A planted pattern that never fit in MAX_DRAWS: fall back to a plain draw.
+      return { r: randomBudget(), b: randomBudget(), g: randomBudget() };
     }
 
     const labels = ['r', 'b', 'g'];
