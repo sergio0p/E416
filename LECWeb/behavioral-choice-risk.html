@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="behavioral-choice-certainty.html">
+  <meta name="nav-next" content="inter-temporal-choice.html">
+  <title>Behavioral Choice Under Risk | ECON 416</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+  <style>
+    .tikz-placeholder {
+      border: 2px dashed #999;
+      background: #fafafa;
+      padding: 1.2rem;
+      margin: 0.8rem auto;
+      text-align: center;
+      color: #555;
+      font-style: italic;
+      max-width: 520px;
+      font-size: 0.85em;
+    }
+    .tikz-placeholder .tikz-label {
+      font-weight: bold;
+      color: #b7410e;
+      font-style: normal;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+  </style>
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header: Behavioral Choice Under Risk -->
+  <section class="section-header" id="behavioral-choice-risk">
+    <div class="section-title-box">
+      <h1>Behavioral Choice Under Risk</h1>
+    </div>
+
+  </section>
+
+  <!-- Frame: Lotteries (source: 546-551) -->
+  <section class="frame" id="lotteries">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Lotteries</h2>
+    </div>
+    <div class="frame-content">
+      <p>Assume we have $n$ states of the world.</p>
+      <p><strong>Definition:</strong> A lottery is a list of prizes and probabilities,
+      $$\ell=\bigl((x_1,x_2,\ldots,x_n),(p_1,p_2,\ldots,p_n)\bigr),$$
+      where $x_k \in \R^m$ is the prize the lottery gives when state $k$ occurs, and $p_k\ge 0$ is the probability that state $k$ occurs.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Lotteries graph (source: 552-565) -->
+  <section class="frame" id="lotteries-graph">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Lotteries</h2>
+    </div>
+    <div class="frame-content">
+      <p>In practice, it is very useful to depict lotteries as a graph.</p>
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Diagram &mdash; source lines 554-564]</span>
+        Tree diagram of a lottery $\ell$ at the root, with branches labeled $p_1,p_2,\ldots,p_n$ leading to nodes $x_1,x_2,\ldots,x_n$.
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Certain Lottery (source: 566-576) -->
+  <section class="frame" id="certain-lottery">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Certain Lottery</h2>
+    </div>
+    <div class="frame-content">
+      <p>The lottery that gives prize $x$ with probability one (with certainty) is denoted by:
+      $$\delta_x=\bigl((x),(1)\bigr).$$</p>
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Diagram &mdash; source lines 570-574]</span>
+        Tree with root $\delta_x$ and a single branch labeled $1$ leading to node $x$.
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Expectation and Variance (source: 578-583) -->
+  <section class="frame" id="expectation-variance">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Expectation and Variance</h2>
+    </div>
+    <div class="frame-content">
+      <p>The expected value of a lottery $\ell_1=\bigl((x_1,\ldots,x_n),(p_1,\ldots,p_n)\bigr)$ is:
+      $$\E[\ell_1]=p_1\cdot x_1+p_2\cdot x_2 +\ldots+ p_n\cdot x_n = \sum_{i=1}^n p_i\cdot x_i;$$
+      and the variance of a lottery $\ell$ is:
+      $$\Var[\ell_1]=\sum_{i=1}^n p_i\cdot (x_i-\E[\ell_1])^2.$$</p>
+    </div>
+  </section>
+
+  <!-- Frame: Composition of Lotteries (source: 584-605) -->
+  <section class="frame overlay-frame" id="composition">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Composition of Lotteries</h2>
+    </div>
+    <div class="frame-content">
+      <p class="overlay" data-overlay="1">Given two lotteries, $\ell_1=\bigl((x_1,\ldots,x_n),(p_1,\ldots,p_n)\bigr)$ and $\ell_2=\bigl((y_1,\ldots,y_m),(q_1,\ldots,q_m)\bigr)$ and a number $\alpha$ in the interval $(0,1)$, we can create a compound lottery $\ell$ that plays $\ell_1$ with probability $\alpha$ and $\ell_2$ with probability $1-\alpha$.</p>
+      <div class="overlay" data-overlay="2">
+        <div class="tikz-placeholder">
+          <span class="tikz-label">[TikZ Diagram &mdash; source lines 587-603]</span>
+          Two-stage tree: root $\ell$ branches to $\ell_1$ (prob $\alpha$) and $\ell_2$ (prob $1-\alpha$); $\ell_1$ branches to $x_1,x_2$ with probs $p, 1-p$; $\ell_2$ branches to $y_1,y_2$ with probs $q, 1-q$. Reduced form:
+          $$\ell=\alpha\ell_1\oplus (1-\alpha)\ell_2 = \bigl((x_1,x_2,y_1,y_2),(\alpha p,\alpha(1-p),(1-\alpha)q,(1-\alpha)(1-q))\bigr).$$
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Preferences Over Lotteries (source: 607-619) -->
+  <section class="frame overlay-frame" id="prefs-over-lotteries">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Preferences Over Lotteries</h2>
+    </div>
+    <div class="frame-content">
+      <p>Given two lotteries $\ell_a$ and $\ell_b$ such that a decision maker (DM) <em>chooses $\ell_a$ over $\ell_b$</em>, the following statements are <em>equivalent</em>:</p>
+      <ul>
+        <li class="overlay" data-overlay="1">The DM judges $\ell_a$ no worse than $\ell_b$ (everyday language);</li>
+        <li class="overlay" data-overlay="2">The DM prefers $\ell_a$ to $\ell_b$ (economics language);</li>
+        <li class="overlay" data-overlay="3">$\ell_a\succeq_{\text{DM}} \ell_b$ (mathematics language).</li>
+      </ul>
+      <p class="overlay" data-overlay="4">For simplicity we write:</p>
+      <ul>
+        <li class="overlay" data-overlay="5">$\ell_a\succ \ell_b$ when $\ell_a\succeq\ell_b$ but $\ell_b\not\succeq\ell_a$ (strict preference)</li>
+        <li class="overlay" data-overlay="6">$\ell_a\sim \ell_b$ when $\ell_a\succeq\ell_b$ and $\ell_b\succeq\ell_a$ (indifference).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Preferences Over Lotteries 2 (source: 621-625) -->
+  <section class="frame" id="prefs-numerical-score">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Preferences Over Lotteries</h2>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li>A preference of the DM, $\succeq_{\text{DM}}$, over the set of lotteries is just the DM's ranking of lotteries.</li>
+        <li>We wish (for convenience) a <span style="color:#2e7d32">numerical score</span> that reflects the DM's ranking.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: vN-M Assumptions (source: 627-637) -->
+  <section class="frame overlay-frame" id="vnm-assumptions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">von Neumann &amp; Morgenstern's Assumptions</h2>
+    </div>
+    <div class="frame-content">
+      <dl class="beamer-description">
+        <dt class="overlay" data-overlay="1">Completeness</dt>
+        <dd class="overlay" data-overlay="1">For any two lotteries $\ell_1$ and $\ell_2$, $\ell_1\succeq \ell_2$ and/or $\ell_2\succeq \ell_1$.</dd>
+        <dt class="overlay" data-overlay="2">Transitivity</dt>
+        <dd class="overlay" data-overlay="2">For any lotteries $\ell_1$, $\ell_2$ and $\ell_3$, if $\ell_1\succeq \ell_2$ and $\ell_2\succeq \ell_3$ then $\ell_1\succeq \ell_3$.</dd>
+        <dt class="overlay" data-overlay="3">Continuity</dt>
+        <dd class="overlay" data-overlay="3">If $\ell_1\succeq\ell_2\succeq \ell_3$ then there exists $p\in[0,1]$ such that $\ell_2\sim p\ell_1\oplus(1-p)\ell_3$.</dd>
+        <dt class="overlay" data-overlay="4">Independence</dt>
+        <dd class="overlay" data-overlay="4">If $\ell_1\succ\ell_2$ then for any $\ell_3$ and any $0\lt p\lt 1$, $p\ell_1\oplus (1-p)\ell_3\succ p\ell_2\oplus(1-p)\ell_3$.</dd>
+      </dl>
+      <div class="block overlay" data-overlay="5">
+        <div class="block-title">Expected Utility Representation</div>
+        <div class="block-body">If $\succeq$ satisfies all of the above, there exists $u:\R\rightarrow\R$ such that
+        $$\bigl((x_1,\ldots,x_n),(p_1,\ldots,p_n)\bigr)\succ \bigl((y_1,\ldots,y_m),(q_1,\ldots,q_m)\bigr)$$
+        if and only if
+        $$\sum_{k=1}^n u(x_k)\cdot p_k \gt \sum_{k=1}^m u(y_k)\cdot q_k.$$</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Expected Utility (source: 640-644) -->
+  <section class="frame overlay-frame" id="expected-utility-def">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Expected Utility</h2>
+    </div>
+    <div class="frame-content">
+      <p>We write:</p>
+      <p class="overlay" data-overlay="1">$$ U(\ell_1)=u(x_1)\cdot p_1+\ldots + u(x_n)\cdot p_n, $$</p>
+      <p class="overlay" data-overlay="2">and refer to $U$ as the <span style="color:#b7410e">expected utility</span> and to $u$ as the <span style="color:#2e7d32">utility for money</span>.</p>
+    </div>
+  </section>
+
+  <!-- Frame: How to use expected utility (source: 647-657) -->
+  <section class="frame overlay-frame" id="how-to-use-eu">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">How to Use Expected Utility</h2>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li class="overlay" data-overlay="1">List the states of the world: $\omega_1$, $\omega_2$, &hellip;, $\omega_n$.</li>
+        <li class="overlay" data-overlay="2">List states' probabilities: $p_1$, $p_2$, &hellip;, $p_n$.</li>
+        <li class="overlay" data-overlay="3">For each possible action:
+          <ul style="list-style-type:lower-alpha;">
+            <li>List its possible outcomes (prizes): $x_1$, $x_2$, &hellip;, $x_n$.</li>
+            <li>Obtain outcomes' utilities: $u(x_1)$, $u(x_2)$, &hellip;, $u(x_n)$.</li>
+            <li>Calculate the expectation of the utility:
+              $$p_1\cdot u(x_1)+p_2\cdot u(x_2)+\ldots+p_n\cdot u(x_n).$$
+            </li>
+          </ul>
+        </li>
+        <li class="overlay" data-overlay="4">Choose the action that delivers the highest expected utility.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Insurance Example (source: 659-669) -->
+  <section class="frame overlay-frame" id="insurance-example">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">How to Use Expected Utility</h2>
+      <p class="frame-subtitle">An Example</p>
+    </div>
+    <div class="frame-content">
+      <p>Suzan has to decide whether to insure (or not) her laptop which is worth \$1,500. The insurance premium is \$80 and the deductible is \$200. The probability of theft or accident is $1/25$ and the probability of nothing happening is $24/25$. Her utility for money is $u(x)=2000\,x-x^2$. She has to choose between insurance or no insurance.</p>
+      <ol>
+        <li class="overlay" data-overlay="1">What are the states?</li>
+        <li class="overlay" data-overlay="2">What are the states' probabilities?</li>
+        <li class="overlay" data-overlay="3">If she does not insure, what are her prizes in each state?</li>
+        <li class="overlay" data-overlay="4">If she does not insure, what is her utility in each state?</li>
+        <li class="overlay" data-overlay="5">What is the expected utility of not insuring?</li>
+        <li class="overlay" data-overlay="6">What is the expected utility of insuring?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Extracting u from preferences (source: 673-685) -->
+  <section class="frame" id="extracting-u">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Extracting $u$ from $\succeq$</h2>
+    </div>
+    <div class="frame-content">
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ + Images &mdash; source lines 674-684]</span>
+        Three images (KitKat, banana, sandwich) connected by ranking arrows: KitKat $\succ$ banana, KitKat $\prec$ sandwich, banana $\prec$ sandwich.
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Risk Aversion intro (source: 687-694) -->
+  <section class="frame" id="risk-aversion-intro">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Risk Aversion</h2>
+    </div>
+    <div class="frame-content">
+      <p>Let's go back to expected utility theory; consider the two lotteries:
+      $$\ell_1=\bigl((100,102),(\tfrac12,\tfrac12)\bigr) \quad\text{and}\quad \delta_{101}=\bigl((101),(1)\bigr).$$</p>
+      <p>We have
+      $$ U(\ell_1)= u(100)\cdot \tfrac12 + u(102)\cdot \tfrac12 \quad\text{and}\quad U(\delta_{101})=u(101)\cdot 1.$$</p>
+    </div>
+  </section>
+
+  <!-- Frame: Risk Aversion algebra (source: 696-706) -->
+  <section class="frame overlay-frame" id="risk-aversion-algebra">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Risk Aversion</h2>
+    </div>
+    <div class="frame-content">
+      <p>$$U(\ell_1)= u(100)\cdot \tfrac12 + u(102)\cdot \tfrac12 \quad\text{and}\quad U(\delta_{101})=u(101).$$</p>
+      <p class="overlay" data-overlay="1">$$U(\ell_1)-U(\delta_{101})=\Bigl[ u(102)-u(101)-\bigl( u(101)-u(100) \bigr) \Bigr] \cdot \tfrac{1}{2}$$</p>
+      <p class="overlay" data-overlay="2">Where $u(102)-u(101)\simeq \mathrm{M}u(101)$ and $u(101)-u(100)\simeq \mathrm{M}u(100)$.</p>
+      <p class="overlay" data-overlay="3">$U(\ell_1)\gt U(\delta_{101}) \Leftrightarrow \mathrm{M}u(101)\gt \mathrm{M}u(100)$.</p>
+      <p class="overlay" data-overlay="4">$U(\ell_1)=U(\delta_{101}) \Leftrightarrow \mathrm{M}u(101)=\mathrm{M}u(100)$.</p>
+      <p class="overlay" data-overlay="4">$U(\ell_1)\lt U(\delta_{101}) \Leftrightarrow \mathrm{M}u(101)\lt \mathrm{M}u(100)$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Risk Aversion graph (source: 708-743) -->
+  <section class="frame" id="risk-aversion-graph">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Risk Aversion</h2>
+    </div>
+    <div class="frame-content">
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Graph &mdash; source lines 711-741]</span>
+        Plot of $u(x)$ vs $x$ with axis ticks at $100, 101, 102$. Marks at $u(100)$ and $u(102)$. Midpoint $\tfrac12 u(100)+\tfrac12 u(102)$ shown at $x=101$. Three alternative curves connecting $(100,u(100))$ to $(102,u(102))$: concave (risk-averse), linear (risk-neutral), convex (risk-loving).
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Attitudes Towards Risk (source: 745-751) -->
+  <section class="frame overlay-frame" id="attitudes-risk">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Expected Utility Theory</h2>
+      <p class="frame-subtitle">Attitudes Towards Risk</p>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li class="overlay" data-overlay="1">Diminishing marginal utility, $u$ is concave, $u^{\prime\prime}\lt 0\Rightarrow$ the consumer is risk-averse.
+          $$U(X)\lt u(\E[X]) \quad\text{for all } X$$
+        </li>
+        <li class="overlay" data-overlay="2">Increasing marginal utility, $u$ is convex, $u^{\prime\prime}\gt 0\Rightarrow$ the consumer is risk-loving.
+          $$U(X)\gt u(\E[X]) \quad\text{for all } X$$
+        </li>
+        <li class="overlay" data-overlay="3">Constant marginal utility, $u$ is affine, $u^{\prime\prime}=0\Rightarrow$ the consumer is risk-neutral.
+          $$U(X)=u(\E[X]) \quad\text{for all } X$$
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Arrow-Pratt (source: 753-755) -->
+  <section class="frame overlay-frame" id="arrow-pratt">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Measuring the Degree of Risk-Aversion</h2>
+      <p class="frame-subtitle">The Arrow-Pratt or Absolute Measure</p>
+    </div>
+    <div class="frame-content">
+      <div class="block">
+        <div class="block-title">Definition</div>
+        <div class="block-body">The <em>Arrow-Pratt</em> absolute measure of risk-aversion of an agent with vN-M utility $u$ at wealth level $w$ is:
+        $$\rho_{u}(w)=\dfrac{-u^{\prime\prime}(w)}{u^{\prime}(w)}.$$</div>
+      </div>
+      <p class="overlay" data-overlay="2">If for two individuals with vN-M utilities $u$ and $\widetilde{u}$ we have that $\rho_{u}(w)\gt \rho_{\widetilde{u}}(w)$ for all wealth levels $w$, then we say that the agent with utility $u$ is more risk-averse than the agent with utility $\widetilde{u}$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Relative Measure (source: 757-760) -->
+  <section class="frame" id="relative-measure">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Measuring the Degree of Risk-Aversion</h2>
+      <p class="frame-subtitle">The Relative Measure</p>
+    </div>
+    <div class="frame-content">
+      <p><em>We are not covering this material, please skip this slide&hellip;</em></p>
+      <div class="block">
+        <div class="block-title">Definition</div>
+        <div class="block-body">The <em>relative</em> measure of risk-aversion of an agent with vN-M utility $u$ at wealth level $w$ is:
+        $$r_{u}(w)=\dfrac{-u^{\prime\prime}(w)\,w}{u^{\prime}(w)}.$$</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Prospect Theory intro (source: 761-771) -->
+  <section class="frame" id="prospect-theory-intro">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+    </div>
+    <div class="frame-content">
+      <p>Prospect theory is a behavioral alternative to Expected utility theory.</p>
+      <p>Notice that &ldquo;prospect&rdquo; has the same meaning as &ldquo;lottery&rdquo;. Under prospect theory, the utility of a prospect $\ell=(\mathbf{x}; \mathbf{p})$ is:
+      $$ U^P(\ell)=\pi(p_1)\cdot \nu(x_1)+\ldots+\pi(p_n)\nu(x_n),$$
+      where:</p>
+      <ul>
+        <li>$\nu(x)$ is the utility of obtaining the prize $x$ with certainty;</li>
+        <li>$\pi$ is a function that &ldquo;distorts&rdquo; probabilities in a special way.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Beliefs / Bayes (source: 773-781) -->
+  <section class="frame" id="beliefs-bayes">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Beliefs</h2>
+    </div>
+    <div class="frame-content">
+      <p>In the standard model, individuals update their (probabilities) beliefs using:</p>
+      <div class="block">
+        <div class="block-title">Bayes' Rule</div>
+        <div class="block-body">Given two events $A$ and $B$ such that $B$ is possible, $\Pr(B)\gt 0$, then the probability of $A$ given that $B$ occurred is:
+        $$\Pr(A\mid B)=\dfrac{\Pr(A\cap B)}{\Pr(B)}.$$</div>
+      </div>
+      <p><small>Later, we shall see how beliefs (prior probabilities) are &ldquo;formed&rdquo; in the standard model&hellip;</small></p>
+    </div>
+  </section>
+
+  <!-- Frame: Bayesian Updating setup (source: 783-791) -->
+  <section class="frame fs-10pt" id="bayesian-updating-setup">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Bayesian Updating</h2>
+    </div>
+    <div class="frame-content">
+      <p>Let's consider two alternative hypotheses regarding some coin:</p>
+      <dl class="beamer-description">
+        <dt>(U)</dt>
+        <dd>The coin is unbiased, $\Pr[H\mid U]=\Pr[T\mid U]=1/2$.</dd>
+        <dt>(B)</dt>
+        <dd>The coin is biased towards heads, $\Pr[H\mid B]=3/4$ and $\Pr[T\mid B]=1/4$.</dd>
+      </dl>
+      <p>Ann and Bart believe that only these two hypotheses are possible but they ascribe different likelihoods. Ann's prior probabilities are $\Pr^A[U]=\Pr^A[B]=1/2$ and Bart's are $\Pr^B[U]=1/3$ and $\Pr^B[B]=2/3$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Bayesian Updating cont (source: 792-802) -->
+  <section class="frame fs-10pt" id="bayesian-updating-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Bayesian Updating</h2>
+    </div>
+    <div class="frame-content">
+      <p>Let $p_t(h^t)$ be Ann's belief that the hypothesis $U$ is true given that the particular history of coin tosses, $h^t$, was observed. We have that:
+      $$p_0(\emptyset)=1/2,$$
+      $$p_1(T)=\Pr^A[U\mid T]=\dfrac{\Pr^A[U\cap T]}{\Pr^A[T]}=\dfrac{p_0\cdot \tfrac12}{p_0\cdot \tfrac12 +(1-p_0)\cdot \tfrac14},$$
+      $$p_t(h^{t-1},T)=\dfrac{p_{t-1}(h^{t-1})\cdot \tfrac12}{p_{t-1}(h^{t-1})\cdot \tfrac12 +(1-p_{t-1}(h^{t-1}))\cdot \tfrac14}.$$</p>
+      <p>In sum: given some coin toss outcome $H$ or $T$ and knowing the prior probability of the hypothesis $U$ being true, we are able to compute the posterior (updated) probability that the hypothesis $U$ is true.</p>
+      <p><strong>Result:</strong> If two individuals assign positive probabilities to the same set of hypotheses, it does not matter if their priors differ. In the limit, as more information becomes available, their posteriors will merge. They will think alike.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Heuristics (source: 803-805) -->
+  <section class="frame" id="heuristics">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Heuristics</h2>
+    </div>
+    <div class="frame-content">
+      <p>Heuristics are rules of thumb that deliver <em>satisfactory</em> outcomes without requiring high computational costs.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Probability Estimation (source: 806-814) -->
+  <section class="frame" id="probability-estimation">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Probability Estimation</h2>
+    </div>
+    <div class="frame-content">
+      <p>Common heuristics:</p>
+      <ol>
+        <li>Availability</li>
+        <li>Representativeness</li>
+        <li>Base rate bias</li>
+        <li>&lsquo;Law&rsquo; of small numbers (gambler's fallacy and &lsquo;hot hand&rsquo;)</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Biases (source: 816-839) -->
+  <section class="frame" id="biases">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Biases</h2>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li>Overconfidence
+          <ol style="list-style-type:lower-alpha;">
+            <li>Overestimation</li>
+            <li>Overplacement</li>
+            <li>Overprecision</li>
+          </ol>
+        </li>
+        <li>Underconfidence</li>
+        <li>Self-serving bias
+          <ol style="list-style-type:lower-alpha;">
+            <li>Pavlovian withdrawal</li>
+            <li>Confirmatory bias</li>
+            <li>Self-attribution bias</li>
+            <li>Visceral fit</li>
+          </ol>
+        </li>
+        <li>Projection bias</li>
+        <li>Magical thoughts
+          <ol style="list-style-type:lower-alpha;">
+            <li>Tempting fate</li>
+            <li>Contagion</li>
+          </ol>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Prospect Theory assumptions (source: 841-849) -->
+  <section class="frame" id="prospect-theory-assumptions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+    </div>
+    <div class="frame-content">
+      <p>Under Prospect theory,
+      $$ U^P(\ell)=\pi(p_1)\cdot \nu(x_1)+\ldots+\pi(p_n)\nu(x_n),$$
+      we assume the following:</p>
+      <ul>
+        <li>$\nu$ is continuous, increasing, and for some reference prize ($r$), $\nu^{\prime\prime}(x)\gt 0$ for $x\lt r$ (risk-loving behavior for losses) and $\nu^{\prime\prime}(x)\lt 0$ for $x\gt r$ (risk-averse behavior for gains).</li>
+        <li>For small $p$, $\pi(p)\gt p$ and $\pi(p)+\pi(1-p)\le 1$. That is, $\pi$ overestimates the probability of unlikely events and underestimates the probability of likely events.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Prospect Theory functions (source: 850-857) -->
+  <section class="frame" id="prospect-theory-functions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+    </div>
+    <div class="frame-content">
+      <p>Under Prospect theory,
+      $$ U^P(\ell)=\pi(p_1)\cdot \nu(x_1)+\ldots+\pi(p_n)\nu(x_n),$$
+      in particular, the following functions are commonly used. They satisfy all the assumptions in the previous slide.
+      $$\nu(x)=\begin{cases}(x-r)^\alpha&\text{if } x\ge r,\\
+      -\lambda\cdot (r-x)^\beta&\text{if } x\le r.\end{cases}$$
+      $$\pi(p)=\dfrac{p^\gamma}{\bigl(p^\gamma+(1-p)^\gamma\bigr)^{1/\gamma}},$$
+      in which $0\lt \alpha,\beta,\gamma\lt 1$ and $\lambda\gt 1$. These assumptions imply loss aversion and that low probabilities are overestimated while high probabilities are underestimated.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Ambiguity setup (source: 858-869) -->
+  <section class="frame" id="ambiguity">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ambiguity</h2>
+    </div>
+    <div class="frame-content">
+      <p>Consider the following experiment: an urn has 90 balls; 30 balls are red and each of the remaining 60 balls is either blue or green, but we do not know the fraction of green (or blue) balls in the urn. One ball is randomly selected from the urn.</p>
+      <p>There are four lotteries:</p>
+      <table style="margin: 0.5rem auto; border-collapse: collapse;">
+        <thead>
+          <tr><th style="border:1px solid #999; padding:0.3rem 0.6rem;">lottery</th><th style="border:1px solid #999; padding:0.3rem 0.6rem;">prize</th><th style="border:1px solid #999; padding:0.3rem 0.6rem;">event</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">R</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">the ball is red</td></tr>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">B</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">the ball is blue</td></tr>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">RG</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">the ball is either red or green</td></tr>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">BG</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">the ball is either blue or green</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Frame: Ambiguity probabilities (source: 871-894) -->
+  <section class="frame" id="ambiguity-probs">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ambiguity</h2>
+    </div>
+    <div class="frame-content">
+      <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; justify-content:center;">
+        <table style="border-collapse: collapse;">
+          <thead>
+            <tr><th style="border:1px solid #999; padding:0.3rem 0.6rem;">event</th><th style="border:1px solid #999; padding:0.3rem 0.6rem;">probability</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">R</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">$1/3$</td></tr>
+            <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">BG</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">$2/3$</td></tr>
+            <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">RBG</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">$1$</td></tr>
+            <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">B</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">?</td></tr>
+            <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">G</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">?</td></tr>
+          </tbody>
+        </table>
+        <p style="max-width: 240px;">Typical preferences: $R\succ B$ and $BG \succ RG$.</p>
+      </div>
+      <table style="margin: 0.8rem auto; border-collapse: collapse;">
+        <thead>
+          <tr><th style="border:1px solid #999; padding:0.3rem 0.6rem;">lottery</th><th style="border:1px solid #999; padding:0.3rem 0.6rem;">prize</th><th style="border:1px solid #999; padding:0.3rem 0.6rem;">event</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">R</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">red</td></tr>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">B</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">blue</td></tr>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">RG</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">red or green</td></tr>
+          <tr><td style="border:1px solid #999; padding:0.3rem 0.6rem;">BG</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">\$100</td><td style="border:1px solid #999; padding:0.3rem 0.6rem;">blue or green</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Frame: Ambiguity Aversion theory (source: 895-905) -->
+  <section class="frame" id="ambiguity-aversion">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ambiguity Aversion</h2>
+      <p class="frame-subtitle">Max Min Expected Utility Theory</p>
+    </div>
+    <div class="frame-content">
+      <p>Max Min Expected Utility Theory is an alternative theory to Expected Utility Theory that allows ambiguity aversion.</p>
+      <p>To use max min utility theory:</p>
+      <ol>
+        <li>Consider an alternative (lottery).</li>
+        <li>For each possible probability distribution: compute the expected utility of the alternative.</li>
+        <li>The minimum of all expected utilities in (2) is the value of the alternative.</li>
+        <li>Choose the alternative that has the highest value.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Ambiguity Aversion example (source: 906-917) -->
+  <section class="frame" id="ambiguity-example">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ambiguity Aversion</h2>
+      <p class="frame-subtitle">Max Min Expected Utility Theory</p>
+    </div>
+    <div class="frame-content">
+      <p>Example:</p>
+      <ul>
+        <li>A coin is either fair or both sides display &ldquo;heads&rdquo;.</li>
+        <li>There are two possible probability distributions: $p=1/2$ or $p=1$ where $p$ is the probability of &ldquo;heads&rdquo;.</li>
+        <li>Lottery #1 (L1) pays \$500 if &ldquo;tails&rdquo;.</li>
+        <li>Lottery #2 (L2) pays \$100 if &ldquo;heads&rdquo;.</li>
+      </ul>
+      $$ U(L1)=\min_{p\in \{ \frac12,1\} } p\,u(0)+(1-p)u(500)=u(0)$$
+      $$ U(L2)=\min_{p\in \{ \frac12,1\} } p\,u(100)+(1-p)u(0)=\tfrac12 u(100)+\tfrac12 u(0)$$
+      <p>So lottery #2 is always better for someone who is ambiguity averse and uses the max min rule.</p>
+    </div>
+  </section>
+
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="behavioral-choice-certainty.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Behavioral Choice Under Certainty</a>
+    <a href="inter-temporal-choice.html" style="color: var(--crane-blue); text-decoration: none;">Inter-temporal Choice &rarr;</a>
+  </div>
+
+  <!-- KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+</body>
+</html>

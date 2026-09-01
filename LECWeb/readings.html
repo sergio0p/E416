@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="preferences.html">
+  <meta name="nav-next" content="behavioral-choice-certainty.html">
+  <title>Readings | ECON 416</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="css/beamer-theme.css">
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Chapter title and content share the same screen (compact header). -->
+  <section class="section-header compact" id="readings">
+    <div class="section-title-box">
+      <h1>Readings</h1>
+    </div>
+  </section>
+
+  <!-- Articles: no title frame; they follow the section heading directly.
+       Citations on the left, Santos's TED talk on the right. -->
+  <div class="section-body" id="articles">
+    <div class="columns">
+      <div class="column">
+        <p>The PDFs are posted on our Canvas site. You must be signed in to Canvas to open them.</p>
+
+        <ol class="reference-list">
+          <li class="scroll-reveal">
+          Kagel, John H., Raymond C. Battalio, Howard Rachlin, and Leonard Green.
+          &ldquo;<a href="https://uncch.instructure.com/courses/128467/files/16308451" target="_blank" rel="noopener">Demand Curves for Animal Consumers</a>.&rdquo;
+          <em>The Quarterly Journal of Economics</em> 96, no. 1 (1981): 1&ndash;16.
+          </li>
+
+          <li class="scroll-reveal">
+          Chen, M. Keith, Venkat Lakshminarayanan, and Laurie R. Santos.
+          &ldquo;<a href="https://uncch.instructure.com/courses/128467/files/16571277" target="_blank" rel="noopener">How Basic Are Behavioral Biases? Evidence from Capuchin Monkey Trading Behavior</a>.&rdquo;
+          <em>Journal of Political Economy</em> 114, no. 3 (2006): 517&ndash;537.
+          </li>
+
+          <li class="scroll-reveal">
+          Pastor-Bernier, Alexandre, Charles R. Plott, and Wolfram Schultz.
+          &ldquo;<a href="https://uncch.instructure.com/courses/128467/files/16571199" target="_blank" rel="noopener">Monkeys Choose as if Maximizing Utility Compatible with Basic Principles of Revealed Preference Theory</a>.&rdquo;
+          <em>Proceedings of the National Academy of Sciences</em> 114, no. 10 (2017): E1766&ndash;E1775.
+          <span class="ref-note">https://doi.org/10.1073/pnas.1612010114</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="column">
+        <video class="dropbox-video"
+               src="https://www.dropbox.com/scl/fi/decjn3lb0h0prml9ju4iz/santos-monkey-economy.mp4?rlkey=no0xy4r5duv7am5evk2tcyicc&amp;raw=1"
+               controls playsinline preload="metadata"></video>
+        <p class="video-credit">
+          Laurie Santos, &ldquo;<a href="https://www.ted.com/talks/laurie_santos_a_monkey_economy_as_irrational_as_ours" target="_blank" rel="noopener">A monkey economy as irrational as ours</a>,&rdquo;
+          TEDGlobal 2010. She is a co-author of the 2006 paper and shows the token
+          marketplace itself. Courtesy of TED (CC BY&ndash;NC&ndash;ND).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="preferences.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Economic Rationality</a>
+    <a href="behavioral-choice-certainty.html" style="color: var(--crane-blue); text-decoration: none;">Behavioral Choice Under Certainty &rarr;</a>
+  </div>
+
+  <!-- KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <script>
+    gsap.utils.toArray('.scroll-reveal').forEach(el => {
+      gsap.set(el, { opacity: 0, y: 15 });
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 90%',
+        end: 'top 90%',
+        onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }),
+        onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -225,6 +225,74 @@ body {
   font-weight: normal;
 }
 
+/* Compact section header: chapter title shares the screen with its content
+   instead of occupying a full viewport (used by readings.html). */
+.section-header.compact {
+  min-height: auto;
+  padding: 3.5rem 2rem 0.5rem;
+}
+
+/* Content that sits directly under a compact section header, with no
+   frame chrome or title bar of its own. */
+.section-body {
+  max-width: var(--frame-max-width);
+  margin: 0 auto 2rem auto;
+  padding: 0 calc(var(--frame-padding) / 2);
+  background: transparent;
+}
+
+/* Credit line under an embedded video. */
+.video-credit {
+  max-width: 440px;
+  margin: 0.6rem auto 0 auto;
+  font-size: 0.8em;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.video-credit a {
+  color: var(--crane-blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+/* Chicago-style reference list */
+.reference-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reference-list li {
+  margin: 0 0 1.5rem 0;
+  padding-left: 2.2rem;
+  text-indent: -2.2rem;
+  line-height: 1.55;
+}
+
+.reference-list li::before {
+  content: none;
+}
+
+.reference-list a {
+  color: var(--crane-blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.reference-list a:hover {
+  background: var(--crane-amber-light, #fff8e1);
+  border-bottom-color: var(--crane-amber, #f9a825);
+}
+
+.reference-list .ref-note {
+  display: block;
+  text-indent: 0;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
@@ -409,6 +477,28 @@ ol > li::before {
   font-family: 'Times New Roman', serif;
   font-size: 1.1em;
   color: var(--crane-amber-dark);
+}
+
+/* Simple booktabs-style data table: horizontal rules only, no verticals. */
+.data-table {
+  border-collapse: collapse;
+  margin: 1.1rem auto 0.4rem auto;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.45rem 1.2rem;
+  text-align: left;
+}
+
+.data-table thead th {
+  border-top: 2px solid var(--text-primary);
+  border-bottom: 1px solid var(--text-primary);
+  font-weight: 700;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 2px solid var(--text-primary);
 }
 
 /* Two-column layout */

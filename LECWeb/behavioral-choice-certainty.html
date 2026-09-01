@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="readings.html">
+  <meta name="nav-next" content="behavioral-choice-risk.html">
+  <title>Behavioral Choice Under Certainty | ECON 416</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+  <style>
+    .tikz-placeholder {
+      border: 2px dashed #999;
+      background: #fafafa;
+      padding: 1.2rem;
+      margin: 0.8rem auto;
+      text-align: center;
+      color: #555;
+      font-style: italic;
+      max-width: 520px;
+      font-size: 0.85em;
+    }
+    .tikz-placeholder .tikz-label {
+      font-weight: bold;
+      color: #b7410e;
+      font-style: normal;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+  </style>
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header: Behavioral Choice Under Certainty -->
+  <section class="section-header" id="behavioral-choice-certainty">
+    <div class="section-title-box">
+      <h1>Behavioral Choice Under Certainty</h1>
+    </div>
+  </section>
+
+  <!-- Frame: Decision Making Under Certainty (source: 440-448) -->
+  <section class="frame" id="decision-making">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Decision Making Under Certainty</h2>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li>Opportunity Costs</li>
+        <li>Sunk Costs</li>
+        <li>Menu Dependence and Decoy Effect</li>
+        <li>Loss aversion and the endowment effect</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Reference-Dependent Preferences (source: 451-459) -->
+  <section class="frame" id="reference-points">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Reference-Dependent Preferences</h2>
+    </div>
+    <div class="frame-content">
+      <p>Individuals use as reference points:</p>
+      <ol>
+        <li>Other's choices/consumption</li>
+        <li>Past &ldquo;utility&rdquo;</li>
+        <li>Anticipated &ldquo;utility&rdquo;<br>
+          (i.e., what they expect, not expected utility theory)</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Menu Effects -->
+  <section class="frame" id="menu-effects">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Menu Effects</h2>
+    </div>
+    <div class="frame-content">
+      <div class="block">
+        <div class="block-title">Menu Effect</div>
+        <div class="block-body">
+          What an individual chooses depends on <strong>what else is on the menu</strong>.
+          Adding or removing an option that nobody ends up choosing can still change
+          which of the remaining options is picked.
+        </div>
+      </div>
+      <p>Standard theory rules this out: if $\mathbf{x}$ is chosen when $\mathbf{y}$ is
+      available, then adding a third option $\mathbf{z}$ should never make $\mathbf{y}$
+      the choice. The menu is supposed to be a container, not an ingredient.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Decoy Effect -->
+  <section class="frame" id="decoy-effect">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Decoy Effect</h2>
+    </div>
+    <div class="frame-content">
+      <div class="block">
+        <div class="block-title">Decoy Effect</div>
+        <div class="block-body">
+          A menu effect produced by adding an option that is <strong>clearly worse than
+          one option but not clearly worse than the other</strong>. The added option—the
+          decoy—is hardly ever chosen. Its job is to make the option that beats it look
+          like the better deal.
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Economist.com offers</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Option 1</td><td>Web subscription</td><td><span>$</span>59</td></tr>
+          <tr><td>Option 2</td><td>Print subscription</td><td><span>$</span>125</td></tr>
+          <tr><td>Option 3</td><td>Print + web subscription</td><td><span>$</span>125</td></tr>
+        </tbody>
+      </table>
+
+      <p class="scroll-reveal">Option 2 is the decoy: it costs the same as Option 3 and
+      gives strictly less, so nobody should take it. Yet its presence makes Option 3 look
+      like a bargain and pulls choices away from Option 1.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Reference-dependent model (source: 493-504) -->
+  <section class="frame" id="kr-model">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Reference-Dependent Preferences Model</h2>
+    </div>
+    <div class="frame-content">
+      <p>This model is a simplified version of K&ouml;szegi &amp; Rabin (2006).</p>
+      <ul>
+        <li>There are two goods: $X$ and $Y$.</li>
+        <li>There is a reference basket: $r=(\underline x,\underline y)$.</li>
+        <li>$u(x)$ consumption utility of good $X$.</li>
+        <li>$u(y)$ consumption utility of good $Y$.</li>
+        <li>$\mu(\Delta u)$ is the gain-loss utility function.</li>
+        <li>The consumer overall utility for the basket $(x,y)$ is:</li>
+      </ul>
+      $$U(x,y\mid \underline x,\underline y)= u(x)+u(y)+\mu(u(x)-u(\underline x))+\mu(u(y)-u(\underline y)).$$
+    </div>
+  </section>
+
+  <!-- Frame: Reference-dependent model cont. (source: 505-515) -->
+  <section class="frame" id="kr-model-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Reference-Dependent Preferences Model</h2>
+      <p class="frame-subtitle">cont.</p>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li>$\mu(u(x)-u(\underline x))$ is the gain or loss in utility when the consumer deviates from the $X$-reference consumption level.</li>
+        <li>$\mu(u(y)-u(\underline y))$ is the gain or loss in utility when the consumer deviates from $Y$-reference consumption level.</li>
+        <li>The gain-loss utility function is given by:
+          $$\mu(\Delta u)\equiv L\cdot \min(\Delta u, 0)+G\cdot \max(\Delta u, 0).$$
+        </li>
+        <li>$\mu(\Delta u)$ is the gain-loss utility function.</li>
+        <li>$L$ is the slope of the gain-loss utility for utility losses.</li>
+        <li>$G$ is the slope of the gain-loss utility for utility gains.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Loss-gain utility (source: 516-526) -->
+  <section class="frame" id="loss-gain">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Loss-Gain Utility</h2>
+    </div>
+    <div class="frame-content">
+      <p>The loss-gain utility is a component of the overall utility. Its utility/disutility depends on how the consumption-utility of a good differs from the consumption-utility of its reference level.</p>
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Diagram &mdash; source lines 518-525]</span>
+        Piecewise-linear gain-loss function $\mu(\Delta u)$: steeper slope for losses ($\Delta u\lt 0$), flatter slope for gains ($\Delta u\gt 0$). Caption: &ldquo;Gains have less impact than losses.&rdquo;
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Numerical Example (source: 527-535) -->
+  <section class="frame" id="numerical-example">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Numerical Example</h2>
+    </div>
+    <div class="frame-content">
+      <p>Consider a traditional ($T$) consumer with utility $u_T(x,y)=\sqrt{x}+\sqrt{y}$, a consumer ($R$) with reference dependent utility,
+      $$u_R(x,y\mid 20,80)=\sqrt{x}+\sqrt{y}+\mu(\sqrt{x}-\sqrt{20})+\mu(\sqrt{y}-\sqrt{80}),$$
+      where:</p>
+      <ul>
+        <li>$\mu(\Delta u) = \min (\Delta u,0)+\tfrac12\cdot \max (\Delta u,0)$.</li>
+        <li>$(20,80)$ is the reference basket.</li>
+      </ul>
+      <p>We assume that both consumers' incomes are $I_T=I_R=120$ and prices initially are $p_X=2$ and $p_Y=1$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Numerical Example cont. (source: 536-539) -->
+  <section class="frame" id="numerical-example-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Numerical Example</h2>
+      <p class="frame-subtitle">Cont.</p>
+    </div>
+    <div class="frame-content">
+      <p>At these prices, the optimal choice for these consumers is to choose the basket $(20,80)$, which (by chance) coincides with the reference basket of the $R$ consumer.</p>
+    </div>
+  </section>
+
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="readings.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Readings</a>
+    <a href="behavioral-choice-risk.html" style="color: var(--crane-blue); text-decoration: none;">Behavioral Choice Under Risk &rarr;</a>
+  </div>
+
+  <!-- KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <script>
+    gsap.utils.toArray('.scroll-reveal').forEach(el => {
+      gsap.set(el, { opacity: 0, y: 15 });
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        end: 'top 85%',
+        onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }),
+        onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
+      });
+    });
+  </script>
+
+</body>
+</html>

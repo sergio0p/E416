@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="behavioral-choice-risk.html">
+  <meta name="nav-next" content="behavioral-games.html">
+  <title>Inter-temporal Choice | ECON 416</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="css/beamer-theme.css">
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="inter-temporal-choice">
+    <div class="section-title-box">
+      <h1>Inter-temporal Choice</h1>
+    </div>
+  </section>
+
+  <!-- Frame: Discounted Expected Utility Model (source: 920-928) -->
+  <section class="frame" id="dem-utility">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Intertemporal Choice: The Standard Model</h2>
+      <p class="frame-subtitle">Discounted Expected Utility Model</p>
+    </div>
+    <div class="frame-content">
+      <p>In the discounted expected utility model, the <em>per period</em> utility of an individual is:
+      $$u(x_t,\omega_t),$$
+      where:</p>
+      <ol>
+        <li>$x_t$ is the choice that the individual makes at time $t$.</li>
+        <li>$\omega_t$ represents variables (events) that the individual does not control (actions of other agents, random shocks to the economy, etc.).</li>
+        <li>$p_t\bigl(\omega_t \mid x_0,\omega_0,\ldots, x_{t-1}, \omega_{t-1}\bigr)$ is the probability distribution of $\omega_t$, which may depend on the past (choices and events).</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: DEM goal (source: 929-939) -->
+  <section class="frame fs-10pt" id="dem-goal">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Intertemporal Choice: The Standard Model</h2>
+      <p class="frame-subtitle">Discounted Expected Utility Model</p>
+    </div>
+    <div class="frame-content">
+      <p>We assume the goal of the individual is to choose $\mathbf{x}=(x_0,x_1, \ldots,x_t, \ldots)$ to maximize the discounted expected utility:
+      $$ \max_{\mathbf{x}} \quad\E\!\left[\sum_{t=0}^{T}\delta^t\cdot u(x_t,\omega_t)\right],$$
+      where $0\lt \delta\lt 1$ is the individual's <em>discount factor</em>. That is, we assume the individual is <em>impatient</em>: $u$ units of utility tomorrow are only worth $\delta\cdot u$ units of utility today.</p>
+      <p>Think of the discounted utility as the analog (for an individual) of the present value of a firm's cash flow.</p>
+      <p>The symbol $\E$ denotes the expectation, which we use only in cases where there is uncertainty about the future.</p>
+      <p>Often, the final date is $T=+\infty$ as economic relationships do not come with an &ldquo;expiration date&rdquo;.</p>
+    </div>
+  </section>
+
+  <!-- Section: Behavioral Models -->
+  <section class="section-header" id="behavioral-models">
+    <div class="section-title-box">
+      <h1>Behavioral Models of Intertemporal Choice</h1>
+    </div>
+  </section>
+
+  <!-- Frame: (β,δ)-model (source: 1142-1157) -->
+  <section class="frame" id="beta-delta">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Behavioral Models of Intertemporal Choice</h2>
+      <p class="frame-subtitle">The $(\beta,\delta)$-model (quasi-hyperbolic discounting)</p>
+    </div>
+    <div class="frame-content">
+      <p>In the standard model (exponential utility), the discount function is:
+      $$D(t)=\delta^t = \exp \left(-k\cdot t\right),\quad\text{where } k=-\log(\delta).$$</p>
+      <p>The $(\beta,\delta)$-model uses a different discount function:
+      $$D(t)=\begin{cases} 1 &\text{if } t=0,\\
+      \beta\cdot \delta^t &\text{if } t\gt 0.\end{cases}$$</p>
+      <ul style="font-size:0.92em;">
+        <li>For streams of utilities that yield the same utility in the present (e.g., $(0,1,0)$ and $(0,0,2)$) both models generate the same results. Why?</li>
+        <li>For streams of utilities that yield different utilities in the present (e.g., $(1,0,0)$ and $(0,2,0)$) their results might differ. Why?</li>
+        <li>The $(\beta,\delta)$-model displays <em>present bias</em>. Why?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Hyperbolic discounting (source: 1158-1167) -->
+  <section class="frame overlay-frame" id="hyperbolic">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Behavioral Models of Intertemporal Choice</h2>
+      <p class="frame-subtitle">Hyperbolic discounting</p>
+    </div>
+    <div class="frame-content">
+      <p>The hyperbolic discounting function is:
+      $$D(t)=\bigl(1+\alpha\cdot t \bigr)^{-\gamma/\alpha}.$$</p>
+      <ul style="font-size:0.92em;">
+        <li class="overlay" data-overlay="1">In the limit, $\alpha\searrow 0$, hyperbolic discounting coincides with exponential discounting. Why?</li>
+        <li class="overlay" data-overlay="2">$\lim_{\alpha\searrow 0}\bigl(1+\alpha\cdot t \bigr)^{-\gamma/\alpha}=\exp\left(-\gamma\cdot t\right).$</li>
+        <li class="overlay" data-overlay="3">We assume that $0\lt \alpha,\gamma\lt +\infty$.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Dynamic Consistency (source: 1168-1174) -->
+  <section class="frame" id="dynamic-consistency">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Dynamic Consistency</h2>
+    </div>
+    <div class="frame-content">
+      <p>Notice that with hyperbolic discounting or with $(\beta,\delta)$ discounting, individual choices might not be dynamically consistent. That is, as time elapses, an individual might change his/her ranking over two flows of utilities even if during the elapsed time both flows delivered the same utility.</p>
+      <div class="block">
+        <div class="block-title">Example</div>
+        <div class="block-body">Consider $\delta=0.9$ and $\beta=0.1$ and three periods $t=0,1$ and $2$. At period zero we have that
+        $$U^{\beta,\delta}(0,1,0)=0.09\lt U^{\beta,\delta}(0,0,2)=0.081\cdot 2= 0.162.$$
+        But after period zero has elapsed the preferences are reversed:
+        $$U^{\beta,\delta}(1,0)=1\gt U^{\beta,\delta}(0,2)=0.18.$$</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Dynamic Consistency reactions (source: 1175-1182) -->
+  <section class="frame fs-10pt" id="dynamic-consistency-reactions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Dynamic Consistency</h2>
+    </div>
+    <div class="frame-content">
+      <p>When time preferences might exhibit dynamically inconsistent behavior, we need to specify how individuals will react. There are three possible alternatives:</p>
+      <ol>
+        <li><strong>The naive approach:</strong> the individual does not realize that he/she might change his/her preferences in the future. He/she makes choices in the present period ignoring that his/her plans might be foiled (by himself/herself) in the future.</li>
+        <li><strong>Strategic approach without commitment:</strong> the individual realizes that his/her future self might behave differently than his/her present self wishes, and so he/she will act expecting that her future self will react to her choices.</li>
+        <li><strong>Strategic approach with commitment:</strong> the individual realizes that his/her future self might behave differently than his/her present self wishes, and so he/she will remove the ability of her future self to make choices by committing to the present choices.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Learning by doing setup (source: 1183-1188) -->
+  <section class="frame fs-10pt" id="lbd-setup">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Learning by Doing Exercise</h2>
+      <p class="frame-subtitle">Setup</p>
+    </div>
+    <div class="frame-content">
+      <p>A $(\beta,\delta)$-individual lives for three periods $t=0,1,2$. In period $t=0$, the individual has two units of &ldquo;corn&rdquo;, $I_{0}=2$. At each period, he/she chooses an <em>integer</em> amount of &ldquo;corn&rdquo; to consume, $c_{t}$. The remaining &ldquo;corn&rdquo; $s_{t}=I_{t}-c_{t}$ is planted and yields $2\cdot s_{t}$ units of &ldquo;corn&rdquo; in the next period, $I_{t+1}=2\cdot s_{t}$.</p>
+      <p>Consumption of $c_{t}$ units of &ldquo;corn&rdquo; yields utility $\sqrt{c_{t}}$.</p>
+      <p>Notice that in the last period $t=2$ there is no point in saving, so $c_{2}=I_{2}$ and $s_{2}=0$. Thus, we only need to find $c_{0}$ and $c_{1}$. Also, notice that $c_{0}$ must be $0$, $1$, or $2$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Learning by doing questions (source: 1189-1195) -->
+  <section class="frame fs-10pt" id="lbd-questions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Learning by Doing Exercise</h2>
+      <p class="frame-subtitle">Questions</p>
+    </div>
+    <div class="frame-content">
+      <ol>
+        <li>For each possible value of $c_{0}$, what are the corresponding possible values of $c_{2}$? <em>Hint:</em> if $c_{0}=2$ there is no saving, and therefore income in period $t=1$ is zero, $I_{1}=0$, and so $c_{1}=0$; if $c_{0}=1$ then $s_{0}=1$ and $I_{1}=2$ so $c_{1}$ must be &hellip; or &hellip; or &hellip; (please fill in the blanks and address the case in which $c_{0}=0$).</li>
+        <li>Using the information above, list all possible eight consumption paths. $(c_{0},c_{1},c_{2})=(2,0,0)$ or $(1,2,0)$ or $(1,1,2)$, etc.</li>
+        <li>Assuming $\delta=1/2$ and $\beta=3/4$, what is the optimal consumption path from the point of view of a naive (or strategic with commitment power &mdash; notice both of them will make the same choices) $(\beta,\delta)$-individual?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="behavioral-choice-risk.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Behavioral Choice Under Risk</a>
+    <a href="behavioral-games.html" style="color: var(--crane-blue); text-decoration: none;">Behavioral Games &rarr;</a>
+  </div>
+
+  <!-- KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+</body>
+</html>
