@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem Set 2 | ECON 416</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@15.1.1/lib/browser/math.js"></script>
+  <script type="importmap">
+  { "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+  </script>
+
+  <link rel="stylesheet" href="css/beamer-theme.css">
+  <link rel="stylesheet" href="css/problem-set.css?v=1">
+  <script src="js/katex-macros.js"></script>
+</head>
+<body>
+
+<section class="title-slide">
+  <div class="title-box">
+    <h1>Problem Set 2</h1>
+    <h2>Revealed Preferences</h2>
+  </div>
+</section>
+
+<!-- Filled by ps-submit.js from the server. Static text is the offline state:
+     a student who somehow reaches this page without a session sees a page that
+     explains itself rather than an empty banner. -->
+<div class="ps-identity" id="ps-identity">
+  <strong>Loading your group…</strong>
+  <span class="ps-members">If this does not change, open the personal link from your Canvas inbox.</span>
+</div>
+
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">The Setup</h2>
+  </div>
+  <div class="frame-content">
+    <p>There are two agents, Antonia and Marie, two goods ($X$ and $Y$) and three
+    periods $0$, $1$ and $2$. Prices are $p^0=(1.5,\,1.5)$, $p^1=(1,\,2)$ and
+    $p^2=(2,\,1)$. Both have the same income, $i=30$.</p>
+
+    <svg id="fig-budgets" style="max-width: 420px; width: 100%; display: block; margin: 1rem auto;"></svg>
+
+    <div class="block">
+      <div class="block-title">Antonia</div>
+      <div class="block-body">
+        Her primary goal is to buy at least $22$ units of good $X$. If prices and
+        income are such that she cannot afford $22$ units of $X$, she consumes
+        only $X$. If $22\times p_X \lt i$, she buys $22$ units of $X$ and spends
+        the remaining income $i-22\times p_X$ on good $Y$.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Marie</div>
+      <div class="block-body">
+        Her primary goal is to buy luxury goods. She uses $90\%$ of her income on
+        the most expensive good and $10\%$ on the least expensive good. If $X$
+        and $Y$ have identical prices, she uses her entire income to buy the same
+        amount of both goods.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">Question 1</h2>
+    <p class="frame-subtitle">Antonia's baskets</p>
+  </div>
+  <div class="frame-content">
+    <p>Find the basket Antonia chooses in each period. Label them $A_0$, $A_1$
+    and $A_2$.</p>
+    <div class="ps-baskets" id="baskets-A"></div>
+    <p class="ps-status">Enter numbers only. Fractions such as $13.5$ are fine.</p>
+  </div>
+</section>
+
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">Question 2</h2>
+    <p class="frame-subtitle">Marie's baskets</p>
+  </div>
+  <div class="frame-content">
+    <p>Find the basket Marie chooses in each period. Label them $M_0$, $M_1$
+    and $M_2$.</p>
+    <div class="ps-baskets" id="baskets-M"></div>
+  </div>
+</section>
+
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">Question 3</h2>
+    <p class="frame-subtitle">Revealed preference relations</p>
+  </div>
+  <div class="frame-content">
+    <p>Click each cell to mark whether the relation holds. Clicking cycles
+    <em>unanswered</em> &rarr; <strong>holds</strong> &rarr; <strong>does not
+    hold</strong>. There is no need to justify your choices.</p>
+    <div id="grids"></div>
+  </div>
+</section>
+
+<div class="ps-submit-bar">
+  <button type="button" id="ps-submit" disabled>Submit answers</button>
+  <span class="ps-status" id="ps-status">Loading…</span>
+</div>
+
+<div class="ps-key" id="ps-key" hidden></div>
+
+<script type="module">
+import { render } from './tikz-svg/dist/tikz-svg.min.js';
+
+/* ---------------------------------------------------------------------------
+ * The budget lines.
+ *
+ * Deliberately WITHOUT the chosen baskets on them: finding those baskets is
+ * questions 1 and 2, and a figure that plots them answers the problem set.
+ * The lines are given data -- income 30 at each of the three price vectors --
+ * so drawing them is scaffolding, not a hint.
+ * ------------------------------------------------------------------------ */
+const BUDGETS = [
+  { t: 0, x: 20, y: 20, color: '#dc322f' },   // p0 = (1.5, 1.5)
+  { t: 1, x: 30, y: 15, color: '#268bd2' },   // p1 = (1, 2)
+  { t: 2, x: 15, y: 30, color: '#859900' },   // p2 = (2, 1)
+];
+
+function drawBudgets() {
+  const S = 11, MAX = 33;
+  const draw = [
+    { type: 'path', points: [{ x: -0.6, y: 0 }, { x: MAX, y: 0 }], arrow: '->',
+      stroke: '#000', strokeWidth: 1.5 },
+    { type: 'path', points: [{ x: 0, y: 0.6 }, { x: 0, y: -MAX }], arrow: '->',
+      stroke: '#000', strokeWidth: 1.5 },
+    { type: 'node', id: 'xlab', position: { x: MAX, y: 1.6 }, label: '$X$',
+      anchor: 'north', fill: 'none', stroke: 'none' },
+    { type: 'node', id: 'ylab', position: { x: -1.4, y: -MAX }, label: '$Y$',
+      anchor: 'east', fill: 'none', stroke: 'none' },
+  ];
+  for (const v of [5, 10, 15, 20, 25, 30]) {
+    draw.push({ type: 'path', points: [{ x: v, y: 0 }, { x: v, y: 0.7 }],
+                stroke: '#000', strokeWidth: 1 });
+    draw.push({ type: 'path', points: [{ x: 0, y: -v }, { x: -0.7, y: -v }],
+                stroke: '#000', strokeWidth: 1 });
+  }
+  for (const b of BUDGETS) {
+    draw.push({ type: 'path', points: [{ x: 0, y: -b.y }, { x: b.x, y: 0 }],
+                stroke: b.color, strokeWidth: 2.5 });
+    draw.push({ type: 'node', id: `p${b.t}`,
+                position: { x: b.x * 0.55, y: -b.y * 0.55 },
+                label: `$p^${b.t}$`, anchor: 'south west',
+                fill: 'none', stroke: 'none', color: b.color });
+  }
+  render(document.getElementById('fig-budgets'),
+         { scale: S, originX: 34, originY: MAX * S + 12, draw });
+}
+
+/* ---------------------------------------------------------------------------
+ * Question ids.
+ *
+ * Generated rather than hand-written, because the id in the page, the id in the
+ * harvested payload and the id in the server's answer key have to be the same
+ * string, and 36 of them typed three times is 108 chances to typo one.
+ * ------------------------------------------------------------------------ */
+const AGENTS = [
+  { key: 'A', name: 'Antonia' },
+  { key: 'M', name: 'Marie' },
+];
+const RELS = [
+  { key: 'dr',  label: 'directly revealed', sym: '\\succeq_{DR}' },
+  { key: 'sdr', label: 'strictly directly revealed', sym: '\\succ_{SDR}' },
+];
+
+function buildBaskets(agent) {
+  const host = document.getElementById(`baskets-${agent.key}`);
+  for (const t of [0, 1, 2]) {
+    const label = document.createElement('label');
+    label.innerHTML = `$${agent.key}_${t}$`;
+    host.appendChild(label);
+    for (const good of ['x', 'y']) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.inputMode = 'decimal';
+      input.autocomplete = 'off';
+      input.dataset.q = `q${agent.key === 'A' ? 1 : 2}.${agent.key}${t}${good}`;
+      input.setAttribute('aria-label',
+        `${agent.name} period ${t}, units of good ${good.toUpperCase()}`);
+      input.placeholder = good.toUpperCase();
+      host.appendChild(input);
+    }
+  }
+}
+
+function buildGrid(agent, rel) {
+  const table = document.createElement('table');
+  table.className = 'ps-grid';
+  const caption = document.createElement('caption');
+  caption.innerHTML = `${rel.label} (${agent.name})`;
+  table.appendChild(caption);
+
+  const body = document.createElement('tbody');
+  for (let i = 0; i < 3; i++) {
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.innerHTML = `$${agent.key}_${i}$`;
+    tr.appendChild(th);
+    for (let j = 0; j < 3; j++) {
+      const td = document.createElement('td');
+      if (i === j) {
+        td.className = 'ps-diag';
+      } else {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ps-cell';
+        btn.dataset.q = `q3.${rel.key}_${agent.key}${i}_${agent.key}${j}`;
+        btn.dataset.state = '';
+        btn.innerHTML =
+          `$${agent.key}_${i} ${rel.sym} ${agent.key}_${j}$` +
+          `<span class="ps-mark">not answered</span>`;
+        btn.addEventListener('click', () => cycle(btn));
+        td.appendChild(btn);
+      }
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+  table.appendChild(body);
+  return table;
+}
+
+const NEXT = { '': 'true', 'true': 'false', 'false': '' };
+const MARK = { '': 'not answered', 'true': 'holds', 'false': 'does not hold' };
+
+function cycle(btn) {
+  btn.dataset.state = NEXT[btn.dataset.state];
+  btn.querySelector('.ps-mark').textContent = MARK[btn.dataset.state];
+  window.dispatchEvent(new CustomEvent('ps:dirty'));
+}
+
+function buildAll() {
+  AGENTS.forEach(buildBaskets);
+  const host = document.getElementById('grids');
+  for (const rel of RELS) {
+    for (const agent of AGENTS) host.appendChild(buildGrid(agent, rel));
+  }
+}
+
+buildAll();
+try { drawBudgets(); } catch (err) { console.warn('figure failed', err); }
+
+window.addEventListener('load', () => {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [{ left: '$$', right: '$$', display: true },
+                   { left: '$', right: '$', display: false }],
+      macros: window.katexMacros, throwOnError: false,
+    });
+  }
+});
+</script>
+
+<script src="js/ps-submit.js?v=1" data-ps="02"></script>
+
+</body>
+</html>

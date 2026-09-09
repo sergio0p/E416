@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relation notation — comparison | ECON 416</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<link rel="stylesheet" href="css/beamer-theme.css">
+<style>
+  table.cmp { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  table.cmp th, table.cmp td { border: 1px solid #ddd; padding: 0.7rem 0.9rem; text-align: left; vertical-align: middle; }
+  table.cmp th { background: #f5f5f5; font-size: 0.85rem; }
+  table.cmp code { font-size: 0.78rem; color: #444; }
+  .big { font-size: 1.9rem; }
+  .row-note { font-size: 0.78rem; color: #777; }
+  .sample { font-size: 1.25rem; line-height: 2.1; }
+  .sample .r { display: inline-block; margin-right: 1.6rem; }
+  .sdr { color: #dc322f; } .dr { color: #268bd2; } .ir { color: #00a651; }
+</style>
+</head>
+<body>
+
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">Relation notation</h2>
+    <p class="frame-subtitle">Where the SDR / DR / IR label sits</p>
+  </div>
+  <div class="frame-content">
+    <table class="cmp" id="cmp">
+      <thead><tr><th style="width:34%">Source</th><th style="width:26%">Rendered</th><th>Notes</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">In context</h2>
+    <p class="frame-subtitle">All three relations, both ways</p>
+  </div>
+  <div class="frame-content">
+    <p><strong>Current — subscript to the right</strong></p>
+    <p class="sample" id="ctx-sub"></p>
+    <p style="margin-top:1.4rem"><strong>Proposed — label underneath</strong></p>
+    <p class="sample" id="ctx-under"></p>
+  </div>
+</section>
+
+<script>
+const ROWS = [
+  [String.raw`a \succ_{\mathrm{SDR}} b`, 'Current. Widest, because the label sits to the right.'],
+  [String.raw`a \underset{\mathrm{SDR}}{\succ} b`, 'Label underneath, script size, relation spacing preserved. 23% narrower.'],
+  [String.raw`a \mathrel{\mathop{\succ}\limits_{\mathrm{SDR}}} b`, 'Identical output to \\underset, three times the source.'],
+  [String.raw`a {\succ \atop \mathrm{SDR}} b`, 'A generalized fraction: label at FULL size, and relation spacing is lost.'],
+  [String.raw`a \mathrel{\succ \atop \mathrm{SDR}} b`, 'Spacing restored, label still full size — too heavy.'],
+  [String.raw`a \overset{\mathrm{SDR}}{\succ} b`, 'Label ABOVE. Right for \\stackrel{def}{=}, wrong for a subscript.'],
+];
+const tbody = document.querySelector('#cmp tbody');
+for (const [src, note] of ROWS) {
+  const tr = document.createElement('tr');
+  const c1 = document.createElement('td');
+  c1.innerHTML = '<code></code>'; c1.querySelector('code').textContent = src;
+  const c2 = document.createElement('td'); c2.className = 'big';
+  c2.innerHTML = katex.renderToString(src, { throwOnError: false });
+  const c3 = document.createElement('td'); c3.className = 'row-note'; c3.textContent = note;
+  tr.append(c1, c2, c3); tbody.appendChild(tr);
+}
+
+const RELS = [['succ', 'SDR', 'sdr'], ['succeq', 'DR', 'dr'], ['succeq', 'IR', 'ir']];
+document.getElementById('ctx-sub').innerHTML = RELS.map(([op, tag, cls]) =>
+  `<span class="r ${cls}">` + katex.renderToString(`a \\${op}_{\\mathrm{${tag}}} b`, {throwOnError:false}) + '</span>').join('');
+document.getElementById('ctx-under').innerHTML = RELS.map(([op, tag, cls]) =>
+  `<span class="r ${cls}">` + katex.renderToString(`a \\underset{\\mathrm{${tag}}}{\\${op}} b`, {throwOnError:false}) + '</span>').join('');
+</script>
+</body>
+</html>

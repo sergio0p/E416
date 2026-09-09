@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RP triangle — harness | ECON 416</title>
+<link rel="icon" href="data:,">   <!-- no favicon request, so a 404 in the
+                                       browser test means a real problem -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@15.1.1/lib/browser/math.js"></script>
+<script type="importmap">
+{ "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/beamer-theme.css">
+<link rel="stylesheet" href="css/problem-set.css?v=13">
+</head>
+<body class="ps-page">
+<!-- A harness, not a lecture page: it exists so the browser test can drive the
+     widget in isolation, without a session, a group or a submission service. -->
+<section class="frame">
+  <div class="frame-title-bar">
+    <h2 class="frame-title">PS 02 - Part I-I</h2>
+    <p class="frame-subtitle">Revealed preference rankings</p>
+  </div>
+  <div class="frame-content">
+    <div id="host"></div>
+    <!-- The stored encoding, kept only so the browser test can read it. The
+         student sees the widget's own KaTeX summary, never this. -->
+    <output id="answer" style="position:absolute; left:-9999px;"></output>
+  </div>
+</section>
+<script type="module">
+import { createRPTriangle } from './js/rp-triangle.js';
+const out = document.getElementById('answer');
+// Version 1 of the exercise: a DR b, b DR c, a IR c.
+const w = createRPTriangle(document.getElementById('host'), {
+  observations: [
+    { id: 'a', prices: [2, 3], basket: [6, 1] },
+    { id: 'b', prices: [3, 2], basket: [3, 3] },
+    { id: 'c', prices: [4, 1], basket: [1, 6] },
+  ],
+  onChange: a => { out.textContent = JSON.stringify(a); },
+});
+// The harness's own control, mounted in the slot the widget provides so it
+// lands on the summary line rather than in a paragraph of its own.
+const clear = Object.assign(document.createElement('button'),
+  { type: 'button', id: 'clear', className: 'rp-clear', textContent: 'Clear' });
+clear.addEventListener('click', () => w.clear());
+w.actions.appendChild(clear);
+window.__rp = w;                       // the test drives through this
+out.textContent = JSON.stringify(w.get());
+</script>
+</body>
+</html>

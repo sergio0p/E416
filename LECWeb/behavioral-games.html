@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="inter-temporal-choice.html">
+  <meta name="nav-next" content="index.html">
+  <title>Behavioral Game Theory | ECON 416</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+  <style>
+    .tikz-placeholder {
+      border: 2px dashed #999;
+      background: #fafafa;
+      padding: 1.2rem;
+      margin: 0.8rem auto;
+      text-align: center;
+      color: #555;
+      font-style: italic;
+      max-width: 520px;
+      font-size: 0.85em;
+    }
+    .tikz-placeholder .tikz-label {
+      font-weight: bold;
+      color: #b7410e;
+      font-style: normal;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .payoff-matrix {
+      border-collapse: collapse;
+      margin: 0.8rem auto;
+      font-size: 0.95em;
+    }
+    .payoff-matrix td, .payoff-matrix th {
+      border: 1px solid #555;
+      padding: 0.5rem 0.9rem;
+      text-align: center;
+    }
+    .payoff-matrix th {
+      background: #fff8e1;
+    }
+  </style>
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="behavioral-game-theory">
+    <div class="section-title-box">
+      <h1>Behavioral Game Theory</h1>
+    </div>
+  </section>
+
+  <!-- Frame: Game Theory quick review (source: 1198-1259) -->
+  <section class="frame overlay-frame" id="game-theory-review">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Game Theory</h2>
+      <p class="frame-subtitle">A Quick Review</p>
+    </div>
+    <div class="frame-content">
+      <div class="block">
+        <div class="block-title">Definition</div>
+        <div class="block-body">A (static) game is a list of players, their available actions, and their payoffs.</div>
+      </div>
+      <p style="text-align:center;"><em>Example: A coordination game.</em></p>
+      <ul>
+        <li class="overlay" data-overlay="1">$I = \{1,2\}$</li>
+        <li class="overlay" data-overlay="2">$S_1=S_2=\{W,M\}$, where $W$ stands for &ldquo;Windows&rdquo; and $M$ stands for &ldquo;Mac&rdquo;.<br>
+          $S=S_1\times S_2=\{ (W,W),(W,M),(M,W),(M,M)\}$</li>
+        <li class="overlay" data-overlay="3">$u_1(W,W)=u_2(M,M)=3$, $u_1(M,M)=u_2(W,W)=2$,<br>
+          $u_1(W,M)=u_1(M,W)=u_2(W,M)=u_2(M,W)=0$.</li>
+      </ul>
+      <div class="overlay" data-overlay="4">
+        <table class="payoff-matrix">
+          <thead>
+            <tr><th></th><th>W</th><th>M</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>W</th><td>3, 2</td><td>0, 0</td></tr>
+            <tr><th>M</th><td>0, 0</td><td>2, 3</td></tr>
+          </tbody>
+        </table>
+        <p style="text-align:center;"><small>Player 1 chooses rows, Player 2 chooses columns.</small></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Nash equilibrium definition (source: 1260-1262) -->
+  <section class="frame" id="nash-eq-def">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Game Theory</h2>
+      <p class="frame-subtitle">A Quick Review</p>
+    </div>
+    <div class="frame-content">
+      <p>The strategy profile $a_{-i}$ is a list of actions of players distinct from player $i$. The best response of player $i$ is the set of all actions $x$ that maximize $u_i(x,a_{-i})$: the payoff of player $i$ when the others play according to $a_{-i}$. We write $BR_i(a_{-i})$ for the best response function of player $i$.</p>
+      <p>A <em>Nash equilibrium</em> is a strategy profile $s=(s_1,\ldots,s_n)$ such that $s_i=BR_i(s_{-i})$ &mdash; every player is best responding to the others' actions.</p>
+    </div>
+  </section>
+
+  <!-- Frame: BR and Nash example (source: 1263-1311) -->
+  <section class="frame" id="br-nash-example">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Best Responses and Nash Equilibrium</h2>
+      <p class="frame-subtitle">An Example: Stag Hunt</p>
+    </div>
+    <div class="frame-content">
+      <table class="payoff-matrix">
+        <thead>
+          <tr><th></th><th>Stag</th><th>Hare</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Stag</th><td><strong>4, 4</strong></td><td>0, 1</td></tr>
+          <tr><th>Hare</th><td>1, 0</td><td><strong>1, 1</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Diagram &mdash; source lines 1264-1297]</span>
+        Best response plot in $(S_1, S_2)$ space with axes labeled $S$ (Stag) and $H$ (Hare). Blue stars at $(S,S)$ and $(H,H)$ mark Player 2's best responses; red circles at the same points mark Player 1's best responses. Where they coincide we have Nash equilibria. Note: Nash eq. = all players are best responding, best response curves cross.
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Prisoners' Dilemma (source: 1314-1361) -->
+  <section class="frame" id="prisoners-dilemma">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle">Prisoners' Dilemma</p>
+    </div>
+    <div class="frame-content">
+      <table class="payoff-matrix">
+        <thead>
+          <tr><th></th><th>Effort</th><th>Shirk</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Effort</th><td>9, 9</td><td>1, 10</td></tr>
+          <tr><th>Shirk</th><td>10, 1</td><td><strong>2, 2</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Diagram &mdash; source lines 1315-1347]</span>
+        Best response plot in $(S_1, S_2)$ space with axes labeled $E$ (Effort) and $S$ (Shirk). Best responses for both players coincide at $(S,S)$, which is the unique Nash equilibrium.
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Prisoners' Dilemma cont (source: 1362-1365) -->
+  <section class="frame" id="pd-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle">Prisoners' Dilemma</p>
+    </div>
+    <div class="frame-content">
+      <p>The only equilibrium is for both players to shirk. Moreover, the best response is always to shirk regardless of the other player's strategy. However, in experiments, players often choose effort.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Nash Eq Continuum (source: 1367-1377) -->
+  <section class="frame" id="nash-continuum">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Nash Equilibrium</h2>
+      <p class="frame-subtitle">of Games with a Continuum of Actions</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider a two-player game in which player 1 chooses $x$, player 2 chooses $y$, and the payoffs are $u_1(x,y)$ and $u_2(x,y)$. Assuming that marginal utilities of one's own action are decreasing, we obtain player 1's best response function by solving:
+      $$ \diff{}{x}u_1(x,y)=0$$
+      and player 2's best response by solving
+      $$\diff{ }{y}u_2(x,y)=0.$$
+      To obtain the Nash equilibria we solve the system of equations given by the best response functions:
+      $$x=BR_1(y),\qquad y=BR_2(x).$$</p>
+    </div>
+  </section>
+
+  <!-- Frame: Dynamic Games (source: 1378-1382) -->
+  <section class="frame" id="dynamic-games">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Dynamic Games</h2>
+    </div>
+    <div class="frame-content">
+      <p>In dynamic games, a strategy of a player prescribes the action that the player will play at each node in the game tree in which the player moves. We focus attention on <em>subgame perfect Nash equilibrium</em>, which is a Nash equilibrium in which at every node of the tree (including nodes that might not be reached during play) players are always best responding.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Two-stage game (source: 1383-1403) -->
+  <section class="frame" id="two-stage">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Dynamic Games</h2>
+      <p class="frame-subtitle">Generic Example of Two-Stage Game with Continuum of Actions</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider the game represented by the following game tree:</p>
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1386-1399]</span>
+        Player 1 (red node) chooses $x$, then Player 2 (green node) observes $x$ and chooses $y$. Terminal node payoffs: $u_1(x,y)$ above, $u_2(x,y)$ below.
+      </div>
+      <p>The game is as in the previous slide but now player 1 chooses $x$ first and then player 2 observes $x$ and chooses $y$. The subgame perfect Nash equilibrium is found by backward induction. We analyze the game at the last stage first: for each $x$ we find player 2's best response $BR_2(x)$ by solving
+      $$\diff{ }{y}u_2(x,y)=0.$$
+      Notice that this best response coincides with the one found in the simultaneous-move game.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Two-stage continuation (source: 1404-1408) -->
+  <section class="frame" id="two-stage-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Example of Two-Stage Game with Continuum of Actions</h2>
+      <p class="frame-subtitle">Continuation</p>
+    </div>
+    <div class="frame-content">
+      <p>Player 1 anticipates player 2's best response and chooses $x$ to maximize his/her payoff given player 2's best response:
+      $$u_1(x,BR_2(x)),$$
+      so player 1's best response is found by solving
+      $$\ddiff{}{x}u_1(x,BR_2(x))=\diff{}{x}u_1(x,BR_2(x))+\diff{}{y}u_1(x,BR_2(x))\cdot \ddiff{BR_2(x)}{x}=0.$$</p>
+    </div>
+  </section>
+
+  <!-- Frame: Public Good (source: 1409-1414) -->
+  <section class="frame" id="public-good">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle">Public Good Contribution</p>
+    </div>
+    <div class="frame-content">
+      <p>A player has to divide one dollar between private consumption $1-x_i$ and donation to a public good $x_i$. Notice that for public goods, consumption is non-rival. The payoffs are:
+      $$u_i(x)=1-x_i+\alpha\cdot \sum_{j=1}^n x_j,$$
+      where $1/n\lt \alpha\lt 1$ and $n$ is the number of players.</p>
+      <p>Notice that since $\diff{u_i}{x_i}=-1+\alpha\lt 0$, we have $BR_i(x_{-i})=0$ but $u_i(0,\ldots,0)=1\lt u_i(1,\ldots,1)=\alpha\cdot n$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Ultimatum game (source: 1415-1445) -->
+  <section class="frame" id="ultimatum">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle">The Ultimatum Game</p>
+    </div>
+    <div class="frame-content">
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1420-1437]</span>
+        Player 1 chooses demand $x$; Player 2 then says Yes (Y) yielding $(x, 1-x)$, or No (N) yielding $(0,0)$.
+      </div>
+      <div class="block">
+        <div class="block-title">The Ultimatum Game</div>
+        <div class="block-body">Player 1 makes demand $x$ and Player 2, after observing it, says either yes or no. Payoffs are: $u_1(x,y)=x$, $u_2(x,y)=1-x$, and $u_1(x,n)=u_2(x,n)=0.$</div>
+      </div>
+      <ul>
+        <li>Player 2's best response is to say yes to any $x\lt 1$.</li>
+        <li>Player 2 is indifferent between saying yes or no to $x=1$.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Ultimatum game cont (source: 1446-1476) -->
+  <section class="frame" id="ultimatum-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle">The Ultimatum Game</p>
+    </div>
+    <div class="frame-content">
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1452-1469]</span>
+        Same ultimatum-game tree as above.
+      </div>
+      <ul>
+        <li>Thus player 2 has two strategies that can be part of a subgame perfect equilibrium:
+          $$s^*(x)=y\text{ for all } x\quad\text{ and }\quad s^{**}(x)=\begin{cases}y\,\text{ if } &x\lt 1,\\ n\,\text{ if } &x=1.\end{cases}$$
+        </li>
+        <li>In any subgame perfect equilibrium: player 1 demands the whole pie and player 2 always says yes, $(1,s^{*})$.</li>
+        <li>But in experiments (in market economies), offers below 20% are often rejected; also, offers below 20% are rare.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Dictatorship (source: 1477-1490) -->
+  <section class="frame" id="dictatorship">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle">The Dictatorship Game</p>
+    </div>
+    <div class="frame-content">
+      <div class="tikz-placeholder">
+        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1483-1489]</span>
+        Player 1 chooses $x$ and the payoff is $(x, 1-x)$ &mdash; Player 2 has no move.
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Ultimatum across cultures (source: 1491-1493) -->
+  <section class="frame" id="ultimatum-cultures">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ultimatum Game</h2>
+    </div>
+    <div class="frame-content">
+      <p>The variance of the ultimatum game behavior across gender, race, majors, etc., is very small in market economies. However, there is substantial variance across different cultures. In less market-oriented societies, low offers are not rejected. In some hunting societies, extremely generous offers are made and rejected (competitive gift giving).</p>
+    </div>
+  </section>
+
+  <!-- Frame: Social Preferences (source: 1494-1502) -->
+  <section class="frame" id="social-preferences">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Behavioral Game Theory Models</h2>
+      <p class="frame-subtitle">Social Preferences</p>
+    </div>
+    <div class="frame-content">
+      <p>Let $\mathbf{u}=(u_1,\ldots,u_n)$ be the standard payoffs of a game with $n$ players. Behavioral Game Theory assumes that players have <em>social preferences</em>, that is, their utility depends not only on their own payoffs but also on the payoffs of the other players. Thus, the utility of player $i$ is given by $U_i$ where:</p>
+      <ul>
+        <li>Inequity aversion model ($0\lt \beta\lt \min(1,\alpha)$):
+          $$U_i(\mathbf{u})=u_i-\beta\sum_{j\neq i} \underbrace{\max(u_i-u_j,0)}_{\text{guilt}}-\alpha\sum_{j\neq i} \underbrace{\max(u_j-u_i,0)}_{\text{envy}}.$$
+        </li>
+        <li>ERC (equity-reciprocity-competition &mdash; <em>not covered</em>), with $\partial_1 F\gt 0$, $\partial_2 F(u_i,1/n)=0$ and $\partial^2_2 F(u_i,1/n)\lt 0$:
+          $$U_i(\mathbf{u})=F\left(u_i, \dfrac{u_i}{\sum_{j=1}^{n} u_j}\right).$$
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Alternative equilibrium concepts (source: 1503-1511) -->
+  <section class="frame" id="alternative-eq">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Alternative Equilibrium Concepts</h2>
+    </div>
+    <div class="frame-content">
+      <p>The introduction of social preferences allows us to explain some of the experimental results, but it keeps the standard assumption that individuals play according to a Nash equilibrium or, in dynamic games, according to a subgame-perfect Nash equilibrium.</p>
+      <p>Two related alternative concepts that assume individuals use a more limited reasoning than implied by Nash equilibrium are:</p>
+      <ul>
+        <li>Iterative deletion of dominated strategies.</li>
+        <li>Level $k$ reasoning.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Iterative deletion (source: 1513-1522) -->
+  <section class="frame fs-10pt" id="iterative-deletion">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Iterative Deletion of Dominated Actions (ID)</h2>
+    </div>
+    <div class="frame-content">
+      <p><strong>Definition:</strong> A player's strategy $s$ is <em>strictly dominated</em> if the player has an alternative strategy that yields a strictly higher payoff <u>regardless of the other players' choices</u>: $u_i(s,y)\lt u_i(t,y)$ for all $y$, where $y$ is the list of strategies chosen by the others.</p>
+      <p>A rational player would never play a strictly dominated action. So we may remove these actions from the game. However, the resulting game might have strictly dominated actions that were not strictly dominated in the original game. The process of eliminating strictly dominated actions and obtaining a simpler game will eventually stop (provided the game has finitely many strategies). The strategies that survive the iterative process of deletion of strictly dominated actions are ID's prediction.</p>
+      <p>In the first step, we only assume the players are rational. In the second, we assume they know that other players are rational. In the third, we assume that they know that the others know that they know&hellip; and so on.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Level k (source: 1524-1532) -->
+  <section class="frame" id="level-k">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Level $k$</h2>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li>Level zero behavior is given (pre-specified by the modeler).</li>
+        <li>Level one behavior is the best response to level zero behavior.</li>
+        <li>&hellip;</li>
+        <li>Level $k$ behavior is the best response to level $k-1$.</li>
+        <li>Level $+\infty$ is the limit of level $k$ as $k$ goes to infinity (and in some games it coincides with Nash equilibrium).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="inter-temporal-choice.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Inter-temporal Choice</a>
+    <a href="index.html" style="color: var(--crane-blue); text-decoration: none;">Index &rarr;</a>
+  </div>
+
+  <!-- KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+</body>
+</html>

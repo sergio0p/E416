@@ -10,26 +10,48 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <link rel="stylesheet" href="css/beamer-theme.css">
 
+  <!-- tikz-svg: the bundle's bare 'mathjs' import must resolve; the shim
+       degrades to null stubs when window.math is absent (diagrams-only page). -->
+  <script type="importmap">
+  { "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+  </script>
+
   <style>
-    .tikz-placeholder {
-      border: 2px dashed #999;
-      background: #fafafa;
-      padding: 1.2rem;
-      margin: 0.8rem auto;
-      text-align: center;
-      color: #555;
-      font-style: italic;
-      max-width: 520px;
-      font-size: 0.85em;
+    /* Guide lines/labels on the gain-loss figure: hidden, revealed on scroll.
+       Targeted by stable id — the library re-renders the SVG's children after
+       fonts load, which would wipe a class added to them, so the reveal state is
+       a class on the <svg> element (which the re-render preserves) instead. */
+    #fig-gain-loss #g-gainV, #fig-gain-loss #g-gainH,
+    #fig-gain-loss #g-lossV, #fig-gain-loss #g-lossH,
+    #fig-gain-loss #node-xa, #fig-gain-loss #node-mua,
+    #fig-gain-loss #node-xma, #fig-gain-loss #node-mma {
+      opacity: 0; transition: opacity 0.4s ease;
     }
-    .tikz-placeholder .tikz-label {
-      font-weight: bold;
-      color: #b7410e;
-      font-style: normal;
-      display: block;
-      margin-bottom: 0.4rem;
+    #fig-gain-loss.show-gain #g-gainV, #fig-gain-loss.show-gain #g-gainH,
+    #fig-gain-loss.show-gain #node-xa, #fig-gain-loss.show-gain #node-mua { opacity: 1; }
+    #fig-gain-loss.show-loss #g-lossV, #fig-gain-loss.show-loss #g-lossH,
+    #fig-gain-loss.show-loss #node-xma, #fig-gain-loss.show-loss #node-mma { opacity: 1; }
+
+    /* Four-region MRS figure: transparent clickable quadrants; MRS nodes hidden
+       until their region is clicked. Same re-render-proof id/svg-class scheme. */
+    #fig-mrs [id^="node-hit-"] { opacity: 0; cursor: pointer; }
+    #fig-mrs [id^="node-hit-"]:hover { opacity: 0.09; }
+    #fig-mrs [id^="node-mrs-"] { opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+    #fig-mrs.show-ne #node-mrs-ne, #fig-mrs.show-nw #node-mrs-nw,
+    #fig-mrs.show-sw #node-mrs-sw, #fig-mrs.show-se #node-mrs-se { opacity: 1; }
+
+    /* Live MRS hover readout — HTML overlay in the figure's top-left (the strip
+       left of the Y-axis is too thin for horizontal text at this width). */
+    #mrs-readout {
+      flex: 0 0 auto; align-self: flex-start;
+      width: 6em; margin-top: 2.2rem;
+      font: 600 0.82rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #586e75; text-align: right;
+      pointer-events: none;
     }
+    #mrs-readout .val { color: #268bd2; font-weight: 700; }
   </style>
+
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
 </head>
@@ -40,6 +62,26 @@
     <div class="section-title-box">
       <h1>Behavioral Choice Under Certainty</h1>
     </div>
+
+    <!-- Table of Contents: in-page anchors to each frame's id (blue = default link color) -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#decision-making" style="margin-left: 1rem;">1. Decision Making</a>
+      <a href="#reference-points" style="margin-left: 1rem;">2. Reference Points</a>
+      <a href="#menu-effects" style="margin-left: 1rem;">3. Menu Effects</a>
+      <a href="#decoy-effect" style="margin-left: 1rem;">4. Decoy Effect</a>
+      <br>
+      <a href="#kr-model" style="margin-left: 1rem;">5. KR Model</a>
+      <a href="#kr-model-cont" style="margin-left: 1rem;">6. KR Model cont.</a>
+      <a href="#loss-aversion" style="margin-left: 1rem;">7. Loss Aversion</a>
+      <a href="#loss-gain" style="margin-left: 1rem;">8. Loss-Gain Utility</a>
+      <br>
+      <a href="#numerical-example-cont" style="margin-left: 1rem;">9. Optimal Basket</a>
+      <a href="#micro-review" style="margin-left: 1rem;">10. Micro Review</a>
+      <a href="#numerical-example" style="margin-left: 1rem;">11. Numerical Example</a>
+      <br>
+      <a href="#trad-graph" style="margin-left: 1rem;">12. Traditional</a>
+      <a href="#refdep-graph" style="margin-left: 1rem;">13. Reference-Dep.</a>
+    </nav>
   </section>
 
   <!-- Frame: Decision Making Under Certainty (source: 440-448) -->
@@ -169,6 +211,34 @@
     </div>
   </section>
 
+  <!-- Frame: Loss Aversion -->
+  <section class="frame" id="loss-aversion">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Loss Aversion</h2>
+    </div>
+    <div class="frame-content">
+      <p>Let $u$ be either an utility for wealth or a gain-loss utility function. The point zero is either the initial wealth or the reference point, and we assume $u(0)=0$.</p>
+      <div class="block">
+        <div class="block-title">Definition</div>
+        <div class="block-body">
+          We say that $u$ displays <strong>loss aversion</strong> if and only if for any
+          point $x\gt 0$, we have that $u(x)\lt -u(-x)$.
+        </div>
+      </div>
+      <div class="pullquote">
+        &ldquo;What should I gain by the exaction of the forfeiture? A pound of man&rsquo;s
+        flesh, taken from a man, is not so estimable, profitable neither, as flesh of muttons,
+        beefs, or goats.&rdquo;
+        <span class="attrib">&mdash; <em>The Merchant of Venice</em>, Act 1, Scene 3 (proposing the bond, weighing what a forfeiture would be worth)</span>
+      </div>
+      <div class="pullquote">
+        &ldquo;Thou stick&rsquo;st a dagger in me: I shall never see my gold again. Fourscore
+        ducats at a sitting! Fourscore ducats!&rdquo;
+        <span class="attrib">&mdash; <em>The Merchant of Venice</em>, Act 3, Scene 1 (with Tubal, on the ducats his daughter took)</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Frame: Loss-gain utility (source: 516-526) -->
   <section class="frame" id="loss-gain">
     <div class="frame-title-bar">
@@ -176,10 +246,52 @@
     </div>
     <div class="frame-content">
       <p>The loss-gain utility is a component of the overall utility. Its utility/disutility depends on how the consumption-utility of a good differs from the consumption-utility of its reference level.</p>
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Diagram &mdash; source lines 518-525]</span>
-        Piecewise-linear gain-loss function $\mu(\Delta u)$: steeper slope for losses ($\Delta u\lt 0$), flatter slope for gains ($\Delta u\gt 0$). Caption: &ldquo;Gains have less impact than losses.&rdquo;
+      <p>A loss-gain utility $\mu$ as defined above displays loss aversion if and only if $L\gt G\gt 0$.</p>
+      <svg id="fig-gain-loss" style="max-width: 456px; width: 100%; display: block; margin: 0 auto;"></svg>
+    </div>
+  </section>
+
+  <!-- Frame: Optimal Basket Choice (MRS regions figure) -->
+  <section class="frame" id="numerical-example-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Optimal Basket Choice</h2>
+      <p class="frame-subtitle">With Reference Dependent Preferences</p>
+    </div>
+    <div class="frame-content">
+      <p>The reference basket $r=(\bar x,\bar y)$ splits the good space into four regions. <strong>Click a region</strong> to reveal the reference-dependent consumer's $\mathrm{MRS}$ there.</p>
+      <div id="fig-mrs-wrap" style="display: flex; align-items: flex-start; gap: 0.25rem; margin: 0.5rem 0;">
+        <div id="mrs-readout">MRS at (x,&nbsp;y)</div>
+        <svg id="fig-mrs" style="flex: 1 1 auto; min-width: 0; display: block;"></svg>
       </div>
+    </div>
+  </section>
+
+  <!-- Frame: Intermediary Micro Review -->
+  <section class="frame" id="micro-review">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Intermediary Micro Review</h2>
+      <p class="frame-subtitle">Finding the optimal basket</p>
+    </div>
+    <div class="frame-content">
+      <p>A consumer looks for the optimal basket $(x,y)$ on the budget line $p_X\,x+p_Y\,y=I$.</p>
+      <ul>
+        <li>$\tfrac{1}{p_X}$ is the amount of good $X$ one dollar buys.</li>
+        <li>Spending that dollar on $X$ raises utility by about $U_X\cdot\tfrac{1}{p_X}$&mdash;the <strong>marginal utility per dollar</strong> of $X$.</li>
+        <li>Likewise, one dollar spent on $Y$ raises utility by about $U_Y\cdot\tfrac{1}{p_Y}$.</li>
+        <li>If $U_X\cdot\tfrac{1}{p_X}\gt U_Y\cdot\tfrac{1}{p_Y}$, the consumer should take one dollar away from good $Y$ and spend it on good $X$: utility rises.</li>
+        <li>If $U_X\cdot\tfrac{1}{p_X}\lt U_Y\cdot\tfrac{1}{p_Y}$, shift one dollar the other way, from $X$ to $Y$.</li>
+        <li>The consumer keeps shifting dollars until no move raises utility.</li>
+      </ul>
+      <p>That happens in one of two ways:</p>
+      <ul>
+        <li><strong>Smooth interior optimum</strong>&mdash;the marginal utilities per dollar are equal:
+          $$\frac{U_X}{p_X}=\frac{U_Y}{p_Y}\quad\Longleftrightarrow\quad \mathrm{MRS}=\frac{U_X}{U_Y}=\frac{p_X}{p_Y}.$$
+        </li>
+        <li><strong>At a kink</strong>&mdash;where the optimal basket has one good at its reference level ($x=\bar x$ or $y=\bar y$), so the indifference curve bends&mdash;the $\mathrm{MRS}$ is not a single number: it takes a one-sided value on each side. The consumer stops as soon as the price ratio lies between them,
+          $$\mathrm{MRS}^{-}\;\ge\;\frac{p_X}{p_Y}\;\ge\;\mathrm{MRS}^{+},$$
+          because from a kink, shifting a dollar <em>either</em> way lowers the marginal utility gained. Here $\mathrm{MRS}^{+}$ is the slope along the indifference curve when the consumer <strong>increases</strong> the quantity of $X$ and <strong>decreases</strong> the quantity of $Y$, while $\mathrm{MRS}^{-}$ is the slope when the consumer <strong>decreases</strong> $X$ and <strong>increases</strong> $Y$.
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -197,20 +309,39 @@
         <li>$(20,80)$ is the reference basket.</li>
       </ul>
       <p>We assume that both consumers' incomes are $I_T=I_R=120$ and prices initially are $p_X=2$ and $p_Y=1$.</p>
+      <p>At these prices, the optimal choice for these consumers is to choose the basket $(20,80)$, which (by chance) coincides with the reference basket of the $R$ consumer.</p>
+      <p>Now suppose the price of $X$ rises to $p_X=3$ (with $p_Y=1$ and $I=120$ unchanged), so the budget line pivots about its $Y$-intercept $(0,120)$.</p>
+      <ul>
+        <li>The <strong>traditional</strong> consumer moves to $(10,90)$&mdash;substituting toward the now relatively cheaper good $Y$.</li>
+        <li>The <strong>reference-dependent</strong> consumer moves to $(\tfrac{40}{3},80)\approx(13.3,80)$: it keeps $Y$ at its reference level $80$&mdash;dropping below the reference would hurt&mdash;so the whole adjustment falls on $X$.</li>
+      </ul>
     </div>
   </section>
 
-  <!-- Frame: Numerical Example cont. (source: 536-539) -->
-  <section class="frame" id="numerical-example-cont">
+
+  <!-- Frame: Traditional consumer graph -->
+  <section class="frame" id="trad-graph">
     <div class="frame-title-bar">
-      <h2 class="frame-title">A Numerical Example</h2>
-      <p class="frame-subtitle">Cont.</p>
+      <h2 class="frame-title">The Traditional Consumer</h2>
+      <p class="frame-subtitle">Budget change from $A$ to $B$</p>
     </div>
     <div class="frame-content">
-      <p>At these prices, the optimal choice for these consumers is to choose the basket $(20,80)$, which (by chance) coincides with the reference basket of the $R$ consumer.</p>
+      <p>Budget lines before ($2x+y=120$, solid) and after ($3x+y=120$, dashed) the price change, with the indifference curves through the initial basket $A=(20,80)$ and the final basket $B=(10,90)$.</p>
+      <img src="img/trad-price-change.png" alt="Traditional consumer: budget lines and indifference curves through A and B" style="max-width: 480px; width: 100%; display: block; margin: 0.5rem auto;">
     </div>
   </section>
 
+  <!-- Frame: Reference-dependent consumer graph -->
+  <section class="frame" id="refdep-graph">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Reference-Dependent Consumer</h2>
+      <p class="frame-subtitle">Budget change from $A$ to $B$</p>
+    </div>
+    <div class="frame-content">
+      <p>The same budget change. The indifference curves are <strong>kinked</strong> along the reference lines $x=\bar x$ and $y=\bar y$ (dotted). The consumer moves from $A=(20,80)$ to $B\approx(13.3,80)$, staying on the $y=\bar y$ kink line&mdash;$Y$ pinned at its reference level.</p>
+      <img src="img/refdep-price-change.png" alt="Reference-dependent consumer: kinked indifference curves and budget lines through A and B" style="max-width: 480px; width: 100%; display: block; margin: 0.5rem auto;">
+    </div>
+  </section>
 
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
@@ -239,6 +370,178 @@
         onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
       });
     });
+  </script>
+
+  <!-- tikz-svg: gain-loss (loss-gain) utility figure, source .tex lines 518-525 -->
+  <script type="module">
+    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+
+    // mu(du) = L*min(du,0) + G*max(du,0), with L=1 (losses), G=0.5 (gains).
+    // Piecewise-linear, so drawn as an exact two-segment path through the origin.
+    // Data here is y-up (math); negated on the way in because SVG is y-down.
+    const a = 0.8, L = 1, G = 0.5;    // a symmetric |change|; slopes L (loss) > G (gain)
+    const gY = G * a, lY = L * a;     // curve heights at +a (gain) and -a (loss)
+    const GUIDE = '#586e75', DASH = '4 2 1 2';   // densely dash-dotted guide lines
+    try {
+      render(document.getElementById('fig-gain-loss'), {
+        scale: 130, originX: 140, originY: 160, padding: 6,
+        katexMacros: (typeof katexMacros !== 'undefined' ? katexMacros : undefined),
+        draw: [
+          // axes (double-headed, as in the original tikzpicture)
+          { type: 'path', points: [{ x: 0, y: -1 }, { x: 0, y: 1 }], arrow: '<->', stroke: '#000', strokeWidth: 1.4 },
+          { type: 'path', points: [{ x: -1, y: 0 }, { x: 1.30, y: 0 }], arrow: '<->', stroke: '#000', strokeWidth: 1.4 },
+          // axis labels (invisible rectangle nodes = tight bounding box)
+          { type: 'node', id: 'mu', position: { x: 0.06, y: -1.06 }, label: '$\\mu$', anchor: 'west', shape: 'rectangle', innerSep: 2, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'du', position: { x: 1.34, y: 0 }, label: '$\\Delta u$', anchor: 'west', shape: 'rectangle', innerSep: 2, fill: 'none', stroke: 'none' },
+          // gain-loss function: (-1,-1) -> (0,0) -> (1,0.5); steep for losses, flat for gains
+          { type: 'path', points: [{ x: -1, y: 1 }, { x: 0, y: 0 }, { x: 1, y: -0.5 }], stroke: '#268bd2', strokeWidth: 2.5 },
+          // --- guide lines (revealed on scroll): from +/-a on the x-axis, up/down to
+          //     the curve, then across to the mu-axis. DOM order = gainV,gainH,lossV,lossH.
+          { type: 'path', id: 'g-gainV', points: [{ x: a, y: 0 }, { x: a, y: -gY }], dashed: DASH, stroke: GUIDE, strokeWidth: 1.2 },
+          { type: 'path', id: 'g-gainH', points: [{ x: a, y: -gY }, { x: 0, y: -gY }], dashed: DASH, stroke: GUIDE, strokeWidth: 1.2 },
+          { type: 'path', id: 'g-lossV', points: [{ x: -a, y: 0 }, { x: -a, y: lY }], dashed: DASH, stroke: GUIDE, strokeWidth: 1.2 },
+          { type: 'path', id: 'g-lossH', points: [{ x: -a, y: lY }, { x: 0, y: lY }], dashed: DASH, stroke: GUIDE, strokeWidth: 1.2 },
+          // guide labels
+          { type: 'node', id: 'xa', position: { x: a, y: 0.08 }, label: '$a$', anchor: 'north', shape: 'rectangle', innerSep: 2, fontSize: 13, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'xma', position: { x: -a, y: -0.08 }, label: '$-a$', anchor: 'south', shape: 'rectangle', innerSep: 2, fontSize: 13, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'mua', position: { x: -0.05, y: -gY }, label: '$\\mu(a)$', anchor: 'east', shape: 'rectangle', innerSep: 2, fontSize: 13, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'mma', position: { x: -0.06, y: lY + 0.1 }, label: '$\\mu(-a)$', anchor: 'east', shape: 'rectangle', innerSep: 2, fontSize: 13, fill: 'none', stroke: 'none' },
+          // caption
+          { type: 'node', id: 'cap', position: { x: 0.15, y: 1.16 }, anchor: 'north', shape: 'rectangle', innerSep: 2,
+            fontSize: 11, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            label: 'Gains have less impact than losses.', fill: 'none', stroke: 'none' },
+        ],
+      });
+
+      // Reveal the guide lines on scroll: the gain side first, then the (larger)
+      // loss side, so loss aversion lands as a payoff. The library re-renders the
+      // SVG's children after fonts load, so hidden/shown is driven by CSS on stable
+      // ids plus a class on the <svg> itself (which the re-render keeps) — never by
+      // classing the regenerated children. Same idea as the 510 SVG reveals.
+      const svg = document.getElementById('fig-gain-loss');
+      const frame = document.getElementById('loss-gain');
+      const step = s => {   // 1: base only, 2: +gain side, 3: +gain+loss
+        svg.classList.toggle('show-gain', s >= 2);
+        svg.classList.toggle('show-loss', s >= 3);
+      };
+      step(1);
+      // Pin the frame at the very top, hold (dwell), then reveal the gain side,
+      // then the loss side — all across the pinned scroll, so nothing appears
+      // until the frame is actually pinned at the top. (510 pinned-reveal pattern.)
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: () => '+=' + (window.innerHeight * 1.4),
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: self => {
+          const p = self.progress;
+          step(p < 0.33 ? 1 : p < 0.66 ? 2 : 3);   // dwell → gain → loss
+        },
+      });
+    } catch (err) { console.warn('gain-loss figure failed', err); }
+  </script>
+
+  <!-- tikz-svg: four-region MRS figure (reference-dependent preferences) -->
+  <script type="module">
+    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+    try {
+      const rx = 42, ry = 42, XM = 84, YM = 84, S = 4.4, OX = 56, OY = 372;   // reference centered in an 84×84 box → equal quadrants; OX/OY = plot origin, reused by the hover readout
+      const GUIDE = '#586e75', DASH = '4 2 1 2', IC = '#268bd2', ICL = '#79b0dd';
+      const hit = { shape: 'rectangle', label: '', fill: '#268bd2', stroke: 'none' };
+      // Indifference curve through r, DERIVED from the example utility itself:
+      //   U = √x+√y+μ(√x−√x̄)+μ(√y−√ȳ),  μ(d)=L·min(d,0)+G·max(d,0).
+      // Graph uses G=½, L=2 (steeper than the text's L=1) to EXAGGERATE the kink.
+      // Set U=√x̄+√ȳ and solve √y(x) per region (coefs (1+G)/(1+L) & (1+L)/(1+G)):
+      //   SE (x≥x̄ gain on X, y≤ȳ loss on Y):  √y = (1/2)·(√x̄−√x)+√ȳ
+      //   NW (x≤x̄ loss on X, y≥ȳ gain on Y):  √y = 2·(√x̄−√x)+√ȳ
+      // The 1/2 vs 2 split IS loss aversion — the single kink at r; |slope| ratio 4.
+      const sq = Math.sqrt, sxb = sq(rx), syb = sq(ry);
+      const icNW = x => { const s = 2 * (sxb - sq(x)) + syb; return s * s; };
+      const icSE = x => { const s = 0.5 * (sxb - sq(x)) + syb; return s * s; };
+      // Two neighbouring indifference curves (lower & higher U). Each kinks where it
+      // crosses a reference divider — same model, so the corners land ON the dashed
+      // lines. One y(x) per level covers all three regions it passes through:
+      //   fX(x)=√x+μ(√x−√x̄) with the right slope; then invert g to get y from the
+      //   residual utility. Plotted 'lineto' + dense samples to keep the corners crisp.
+      const Gv = 0.5, Lv = 2, sb = sxb;
+      const fX  = x => x >= rx ? (1 + Gv) * sq(x) - Gv * sb : (1 + Lv) * sq(x) - Lv * sb;
+      const yOf = v => { const s = (v >= sb) ? (v + Gv * sb) / (1 + Gv) : (v + Lv * sb) / (1 + Lv); return s > 0 ? s * s : undefined; };
+      const icLevel = U0 => x => { const y = x > 0 ? yOf(U0 - fX(x)) : undefined; return (y == null || y <= 0) ? undefined : y; };
+      const Ur = 2 * sb;                    // utility at the reference r
+      const icLow  = icLevel(Ur - 4.44);    // lower: crosses ȳ at x≈25, then x̄ at y≈25 (through SW)
+      const icHigh = icLevel(Ur + 2.28);    // higher: crosses x̄ at y≈64, then ȳ at x≈64 (through NE)
+      render(document.getElementById('fig-mrs'), {
+        scale: S, originX: OX, originY: OY, padding: 8,
+        katexMacros: (typeof katexMacros !== 'undefined' ? katexMacros : undefined),
+        draw: [
+          // axes
+          { type: 'path', points: [{ x: 0, y: 0 }, { x: XM, y: 0 }], arrow: '->', stroke: '#000', strokeWidth: 1.4 },
+          { type: 'path', points: [{ x: 0, y: 0 }, { x: 0, y: -YM }], arrow: '->', stroke: '#000', strokeWidth: 1.4 },
+          { type: 'node', id: 'xlab', position: { x: XM + 2, y: 0 }, label: '$X$', anchor: 'west', shape: 'rectangle', innerSep: 2, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'ylab', position: { x: 0, y: -(YM + 2) }, label: '$Y$', anchor: 'south', shape: 'rectangle', innerSep: 2, fill: 'none', stroke: 'none' },
+          // reference dividers (dashed-dotted), spanning the orthant through r
+          { type: 'path', points: [{ x: rx, y: 0 }, { x: rx, y: -YM }], dashed: DASH, stroke: GUIDE, strokeWidth: 1.1 },
+          { type: 'path', points: [{ x: 0, y: -ry }, { x: XM, y: -ry }], dashed: DASH, stroke: GUIDE, strokeWidth: 1.1 },
+          // reference point + labels
+          { type: 'node', id: 'rpt', position: { x: rx, y: -ry }, label: '', shape: 'circle', radius: 3.5, innerSep: 0, fill: '#000', stroke: 'none' },
+          { type: 'node', id: 'rlab', position: { x: rx + 1.5, y: -(ry + 1.5) }, label: '$r$', anchor: 'south west', shape: 'rectangle', innerSep: 2, fontSize: 13, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'xbar', position: { x: rx, y: 2.5 }, label: '$\\bar x$', anchor: 'north', shape: 'rectangle', innerSep: 2, fontSize: 12, fill: 'none', stroke: 'none' },
+          { type: 'node', id: 'ybar', position: { x: -2, y: -ry }, label: '$\\bar y$', anchor: 'east', shape: 'rectangle', innerSep: 2, fontSize: 12, fill: 'none', stroke: 'none' },
+          // neighbouring indifference curves (thinner/lighter): lower through SW, higher through NE.
+          // 'lineto' + dense samples so the kinks where they cross the dividers stay crisp.
+          { type: 'plot', expr: icLow,  domain: [14, 90], samples: 80, handler: 'lineto', stroke: ICL, strokeWidth: 1.5 },
+          { type: 'plot', expr: icHigh, domain: [36, 90], samples: 80, handler: 'lineto', stroke: ICL, strokeWidth: 1.5 },
+          // indifference curve through r — two sampled function-plots from the model; one kink at r.
+          // Arms deliberately run a little past the axes: NW up above the top, SE past the right end.
+          { type: 'plot', expr: icNW, domain: [26, rx], samples: 40, handler: 'smooth', stroke: IC, strokeWidth: 2.5 },
+          { type: 'plot', expr: icSE, domain: [rx, 90], samples: 40, handler: 'smooth', stroke: IC, strokeWidth: 2.5 },
+          // clickable quadrant hit-areas (transparent; ids drive the reveal)
+          { type: 'node', id: 'hit-ne', position: { x: (rx + XM) / 2, y: -(ry + YM) / 2 }, halfWidth: (XM - rx) * S / 2, halfHeight: (YM - ry) * S / 2, ...hit },
+          { type: 'node', id: 'hit-nw', position: { x: rx / 2, y: -(ry + YM) / 2 }, halfWidth: rx * S / 2, halfHeight: (YM - ry) * S / 2, ...hit },
+          { type: 'node', id: 'hit-sw', position: { x: rx / 2, y: -ry / 2 }, halfWidth: rx * S / 2, halfHeight: ry * S / 2, ...hit },
+          { type: 'node', id: 'hit-se', position: { x: (rx + XM) / 2, y: -ry / 2 }, halfWidth: (XM - rx) * S / 2, halfHeight: ry * S / 2, ...hit },
+          // MRS labels (KaTeX), hidden until their region is clicked. Each marginal
+          // utility carries one kink slope (G in a gain, L in a loss) — never both.
+          { type: 'node', id: 'mrs-ne', position: { x: (rx + XM) / 2, y: -(ry + YM) / 2 }, label: "$\\mathrm{MRS}=\\frac{(1+G)\\,u'(x)}{(1+G)\\,u'(y)}$", shape: 'rectangle', innerSep: 4, fontSize: 12, fill: '#ffffff', stroke: 'none' },
+          { type: 'node', id: 'mrs-nw', position: { x: rx / 2, y: -(ry + YM) / 2 }, label: "$\\mathrm{MRS}=\\frac{(1+L)\\,u'(x)}{(1+G)\\,u'(y)}$", shape: 'rectangle', innerSep: 4, fontSize: 12, fill: '#ffffff', stroke: 'none' },
+          { type: 'node', id: 'mrs-sw', position: { x: rx / 2, y: -ry / 2 }, label: "$\\mathrm{MRS}=\\frac{(1+L)\\,u'(x)}{(1+L)\\,u'(y)}$", shape: 'rectangle', innerSep: 4, fontSize: 12, fill: '#ffffff', stroke: 'none' },
+          { type: 'node', id: 'mrs-se', position: { x: (rx + XM) / 2, y: -ry / 2 }, label: "$\\mathrm{MRS}=\\frac{(1+G)\\,u'(x)}{(1+L)\\,u'(y)}$", shape: 'rectangle', innerSep: 4, fontSize: 12, fill: '#ffffff', stroke: 'none' },
+        ],
+      });
+      // Reveal on click via event delegation on the persistent <svg> (survives the
+      // library's post-fonts re-render); toggle a per-region class on the svg.
+      const svg = document.getElementById('fig-mrs');
+      svg.addEventListener('click', e => {
+        const g = e.target.closest('g[id^="node-hit-"]');
+        if (g) svg.classList.toggle('show-' + g.id.slice('node-hit-'.length));
+      });
+
+      // Live MRS readout on hover. Invert the cursor (screen → the plot's user
+      // space via getScreenCTM) to data coords, then MRS(x,y) from the model.
+      // Same G/L as the drawn curve (exaggerated: G=½, L=2). The listener rides
+      // the persistent <svg> and writes into an HTML overlay, so the library's
+      // post-fonts re-render wipes neither.
+      const G = 0.5, Lm = 2;
+      const readout = document.getElementById('mrs-readout');
+      const IDLE = 'MRS at (x,&nbsp;y)';
+      const mrsAt = (x, y) => {
+        if (x <= 0 || y <= 0) return null;
+        const mx = x < rx ? Lm : G, my = y < ry ? Lm : G;   // loss slope below the reference, gain slope above
+        return (1 + mx) / (1 + my) * Math.sqrt(y) / Math.sqrt(x);
+      };
+      svg.addEventListener('mousemove', e => {
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return;
+        const u = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+        const x = (u.x - OX) / S, y = (OY - u.y) / S;
+        const m = mrsAt(x, y);
+        readout.innerHTML = (m == null) ? IDLE
+          : `MRS at (${x.toFixed(0)},&nbsp;${y.toFixed(0)}) = <span class="val">${m.toFixed(2)}</span>`;
+      });
+      svg.addEventListener('mouseleave', () => { readout.innerHTML = IDLE; });
+    } catch (err) { console.warn('MRS figure failed', err); }
   </script>
 
 </body>
