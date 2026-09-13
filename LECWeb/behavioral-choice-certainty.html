@@ -50,6 +50,24 @@
       pointer-events: none;
     }
     #mrs-readout .val { color: #268bd2; font-weight: 700; }
+
+    /* Safari/WebKit does not paint `position: relative` content inside
+       <foreignObject>, so KaTeX labels in tikz-svg figures lay out correctly but
+       never appear — fractions worst of all, whose absolutely-positioned .vlist
+       rows escape to the SVG origin as a stray glyph. KaTeX already emits a MathML
+       twin next to the HTML rendering, and WebKit renders MathML natively, so on
+       WebKit we show the twin and hide the HTML. Guarded by -webkit-backdrop-filter,
+       which is true only in WebKit (verified false in Chrome and Firefox), leaving
+       their known-good HTML rendering untouched. Supersedes the `.base{position:
+       static}` fix in seating/ps/css/problem-set.css:270, which handles plain
+       labels but not fractions. */
+    @supports (-webkit-backdrop-filter: blur(1px)) {
+      svg foreignObject .katex .katex-html { display: none; }
+      svg foreignObject .katex .katex-mathml {
+        position: static; clip: auto; clip-path: none; height: auto; width: auto;
+        overflow: visible; padding: 0; border: 0; opacity: 1; font-size: 1em;
+      }
+    }
   </style>
 
     <!-- Google Analytics -->
@@ -217,7 +235,7 @@
       <h2 class="frame-title">Loss Aversion</h2>
     </div>
     <div class="frame-content">
-      <p>Let $u$ be either an utility for wealth or a gain-loss utility function. The point zero is either the initial wealth or the reference point, and we assume $u(0)=0$.</p>
+      <p>Let $u$ be either a utility for wealth or a gain-loss utility function. The point zero is either the initial wealth or the reference point, and we assume $u(0)=0$.</p>
       <div class="block">
         <div class="block-title">Definition</div>
         <div class="block-body">
