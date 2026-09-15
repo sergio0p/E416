@@ -439,6 +439,15 @@ ol > li::before {
   line-height: 1;
 }
 
+/* Source citation closing a quoted block body */
+.block-cite {
+  display: block;
+  margin-top: 0.7rem;
+  text-align: right;
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
 /* Definition, Example, Alert blocks - all use same Crane styling */
 
 /* Emphasis */
@@ -639,6 +648,10 @@ dl.beamer-description dt:first-of-type + dd {
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.overlay-frame .frame-content {
+  transition: transform 0.4s ease;
 }
 
 .overlay-frame .overlay {
