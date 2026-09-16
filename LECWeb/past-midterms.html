@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="brain-biology.html">
+  <meta name="nav-next" content="behavioral-choice-risk.html">
+  <title>Past Midterms | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+  <!-- Google Analytics -->
+  <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header: Past Midterms -->
+  <section class="section-header" id="past-midterms">
+    <div class="section-title-box">
+      <h1>Past Midterms</h1>
+    </div>
+
+    <!-- Table of Contents: in-page anchors to each frame's id (blue = default link color) -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#exams" style="margin-left: 1rem;">1. Exams</a>
+    </nav>
+  </section>
+
+  <!-- Frame: Exams -->
+  <section class="frame" id="exams">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Exams</h2>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308372">Midterm 2 SPRING 19</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308330">Midterm 1 FALL 19</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16576475">Midterm 2 FALL 19</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308364">Midterm 1 SPRING 20</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16576474">Midterm 2 SPRING 20</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308334">Midterm 1 FALL 20</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308410">Midterm 2 FALL 20</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308430">Midterm 1 FALL 22</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308331">Midterm 1 FALL 23</a></li>
+        <li><a href="https://uncch.instructure.com/courses/128467/files/16308441">Midterm 1 FALL 25</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="brain-biology.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Brain Biology</a>
+    <a href="behavioral-choice-risk.html" style="color: var(--crane-blue); text-decoration: none;">Behavioral Choice Under Risk &rarr;</a>
+  </div>
+
+  <!-- KaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <script>
+    gsap.utils.toArray('.scroll-reveal').forEach(el => {
+      gsap.set(el, { opacity: 0, y: 15 });
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        end: 'top 85%',
+        onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }),
+        onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
+      });
+    });
+  </script>
+
+</body>
+</html>
