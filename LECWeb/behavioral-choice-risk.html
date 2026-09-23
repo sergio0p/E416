@@ -109,11 +109,11 @@
       $$ U^P(\ell)=\pi(p_1)\cdot \nu(x_1)+\ldots+\pi(p_n)\nu(x_n),$$
       in particular, the following functions are commonly used. They satisfy all the assumptions in the previous slide.
       $$\nu(x)=\begin{cases}(x-r)^\alpha&\text{if } x\ge r,\\
-      -\lambda\cdot (r-x)^\beta&\text{if } x\le r.\end{cases}$$
+      -\lambda\cdot (r-x)^\alpha&\text{if } x\le r.\end{cases}$$
       $$\pi(p)=\dfrac{p^\gamma}{\bigl(p^\gamma+(1-p)^\gamma\bigr)^{1/\gamma}},$$
-      in which $0\lt \alpha,\beta,\gamma\lt 1$ and $\lambda\gt 1$. These assumptions imply loss aversion and that low probabilities are overestimated while high probabilities are underestimated.</p>
+      in which $0\lt \alpha,\gamma\lt 1$ and $\lambda\gt 1$. With the same exponent $\alpha$ on both sides of $r$, the condition $\lambda\gt 1$ is exactly loss aversion, $-\nu(r-x)=\lambda\,x^{\alpha}\gt x^{\alpha}=\nu(r+x)$ for every $x\gt 0$, and $\gamma\lt 1$ makes low probabilities overestimated and high probabilities underestimated.</p>
 
-      <p>For instance, with reference point $r=0$, $\alpha=\beta=1/2$ and $\lambda=2$:
+      <p>For instance, with reference point $r=0$, $\alpha=1/2$ and $\lambda=2$:
       $$\nu(x)=\begin{cases}\sqrt{x}&\text{if } x\ge 0,\\[2pt] -2\sqrt{-x}&\text{if } x\lt 0.\end{cases}$$
       The value function is concave over gains ($x\gt 0$, risk-averse) and convex over losses ($x\lt 0$, risk-loving). It is also steeper over losses: a loss of $x$ hurts more than a gain of $x$ pleases,
       $$-\nu(-x)\gt\nu(x)\qquad\text{(loss aversion).}$$</p>
