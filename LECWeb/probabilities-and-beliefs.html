@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="choice-under-uncertainty.html">
+  <meta name="nav-next" content="behavioral-choice-risk.html">
+  <title>Probabilities and Beliefs | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+  <style>
+    /* Prize-ranking picture (tikz-svg) in the Extracting u frame */
+    .extract-u-fig { max-width: 420px; width: 100%; display: block; margin: 0.75rem auto; }
+    .extract-p-fig { max-width: 460px; width: 100%; display: block; margin: 0.75rem auto; }
+
+    /* Comic-book callouts on a horizontally panning stage. The list sits on the
+       left of a wide canvas; the balloon for a clicked item opens at the far
+       right, joined to the item by a long amber tail, and the stage pans to it.
+       Clicking the same item again pans back and hides it. Widths are set by the script. */
+    .callout-stage {
+      width: 100%;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .callout-canvas {
+      position: relative;
+      display: grid;
+      grid-template-columns: var(--stage-w, 100%) var(--box-w, 420px);
+      column-gap: var(--stem-gap, 200px);
+      align-items: start;
+    }
+    .callout-list { grid-column: 1; min-width: 0; position: relative; z-index: 1; }   /* text stays readable over a crossing tail */
+    .callout-item { cursor: pointer; }   /* plain text; the pointer cursor is the only affordance */
+    .callout-item:focus-visible { outline: none; }
+    .callout-box { grid-column: 2; grid-row: 1; min-width: 0; position: relative; z-index: 1; }
+    .callout-box[hidden] { display: none; }
+    .callout-box .block { width: 100%; margin: 0; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18); }
+    /* The balloon body is styled like .block-body but is not one, so the theme's
+       block-flip script (Ctrl/right-click on a title shows a "?" back) leaves it alone. */
+    .callout-body { background: #fff8e1; color: #000000; padding: 1rem; border-radius: 0 0 6px 6px; }
+    .callout-body > p:first-child { margin-top: 0; }
+    .callout-body > p:last-child { margin-bottom: 0; }
+    /* Flip card: front = definition, back = example. Same mechanics as the flip
+       cells in E510 repeated-games.html; faces share one grid cell so the card
+       is as tall as its taller face and needs no fixed height. */
+    .flip-card { perspective: 900px; cursor: pointer; }
+    .flip-card:focus:not(:focus-visible) { outline: none; }
+    .flip-inner {
+      display: grid;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(.2, .8, .2, 1);
+    }
+    .flip-front, .flip-back {
+      grid-area: 1 / 1;
+      min-width: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flip-back { transform: rotateY(180deg); }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .callout-box .katex-display { font-size: 0.8em; overflow-x: auto; overflow-y: hidden; }   /* smaller, so the Bayes line fits the balloon */
+    .callout-tails {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+      display: none;
+    }
+    .slideshow__callout[hidden] { display: none; }
+    .slideshow__callout .block { width: 100%; margin: 0; }
+    .slideshow__callout::before {
+      content: '';
+      position: absolute;
+      left: -16px;
+      top: 0.55rem;
+      border: 12px solid transparent;
+      border-left: 0;
+      border-right-color: #f9a825;   /* block-title amber */
+    }
+
+    /* Safari/WebKit does not paint `position: relative` content inside
+       <foreignObject>, so KaTeX labels in tikz-svg figures lay out correctly but
+       never appear. KaTeX also emits a MathML twin, which WebKit renders natively,
+       so on WebKit show the twin and hide the HTML. Guarded by
+       -webkit-backdrop-filter, true only in WebKit. Same fix as
+       behavioral-choice-risk.html. */
+    @supports (-webkit-backdrop-filter: blur(1px)) {
+      svg foreignObject .katex .katex-html { display: none; }
+      svg foreignObject .katex .katex-mathml {
+        position: static; clip: auto; clip-path: none; height: auto; width: auto;
+        overflow: visible; padding: 0; border: 0; opacity: 1; font-size: 1em;
+      }
+    }
+  </style>
+
+  <!-- tikz-svg: the bundle's bare 'mathjs' import must resolve; the shim
+       degrades to null stubs when window.math is absent (diagrams-only page). -->
+  <script type="importmap">
+  { "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+  </script>
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="probabilities-and-beliefs">
+    <div class="section-title-box">
+      <h1>Probabilities and Beliefs</h1>
+    </div>
+
+    <!-- Table of Contents: in-page anchors to each frame's id -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#extracting-u-from-choices" style="margin-left: 1rem;">1. Extracting $u$</a>
+      <a href="#extracting-p-from-choices" style="margin-left: 1rem;">2. Extracting $p$</a>
+      <a href="#beliefs-bayes" style="margin-left: 1rem;">3. Beliefs</a>
+      <a href="#bayesian-updating-setup" style="margin-left: 1rem;">4. Bayesian Updating</a>
+      <br>
+      <a href="#heuristics" style="margin-left: 1rem;">5. Heuristics</a>
+      <a href="#probability-estimation" style="margin-left: 1rem;">6. Estimation</a>
+      <a href="#biases" style="margin-left: 1rem;">7. Biases</a>
+    </nav>
+  </section>
+
+  <!-- Frame: Extracting u from choices (standard gamble). The picture ports the
+       "Extracting u from ⪰" TikZ frame in 416/E416_LEC_FA25.tex (KitKat, banana,
+       San Pellegrino) to tikz-svg: the photos are SVG pattern fills on rectangle
+       nodes, the arrows are library edges. One long frame, no pinning. -->
+  <section class="frame" id="extracting-u-from-choices">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Extracting $u$ from choices</h2>
+      <p class="frame-subtitle">Under Expected Utility (Standard Model)</p>
+    </div>
+    <div class="frame-content">
+      <p>The idea is the same as in <a href="preferences.html#extracting-utility">choice under certainty</a>. There we <em>defined</em> the utility of every basket on the diagonal, $u(x,x)=x$, and gave any other basket the utility of the diagonal basket it is indifferent to. Under expected utility the ruler is no longer the diagonal but the family of lotteries between the best and the worst prize.</p>
+
+      <div class="block">
+        <div class="block-title">Standard Gamble (Probability Equivalent)</div>
+        <div class="block-body">Let $b$ be the best prize and $w$ the worst, and set $u(b)=1$ and $u(w)=0$. For any other prize $x$, find the probability $p$ that makes the agent indifferent between $x$ for sure and the lottery that pays $b$ with probability $p$ and $w$ with probability $1-p$:
+        $$\delta_x\sim\left((b,w),(p,1-p)\right).$$
+        The expected utility of the lottery is $p\cdot u(b)+(1-p)\cdot u(w)=p$, so $u(x)=p$.</div>
+      </div>
+
+      <p>This is the von Neumann&ndash;Morgenstern construction turned into a question, and it is the standard way of measuring utility in health economics.</p>
+
+      <p><strong>Example.</strong> Three prizes. Ann's choices between sure prizes reveal the ranking: San Pellegrino $\succ$ KitKat $\succ$ banana.</p>
+
+      <!-- Photos as pattern fills for the rectangle nodes in both pictures of this page
+           (fill: url(#pat-…)); the <pattern>s are generated by the render script. -->
+      <svg width="0" height="0" style="position: absolute;" aria-hidden="true">
+        <defs id="extract-u-defs"></defs>
+      </svg>
+      <svg id="extract-u-fig" class="extract-u-fig" role="img"
+           aria-label="KitKat, banana and San Pellegrino with arrows: KitKat is preferred to banana, San Pellegrino is preferred to both"></svg>
+
+      <ol>
+        <li>Fix the scale: $u(\text{banana})=0$ and $u(\text{San Pellegrino})=1$.</li>
+        <li>Ask Ann: a KitKat for sure, or the lottery $\left((\text{San Pellegrino},\text{banana}),(p,1-p)\right)$?</li>
+        <li>She takes the KitKat at $p=1/2$, so $u(\text{KitKat})\gt 1/2$: raise $p$. She takes the lottery at $p=3/4$, so $u(\text{KitKat})\lt 3/4$: lower $p$.</li>
+        <li>Keep going until she is indifferent, say at $p^*=0.7$. Then $u(\text{KitKat})=0.7$.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Extracting p from choices (matching probability). Same recipe as the
+       u frame with a belief as the unknown; the picture is the bet and the matching
+       lottery as two trees, drawn by tikz-svg with the photos as leaves. -->
+  <section class="frame" id="extracting-p-from-choices">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Extracting $p$ from choices</h2>
+      <p class="frame-subtitle">Under Expected Utility (Standard Model)</p>
+    </div>
+    <div class="frame-content">
+      <p>Same trick, new unknown. In the standard model beliefs are probabilities. Ann's probability that it rains in Chapel Hill tomorrow is not written anywhere: we extract it from her choices, one indifference at a time.</p>
+
+      <div class="block">
+        <div class="block-title">Matching Probability</div>
+        <div class="block-body">Take two prizes, $b\succ w$, and an event $A$. A <em>bet on $A$</em> pays $b$ if $A$ happens and $w$ if it does not. Find the probability $p$ that makes Ann indifferent between the bet on $A$ and the lottery that pays $b$ with probability $p$ and $w$ with probability $1-p$:
+        $$(b \text{ if } A,\; w \text{ if not } A)\sim\left((b,w),(p,1-p)\right).$$
+        The expected utility of the bet is $\Pr[A]\cdot u(b)+(1-\Pr[A])\cdot u(w)$ and the expected utility of the lottery is $p\cdot u(b)+(1-p)\cdot u(w)$. They are equal only if $\Pr[A]=p$.</div>
+      </div>
+
+      <p>Notice that $u$ cancels: all we used is $u(b)\gt u(w)$. So we do not need to know Ann's utility to extract her beliefs. Any two prizes she can rank will do.</p>
+
+      <p><strong>Example.</strong> Prizes as before, San Pellegrino $\succ$ banana, and $A$ = rain in Chapel Hill tomorrow.</p>
+      <svg id="extract-p-fig" class="extract-p-fig" role="img"
+           aria-label="Two trees: the bet pays San Pellegrino if rain and a banana if no rain; the lottery pays San Pellegrino with probability p and a banana with probability 1 minus p; the two are indifferent"></svg>
+
+      <ol>
+        <li>Ask Ann: a San Pellegrino if it rains tomorrow and a banana if not, or the lottery $\left((\text{San Pellegrino},\text{banana}),(p,1-p)\right)$?</li>
+        <li>She takes the bet at $p=1/2$, so $\Pr^A[\text{rain}]\gt 1/2$: raise $p$. She takes the lottery at $p=3/4$, so $\Pr^A[\text{rain}]\lt 3/4$: lower $p$.</li>
+        <li>Keep going until she is indifferent, say at $p^*=0.6$. Then $\Pr^A[\text{rain}]=0.6$.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Beliefs / Bayes (source: 773-781) -->
+  <section class="frame" id="beliefs-bayes">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Beliefs</h2>
+    </div>
+    <div class="frame-content">
+      <p>In the standard model, individuals update their (probabilities) beliefs using:</p>
+      <div class="block">
+        <div class="block-title">Bayes' Rule</div>
+        <div class="block-body">Given two events $A$ and $B$ such that $B$ is possible, $\Pr(B)\gt 0$, then the probability of $A$ given that $B$ occurred is:
+        $$\Pr(A\mid B)=\dfrac{\Pr(A\cap B)}{\Pr(B)}.$$</div>
+      </div>
+      <p><small>Later, we shall see how beliefs (prior probabilities) are &ldquo;formed&rdquo; in the standard model&hellip;</small></p>
+    </div>
+  </section>
+
+  <!-- Frame: Bayesian Updating setup (source: 783-791) -->
+  <section class="frame fs-10pt" id="bayesian-updating-setup">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Bayesian Updating</h2>
+    </div>
+    <div class="frame-content">
+      <p>Let's consider two alternative hypotheses regarding some coin:</p>
+      <dl class="beamer-description">
+        <dt>(U)</dt>
+        <dd>The coin is unbiased, $\Pr[H\mid U]=\Pr[T\mid U]=1/2$.</dd>
+        <dt>(B)</dt>
+        <dd>The coin is biased towards heads, $\Pr[H\mid B]=3/4$ and $\Pr[T\mid B]=1/4$.</dd>
+      </dl>
+      <p>Ann and Bart believe that only these two hypotheses are possible but they ascribe different likelihoods. Ann's prior probabilities are $\Pr^A[U]=\Pr^A[B]=1/2$ and Bart's are $\Pr^B[U]=1/3$ and $\Pr^B[B]=2/3$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Bayesian Updating cont (source: 792-802) -->
+  <section class="frame fs-10pt" id="bayesian-updating-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Bayesian Updating</h2>
+    </div>
+    <div class="frame-content">
+      <p>Let $p_t(h^t)$ be Ann's belief that the hypothesis $U$ is true given that the particular history of coin tosses, $h^t$, was observed. We have that:
+      $$p_0(\emptyset)=1/2,$$
+      $$p_1(T)=\Pr^A[U\mid T]=\dfrac{\Pr^A[U\cap T]}{\Pr^A[T]}=\dfrac{p_0\cdot \tfrac12}{p_0\cdot \tfrac12 +(1-p_0)\cdot \tfrac14},$$
+      $$p_t(h^{t-1},T)=\dfrac{p_{t-1}(h^{t-1})\cdot \tfrac12}{p_{t-1}(h^{t-1})\cdot \tfrac12 +(1-p_{t-1}(h^{t-1}))\cdot \tfrac14}.$$</p>
+      <p>In sum: given some coin toss outcome $H$ or $T$ and knowing the prior probability of the hypothesis $U$ being true, we are able to compute the posterior (updated) probability that the hypothesis $U$ is true.</p>
+      <p><strong>Result:</strong> If two individuals assign positive probabilities to the same set of hypotheses, it does not matter if their priors differ. In the limit, as more information becomes available, their posteriors will merge. They will think alike.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Heuristics (source: 803-805) -->
+  <section class="frame" id="heuristics">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Heuristics</h2>
+    </div>
+    <div class="frame-content">
+      <p>Heuristics are rules of thumb that deliver <em>satisfactory</em> outcomes without requiring high computational costs.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Probability Estimation (source: 806-814). Comic-book callouts: click a
+       heuristic and its balloon opens at the far right of a panning stage, joined to
+       the item by a long tail; click the same heuristic again to pan back and close it. -->
+  <section class="frame" id="probability-estimation">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Probability Estimation</h2>
+    </div>
+    <div class="frame-content">
+      <div class="callout-stage">
+        <div class="callout-canvas">
+          <div class="callout-list">
+            <p>Common heuristics used to evaluate probabilities:</p>
+            <ol>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-availability">Availability</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-representativeness">Representativeness</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-base-rate">Base rate neglect</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-small-numbers">&lsquo;Law&rsquo; of small numbers (gambler's fallacy and &lsquo;hot hand&rsquo;)</span></li>
+            </ol>
+          </div>
+
+          <!-- The tail: one polygon, redrawn for whichever balloon is open -->
+          <svg class="callout-tails" aria-hidden="true"></svg>
+
+          <div class="callout-box" id="callout-availability" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">1. Availability</div>
+                    <div class="callout-body">We judge how likely an event is by how easily examples of it come to mind.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>After a plane crash makes the news, people overestimate the risk of flying: a crash is vivid and easy to recall, the car accidents of the same week are not.</p>
+                  <p>Are there more English words that <em>start</em> with K, or that have K as the <em>third</em> letter? Most people say &ldquo;start with K&rdquo;, because those are easier to think of. There are about twice as many with K in third place.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-representativeness" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">2. Representativeness</div>
+                    <div class="callout-body">We judge how likely something is by how much it resembles our stereotype of it, and ignore how common it is.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Linda is 31, single, outspoken, and was a philosophy major deeply concerned with social justice. Which is more likely?</p>
+                  <p style="margin-left: 1.5em;">(a) Linda is a bank teller.<br>(b) Linda is a bank teller and active in the feminist movement.</p>
+                  <p>Most people pick (b). But (b) is a special case of (a): every Linda in (b) is also in (a), so (b) cannot be more likely.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-base-rate" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">3. Base rate neglect</div>
+                    <div class="callout-body">We go by the evidence alone and forget how common the event was to begin with.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>In a city, 85% of the cabs are Green and 15% are Blue. A cab was involved in a hit-and-run at night. A witness says it was Blue. Tested under the same conditions, the witness identifies the color correctly 80% of the time. How likely is it that the cab was Blue?</p>
+                  <p>Most people answer about $0.8$. Bayes' rule gives
+                  $$\begin{aligned}&\Pr[\text{Blue}\mid\text{says Blue}]\\ &=\dfrac{0.15\cdot 0.8}{0.15\cdot 0.8+0.85\cdot 0.2}=\dfrac{0.12}{0.29}\approx 0.41.\end{aligned}$$
+                  The base rate, $15\%$ Blue, was ignored.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-small-numbers" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">4. &lsquo;Law&rsquo; of small numbers</div>
+                    <div class="callout-body">We expect a small sample to look like the whole population.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p><strong>Gambler's fallacy.</strong> After five reds in a row at roulette, black feels &ldquo;due&rdquo;. The wheel has no memory: black is still $18/38$.</p>
+                  <p><strong>Hot hand.</strong> A basketball player who hit three shots in a row is &ldquo;hot&rdquo;, so the next shot feels more likely to go in than her season average.</p>
+                  <p>Both come from the same belief: a short run must balance out (fallacy) or must continue (hot hand), when a short run is just what randomness looks like.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Biases (source: 816-839). Same comic-book callouts as Probability
+       Estimation: every item, parents included, opens a flip card (definition /
+       example) at the far right, joined to the item by a long tail. -->
+  <section class="frame" id="biases">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Biases</h2>
+    </div>
+    <div class="frame-content">
+      <div class="callout-stage">
+        <div class="callout-canvas">
+          <div class="callout-list">
+            <ol>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-overconfidence">Overconfidence</span>
+                <ol>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-overestimation">Overestimation</span></li>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-overplacement">Overplacement</span></li>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-overprecision">Overprecision</span></li>
+                </ol>
+              </li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-underconfidence">Underconfidence</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-self-serving">Self-serving bias</span>
+                <ol>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-pavlovian">Pavlovian withdrawal</span></li>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-confirmatory">Confirmatory bias</span></li>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-self-attribution">Self-attribution bias</span></li>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-visceral-fit">Visceral fit</span></li>
+                </ol>
+              </li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-projection">Projection bias</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-magical">Magical thoughts</span>
+                <ol>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-tempting-fate">Tempting fate</span></li>
+                  <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bias-contagion">Contagion</span></li>
+                </ol>
+              </li>
+            </ol>
+          </div>
+
+          <svg class="callout-tails" aria-hidden="true"></svg>
+
+          <div class="callout-box" id="callout-bias-overconfidence" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Overconfidence</div>
+                    <div class="callout-body">Being more sure of yourself, or of your judgment, than the facts justify. It comes in three kinds.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Ask a class to predict their exam score, to rank themselves in the class, and to give a range they are 90% sure contains the class average. Most predict too high, most rank themselves above the median, and most ranges miss.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-overestimation" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Overestimation</div>
+                    <div class="callout-body">Thinking you will do better, faster, or more than you actually will.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>The planning fallacy. Professor Parreiras predicts a quick walk from Gardner to Fetzer Hall and arrives late to class.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-overplacement" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Overplacement</div>
+                    <div class="callout-body">Thinking you are better than other people.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>The better-than-average effect: most drivers rate themselves above the median driver, which cannot be true of most drivers.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-overprecision" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Overprecision</div>
+                    <div class="callout-body">Being too sure that your estimate is right.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Ask people for a range they are 90% sure contains the length of the Nile. Fewer than half of the ranges contain it.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-underconfidence" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Underconfidence</div>
+                    <div class="callout-body">Thinking you will do worse, or rank lower, than you actually do.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>The hard-easy effect: on hard tasks people overestimate their score but rank themselves too low; on easy tasks the reverse. Ask who is below average at juggling and most hands go up, which cannot be true either.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-self-serving" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Self-serving bias</div>
+                    <div class="callout-body">We judge what is true, or what is fair, in the direction that benefits us.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Two students read the same file about a car accident, one as the injured party and one as the driver, and are asked what a fair settlement would be. Each expects the judge to side with them. The further apart their answers, the more often they fail to settle, and both lose.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-pavlovian" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Pavlovian withdrawal</div>
+                    <div class="callout-body">When a train of thought heads toward a bad outcome, we flinch and drop it before it is finished. The futures we do think through are the rosy ones, so our beliefs come out too optimistic.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Depressive realism. Students press a button and a light sometimes comes on; afterwards they rate how much control they had over it. Non-depressed students overrate their control. Depressed students, whose flinch is weaker, get it right: sadder but wiser.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-confirmatory" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Confirmatory bias</div>
+                    <div class="callout-body">We look for evidence, and read it, in a way that supports what we already believe.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Supporters and opponents of the death penalty read the same two studies, one finding that it deters crime and one finding that it does not. Each side rates the study on its side as the better one, and both leave more convinced than they came.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-self-attribution" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Self-attribution bias</div>
+                    <div class="callout-body">Success is my skill; failure is bad luck.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>A good grade is deserved, a bad one is an unfair exam. Investors credit their skill for gains and blame the market for losses, so after a run of gains they trade more, and their returns fall.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-visceral-fit" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Visceral fit</div>
+                    <div class="callout-body">What you feel in your body right now makes the states of the world that match it seem more likely.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>People asked on a hot day believe more in global warming than people asked on a cold day. Thirsty people rate a drought as more likely.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-projection" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Projection bias</div>
+                    <div class="callout-body">We expect our future tastes to be what they are today.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Cold-weather gear ordered on an unusually cold day is returned more often once the weather turns. Shopping when hungry fills the cart with more than you will eat.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-magical" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Magical thoughts</div>
+                    <div class="callout-body">Believing in causal links that the physical world does not allow.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>A lucky shirt on game day, knocking on wood, not saying the name of the disease.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-tempting-fate" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Tempting fate</div>
+                    <div class="callout-body">Believing that a careless or boastful act invites the bad outcome.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>Students who skipped the reading feel more likely to be called on in class. Saying &ldquo;I have never had a flat tire&rdquo; feels like asking for one.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bias-contagion" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Contagion</div>
+                    <div class="callout-body">An object keeps the essence of whatever touched it.</div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">Example</div>
+                    <div class="callout-body"><p>People refuse a glass of juice a sterilized cockroach was dipped in, and will not wear a freshly laundered sweater that once belonged to a murderer.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="choice-under-uncertainty.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Choice Under Uncertainty</a>
+    <a href="behavioral-choice-risk.html" style="color: var(--crane-blue); text-decoration: none;">Behavioral Choice Under Risk &rarr;</a>
+  </div>
+
+  <!-- KaTeX JS -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Generic overlay-frame handler (Beamer \pause): pin the frame, reveal items on scroll.
+    document.querySelectorAll('.overlay-frame').forEach(frame => {
+      const overlays = frame.querySelectorAll('.overlay');
+      const count = overlays.length;
+      if (count === 0) return;
+      overlays[0].classList.add('revealed');
+      const scrollPerOverlay = window.innerHeight * 0.5;
+      const totalScroll = scrollPerOverlay * (count - 1);
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: `+=${totalScroll}`,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const currentStep = Math.floor(progress * count);
+          overlays.forEach((overlay, i) => {
+            const isOnly = overlay.hasAttribute('data-overlay-only');
+            if (isOnly) {
+              overlay.classList.toggle('revealed', i === currentStep);
+            } else {
+              overlay.classList.toggle('revealed', i <= currentStep);
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <script>
+    // Comic-book callouts: click a list item, its balloon opens at the far right
+    // of the stage with a long tail from the item, and the stage pans to it;
+    // click the same item again to pan back and close it. Clicking another item
+    // switches balloons. Clicking the balloon flips it: definition / example.
+    (function initCallouts() {
+      const AMBER = '#f9a825';
+      document.querySelectorAll('.callout-stage').forEach(stage => {
+        const canvas = stage.querySelector('.callout-canvas');
+        const tails  = stage.querySelector('.callout-tails');
+        const boxes  = Array.from(stage.querySelectorAll('.callout-box'));
+        const tail   = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        tail.setAttribute('fill', AMBER);
+        tails.appendChild(tail);
+        let open = null;
+
+        const activate = (el, fn) => {
+          el.addEventListener('click', fn);
+          el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); }
+          });
+        };
+
+        // Sizes. The list column is at most 340px wide; the balloon at most 420px.
+        // The tail is at least 160px long, and longer when the stage has room, so
+        // the balloon sits at the extreme right. On a wide stage everything fits
+        // and nothing pans; on a phone the canvas overflows and the stage pans.
+        function layout() {
+          const stageW = stage.clientWidth;
+          const listW = Math.min(stageW, 340);
+          const wide  = stageW >= listW + 160 + 300;          // room for a 300px balloon and a 160px tail
+          const boxW  = wide ? Math.min(420, stageW - listW - 160) : Math.min(420, Math.round(stageW * 0.85));
+          const gap   = wide ? stageW - listW - boxW : 160;
+          canvas.style.setProperty('--stage-w', `${listW}px`);
+          canvas.style.setProperty('--box-w', `${boxW}px`);
+          canvas.style.setProperty('--stem-gap', `${gap}px`);
+          canvas.style.width = open ? `${listW + gap + boxW}px` : '100%';
+          if (open) drawTail(open);
+        }
+
+        // Tail: tip at the clicked item's right end, base on the balloon's title bar
+        function drawTail(box) {
+          const item = stage.querySelector(`.callout-item[data-callout="${box.id}"]`);
+          const c = canvas.getBoundingClientRect();
+          const i = item.getBoundingClientRect();
+          const t = box.querySelector('.block-title').getBoundingClientRect();
+          const tipX = i.right - c.left + 8, tipY = (i.top + i.bottom) / 2 - c.top;
+          const baseX = t.left - c.left + 1;
+          tail.setAttribute('points', `${tipX},${tipY} ${baseX},${t.top - c.top + 5} ${baseX},${t.bottom - c.top - 5}`);
+          tails.style.display = 'block';
+        }
+
+        function show(box) {
+          boxes.forEach(b => { b.hidden = (b !== box); });
+          box.querySelector('.flip-card').classList.remove('flipped');   // always open on the front
+          open = box;
+          layout();
+          requestAnimationFrame(() => {
+            drawTail(box);
+            stage.scrollTo({ left: stage.scrollWidth, behavior: 'smooth' });
+          });
+        }
+        function close() {
+          if (!open) return;
+          const box = open;
+          open = null;
+          stage.scrollTo({ left: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            box.hidden = true;
+            tails.style.display = 'none';
+            layout();
+          }, 450);
+        }
+
+        stage.querySelectorAll('.callout-item').forEach(item => {
+          const box = document.getElementById(item.dataset.callout);
+          if (box) activate(item, () => (open === box ? close() : show(box)));
+        });
+        // Clicking the balloon flips it between definition and example
+        stage.querySelectorAll('.flip-card').forEach(card => activate(card, () => card.classList.toggle('flipped')));
+        layout();
+        window.addEventListener('resize', layout);
+      });
+    })();
+  </script>
+
+  <!-- The two pictures of this page, drawn by tikz-svg. Photos are cropped to their
+       content in img/; a photo node is a rectangle with the photo's aspect ratio, filled
+       by a <pattern> drawn in pixel units, so nothing is stretched or cropped. Edge
+       labels are KaTeX; needs the tikz-svg bundle of 2026-09-23 or later, which sizes a
+       math edge label from its rendered box (older bundles sized "$\succ$" by its seven
+       source characters and pushed the glyph away from the edge). -->
+  <script type="module">
+    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+
+    const SRC = { kitkat: 'img/kitkat.png', banana: 'img/banana.jpg', san: 'img/san.jpg' };  // 1280x865, 1910x1120, 140x492
+    const NS = 'http://www.w3.org/2000/svg';
+    const defs = document.getElementById('extract-u-defs');
+    // A photo node: registers a pattern of exactly w x h pixels, returns the node config.
+    const photo = (patId, key, w, h, x, y) => {
+      const pat = document.createElementNS(NS, 'pattern');
+      pat.setAttribute('id', patId);
+      pat.setAttribute('patternUnits', 'objectBoundingBox');
+      pat.setAttribute('patternContentUnits', 'userSpaceOnUse');
+      pat.setAttribute('width', '1'); pat.setAttribute('height', '1');
+      const img = document.createElementNS(NS, 'image');
+      img.setAttribute('href', SRC[key]);
+      img.setAttribute('width', w); img.setAttribute('height', h);
+      img.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      pat.appendChild(img); defs.appendChild(pat);
+      return {
+        position: { x, y }, shape: 'rectangle', label: '',
+        minimumWidth: w, minimumHeight: h, innerSep: 0,
+        fill: `url(#${patId})`, stroke: 'none', strokeWidth: 0,
+      };
+    };
+    const MACROS = (typeof katexMacros !== 'undefined' ? katexMacros : undefined);
+    const draw = (id, config) => {
+      try { render(document.getElementById(id), config); }
+      catch (e) { console.error(`${id} render failed`, e); }
+    };
+
+    // 1. Extracting u: the prize ranking, same layout as the TikZ original
+    draw('extract-u-fig', {
+      scale: 1, padding: 14, katexMacros: MACROS,
+      edgeStyle: { stroke: '#000000', strokeWidth: 2, arrow: 'stealth', fontSize: 34, innerSep: 2 },
+      states: {
+        kitkat: photo('pat-kitkat', 'kitkat', 120, 81, 0, 0),
+        banana: photo('pat-banana', 'banana', 150, 88, 95, 135),
+        san:    photo('pat-san',    'san',    42, 148, 255, 60),
+      },
+      edges: [
+        { from: 'kitkat', to: 'banana', bend: 'right', label: '$\\succ$' },     // KitKat ≻ banana
+        { from: 'kitkat', to: 'san', out: 45, in: 135, label: '$\\prec$' },     // KitKat ≺ San Pellegrino
+        { from: 'banana', to: 'san', out: -90, in: -90, label: '$\\prec$' },    // banana ≺ San Pellegrino
+      ],
+    });
+
+    // 2. Extracting p: the bet on A (left) is matched by the lottery (right).
+    //    Trees fan upward from a root circle to the photo leaves, as in the
+    //    lottery trees of Choice Under Uncertainty.
+    const root = (x, y) => ({
+      position: { x, y }, shape: 'circle', radius: 14, label: '',
+      fill: '#ffffff', stroke: '#586e75', strokeWidth: 2,
+    });
+    const text = (x, y, label, fontSize) => ({
+      position: { x, y }, shape: 'rectangle', label, fontSize,
+      fill: 'none', stroke: 'none', innerSep: 2, labelColor: '#374151',
+    });
+    draw('extract-p-fig', {
+      scale: 1, padding: 14, katexMacros: MACROS,
+      edgeStyle: { stroke: '#374151', strokeWidth: 2, arrow: 'stealth', fontSize: 16, innerSep: 2, labelColor: '#374151' },
+      states: {
+        bet:    root(0, 0),
+        betSan: photo('pat-san-leaf',    'san',    24, 84, -60, -125),
+        betBan: photo('pat-banana-leaf', 'banana', 75, 44,  60, -125),
+        sim:    text(125, -70, '$\\sim$', 30),
+        lot:    root(250, 0),
+        lotSan: photo('pat-san-leaf2',    'san',    24, 84, 190, -125),
+        lotBan: photo('pat-banana-leaf2', 'banana', 75, 44, 310, -125),
+        capBet: text(0,   32, '$\\text{the bet on }A$', 14),   // all-math: a mixed label drops the space before $A$
+        capLot: text(250, 32, 'the lottery', 14),
+      },
+      edges: [
+        { from: 'bet', to: 'betSan', label: 'rain',    labelSide: 'left'  },
+        { from: 'bet', to: 'betBan', label: 'no rain', labelSide: 'right' },
+        { from: 'lot', to: 'lotSan', label: '$p$',     labelSide: 'left'  },
+        { from: 'lot', to: 'lotBan', label: '$1-p$',   labelSide: 'right' },
+      ],
+    });
+  </script>
+
+</body>
+</html>
