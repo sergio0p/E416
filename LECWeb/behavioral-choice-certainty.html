@@ -51,6 +51,13 @@
     }
     #mrs-readout .val { color: #268bd2; font-weight: 700; }
 
+    /* Capuchin table has four columns; the theme's 1.2rem cell padding squeezes
+       the "shown → given" cells onto several lines at phone width. */
+    #capuchin-reference .data-table th,
+    #capuchin-reference .data-table td { padding: 0.45rem 0.6rem; }
+    #capuchin-reference .data-table td:nth-child(2),
+    #capuchin-reference .data-table td:nth-child(3) { white-space: nowrap; }
+
     /* Safari/WebKit does not paint `position: relative` content inside
        <foreignObject>, so KaTeX labels in tikz-svg figures lay out correctly but
        never appear — fractions worst of all, whose absolutely-positioned .vlist
@@ -93,12 +100,17 @@
       <a href="#loss-aversion" style="margin-left: 1rem;">7. Loss Aversion</a>
       <a href="#loss-gain" style="margin-left: 1rem;">8. Loss-Gain Utility</a>
       <br>
-      <a href="#numerical-example-cont" style="margin-left: 1rem;">9. Optimal Basket</a>
-      <a href="#micro-review" style="margin-left: 1rem;">10. Micro Review</a>
-      <a href="#numerical-example" style="margin-left: 1rem;">11. Numerical Example</a>
+      <a href="#endowment-effect" style="margin-left: 1rem;">9. Endowment Effect</a>
+      <a href="#endowment-choosers" style="margin-left: 1rem;">10. Sellers &amp; Choosers</a>
+      <a href="#endowment-kr" style="margin-left: 1rem;">11. WTA vs. WTP</a>
+      <a href="#capuchin-reference" style="margin-left: 1rem;">12. Capuchin Monkeys</a>
       <br>
-      <a href="#trad-graph" style="margin-left: 1rem;">12. Traditional</a>
-      <a href="#refdep-graph" style="margin-left: 1rem;">13. Reference-Dep.</a>
+      <a href="#numerical-example-cont" style="margin-left: 1rem;">13. Optimal Basket</a>
+      <a href="#micro-review" style="margin-left: 1rem;">14. Micro Review</a>
+      <a href="#numerical-example" style="margin-left: 1rem;">15. Numerical Example</a>
+      <a href="#trad-graph" style="margin-left: 1rem;">16. Traditional</a>
+      <br>
+      <a href="#refdep-graph" style="margin-left: 1rem;">17. Reference-Dep.</a>
     </nav>
   </section>
 
@@ -266,6 +278,174 @@
       <p>The loss-gain utility is a component of the overall utility. Its utility/disutility depends on how the consumption-utility of a good differs from the consumption-utility of its reference level.</p>
       <p>A loss-gain utility $\mu$ as defined above displays loss aversion if and only if $L\gt G\gt 0$.</p>
       <svg id="fig-gain-loss" style="max-width: 456px; width: 100%; display: block; margin: 0 auto;"></svg>
+    </div>
+  </section>
+
+  <!-- Frame: The Endowment Effect (source: KKT91, pp. 194–196) -->
+  <section class="frame" id="endowment-effect">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Endowment Effect</h2>
+    </div>
+    <div class="frame-content">
+      <div class="block">
+        <div class="block-title">Endowment Effect</div>
+        <div class="block-body">
+          People demand more to give up an object than they would pay to acquire it:
+          the willingness to accept exceeds the willingness to pay, $\mathrm{WTA}\gt\mathrm{WTP}$.
+        </div>
+      </div>
+      <p>Kahneman, Knetsch &amp; Thaler (1990) ran markets in an economics class at Cornell.
+      Half the students, chosen at random, received an object; the other half could buy one.
+      Since the objects were assigned at random, half of those who value them most start
+      without one, so standard theory predicts that half of the 22 objects change hands.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Predicted trades</th>
+            <th>Observed trades</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Induced-value tokens</td><td>supply meets demand</td><td>within one trade</td></tr>
+          <tr><td>Coffee mugs (<span>$</span>6.00)</td><td>11</td><td>4, 1, 2, 2</td></tr>
+          <tr><td>Ballpoint pens (<span>$</span>3.98)</td><td>11</td><td>4 or 5</td></tr>
+        </tbody>
+      </table>
+
+      <p>The median mug owner would not sell for less than <span>$</span>5.25, while the
+      median buyer would not pay more than <span>$</span>2.25&ndash;<span>$</span>2.75.
+      Median selling prices were about twice median buying prices.</p>
+
+      <p class="scroll-reveal">A token is worth whatever the experimenter says it is worth;
+      a mug is worth whatever its owner decides. The endowment effect shows up for the mugs
+      and pens, not for the tokens.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Sellers, Choosers, and Buyers (source: KKT91, pp. 196–197) -->
+  <section class="frame" id="endowment-choosers">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Sellers, Choosers, and Buyers</h2>
+      <p class="frame-subtitle">Reluctance to sell or reluctance to buy?</p>
+    </div>
+    <div class="frame-content">
+      <p>Seventy-seven students at Simon Fraser University were randomly split into three
+      groups and asked, at each price from <span>$</span>0.25 to <span>$</span>9.25, what
+      they would do.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Decision at each price</th>
+            <th>Median price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Sellers</td><td>own a mug: sell it or keep it</td><td><span>$</span>7.12</td></tr>
+          <tr><td>Choosers</td><td>no mug: take a mug or the money</td><td><span>$</span>3.12</td></tr>
+          <tr><td>Buyers</td><td>no mug: buy one or keep the money</td><td><span>$</span>2.87</td></tr>
+        </tbody>
+      </table>
+
+      <p>Sellers and Choosers face the same choice&mdash;leave with the mug or with the
+      money&mdash;yet Choosers price the mug like Buyers. The low volume of trade comes from
+      owners' reluctance to part with the mug, not from buyers' reluctance to part with cash.</p>
+
+      <p class="scroll-reveal">Owning does not make the object more attractive: students given
+      a pen did not rate pens as more attractive than the others did, yet 56% of them kept the
+      pen over two chocolate bars, against 24% of those not given one.</p>
+
+      <div class="pullquote scroll-reveal">
+        &ldquo;This suggests that the main effect of endowment is not to enhance the appeal of
+        the good one owns, only the pain of giving it up.&rdquo;
+        <span class="attrib">&mdash; Kahneman, Knetsch &amp; Thaler,
+        <a href="https://uncch.instructure.com/courses/128467/files/16576460">&ldquo;The Endowment Effect, Loss Aversion, and Status Quo Bias&rdquo;</a>,
+        <em>JEP</em> 5(1), 1991, p. 197</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Endowment effect in the reference-dependent model -->
+  <section class="frame" id="endowment-kr">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Endowment Effect and Loss Aversion</h2>
+      <p class="frame-subtitle">WTA and WTP in the reference-dependent model</p>
+    </div>
+    <div class="frame-content">
+      <p>Let good $X$ be a mug, $x\in\set{0,1}$, and good $Y$ be money, with $u(y)=y$.
+      Write $m=u(1)-u(0)\gt 0$ for the consumption utility of the mug.</p>
+      <ul>
+        <li><strong>Seller</strong>&mdash;owns the mug, so the reference is $\underline x=1$.
+          Selling at price $p$ is a loss of $m$ in $X$ and a gain of $p$ in $Y$:
+          $$\begin{aligned}\Delta U&=-(1+L)\,m+(1+G)\,p\ge 0\\ \iff p&\ge\frac{1+L}{1+G}\,m=\mathrm{WTA}.\end{aligned}$$
+        </li>
+        <li><strong>Buyer</strong>&mdash;has no mug, so the reference is $\underline x=0$.
+          Buying at price $p$ is a gain of $m$ in $X$ and a loss of $p$ in $Y$:
+          $$\begin{aligned}\Delta U&=(1+G)\,m-(1+L)\,p\ge 0\\ \iff p&\le\frac{1+G}{1+L}\,m=\mathrm{WTP}.\end{aligned}$$
+        </li>
+      </ul>
+      <p>Therefore
+      $$\frac{\mathrm{WTA}}{\mathrm{WTP}}=\paren{\frac{1+L}{1+G}}^2\gt 1\iff L\gt G.$$</p>
+      <p class="scroll-reveal">With the $\mu$ of the numerical example ($L=1$, $G=\tfrac12$),
+      $\mathrm{WTA}/\mathrm{WTP}=\paren{2/\tfrac32}^2=\tfrac{16}{9}\approx 1.8$&mdash;close to
+      the factor of about 2 in the mug markets. Without loss aversion ($L=G$) the gap
+      vanishes: $\mathrm{WTA}=\mathrm{WTP}=m$. A Chooser gains either the mug or the money,
+      so is indifferent at $p=m$, between the two&mdash;the same order as
+      $\$2.87\lt\$3.12\lt\$7.12$.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Reference points in capuchin monkeys (source: CLS06, pp. 529–534) -->
+  <section class="frame" id="capuchin-reference">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Reference Points in Capuchin Monkeys</h2>
+      <p class="frame-subtitle">Chen, Lakshminarayanan &amp; Santos (2006)</p>
+    </div>
+    <div class="frame-content">
+      <p>Capuchins who had learned to trade tokens for food chose between two
+      experimenters. Each experimenter first <strong>showed</strong> some apple pieces,
+      then took a token and <strong>gave</strong> apple pieces&mdash;sometimes more, sometimes
+      fewer than shown. Each cell below reads <em>pieces shown &rarr; pieces given</em>.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Experiment</th>
+            <th>E1</th>
+            <th>E2</th>
+            <th>E1 chosen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2. Gamble</td><td>1 &rarr; 1 or 2</td><td>2 &rarr; 1 or 2</td><td>71%</td></tr>
+          <tr><td>3. Sure thing</td><td>1 &rarr; 1</td><td>2 &rarr; 1</td><td>79%</td></tr>
+        </tbody>
+      </table>
+
+      <p>Within each experiment the two experimenters deliver the same payoffs; only the
+      display differs. Standard theory gives no reason to favor either one.</p>
+      <ul>
+        <li><strong>Reference dependence</strong>&mdash;in experiment 2 the second piece is
+          a bonus from E1 but a penalty from E2.</li>
+        <li><strong>Loss aversion</strong>&mdash;a sure loss (experiment 3) repels more than
+          a half chance of a loss plus a half chance of a gain (experiment 2): 79% against 71%.</li>
+      </ul>
+
+      <p class="scroll-reveal">The displayed apple sets what the monkey expects&mdash;the third
+      kind of reference point above&mdash;and getting less than that is coded as a loss. In the
+      mug markets the reference is what one owns; here it is what one was shown.</p>
+
+      <div class="pullquote scroll-reveal">
+        &ldquo;Given our capuchins&rsquo; inexperience with money and trade, these results
+        suggest that loss aversion extends beyond humans and may be innate rather than
+        learned.&rdquo;
+        <span class="attrib">&mdash; Chen, Lakshminarayanan &amp; Santos,
+        <a href="https://uncch.instructure.com/courses/128467/files/16571277">&ldquo;How Basic Are Behavioral Biases?&rdquo;</a>,
+        <em>JPE</em> 114(3), 2006, p. 517</span>
+      </div>
     </div>
   </section>
 
