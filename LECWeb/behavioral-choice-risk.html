@@ -33,6 +33,14 @@
     /* Prospect-theory value function figure (tikz-svg), below the formulas in the same frame */
     .pt-graph { max-width: 520px; width: 100%; display: block; margin: 0.6rem auto 0.4rem; }
 
+    .pw-graph { max-width: 360px; width: 100%; display: block; margin: 0.6rem auto 0.4rem; }
+
+    /* Sliders under the value-function and decision-weight widgets */
+    .pt-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 2rem; margin: 0.2rem 0 0; }
+    .pt-slider { display: flex; align-items: center; gap: 0.5rem; }
+    .pt-slider input[type="range"] { width: 9rem; accent-color: var(--crane-amber-dark); }
+    .pt-slider output { min-width: 2.2em; font-variant-numeric: tabular-nums; }
+
     /* Safari/WebKit does not paint `position: relative` content inside
        <foreignObject>, so KaTeX labels in tikz-svg figures lay out correctly but
        never appear. KaTeX also emits a MathML twin, which WebKit renders natively,
@@ -69,11 +77,14 @@
       <a href="#prospect-theory-intro" style="margin-left: 1rem;">1. Prospect Theory</a>
       <a href="#prospect-theory-assumptions" style="margin-left: 1rem;">2. Assumptions</a>
       <a href="#prospect-theory-functions" style="margin-left: 1rem;">3. Value Function</a>
-      <a href="#ambiguity" style="margin-left: 1rem;">4. Ellsberg Urn</a>
+      <a href="#prospect-theory-utility" style="margin-left: 1rem;">4. Valuation</a>
       <br>
-      <a href="#ambiguity-probs" style="margin-left: 1rem;">5. Ambiguity</a>
-      <a href="#ambiguity-aversion" style="margin-left: 1rem;">6. Max Min EU</a>
-      <a href="#ambiguity-example" style="margin-left: 1rem;">7. Max Min Example</a>
+      <a href="#prospect-theory-weights" style="margin-left: 1rem;">5. Decision Weights</a>
+      <a href="#ambiguity" style="margin-left: 1rem;">6. Ellsberg Urn</a>
+      <a href="#ambiguity-probs" style="margin-left: 1rem;">7. Ambiguity</a>
+      <a href="#ambiguity-aversion" style="margin-left: 1rem;">8. Max Min EU</a>
+      <br>
+      <a href="#ambiguity-example" style="margin-left: 1rem;">9. Max Min Example</a>
     </nav>
   </section>
 
@@ -129,6 +140,51 @@
       The value function is concave over gains ($x\gt 0$, risk-averse) and convex over losses ($x\lt 0$, risk-loving). It is also steeper over losses: a loss of $x$ hurts more than a gain of $x$ pleases,
       $$-\nu(-x)\gt\nu(x)\qquad\text{(loss aversion).}$$</p>
       <svg id="pt-value-fn" class="pt-graph"></svg>
+    </div>
+  </section>
+
+  <!-- Frame: Prospect Theory, the utility function (valuation). The example of the
+       previous frame as a widget: sliders set alpha and lambda; the axes stay fixed. -->
+  <section class="frame" id="prospect-theory-utility">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+      <p class="frame-subtitle">The Utility Function</p>
+    </div>
+    <div class="frame-content">
+      <p>Under Prospect Theory, the utility for money is referred to as the <em>valuation</em>. As seen before, the utility displays:</p>
+      <ul>
+        <li>loss aversion;</li>
+        <li>risk-loving behavior in the loss domain;</li>
+        <li>risk-averse behavior in the gain domain.</li>
+      </ul>
+      <svg id="pt-value-widget" class="pt-graph" role="img" aria-label="Value function nu(x) = x^alpha for gains and -lambda(-x)^alpha for losses, redrawn for the chosen alpha and lambda"></svg>
+      <div class="pt-controls">
+        <label class="pt-slider">$\alpha$ <input type="range" id="pt-alpha" min="0.1" max="1" step="0.05" value="0.5"> <output for="pt-alpha" id="pt-alpha-out">0.50</output></label>
+        <label class="pt-slider">$\lambda$ <input type="range" id="pt-lambda" min="1" max="3" step="0.1" value="2"> <output for="pt-lambda" id="pt-lambda-out">2.0</output></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Prospect Theory, probability weights. Widget: the slider sets gamma in
+       pi(p) = p^gamma / (p^gamma + (1-p)^gamma)^(1/gamma); pi in red, pi = p in dark blue. -->
+  <section class="frame" id="prospect-theory-weights">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+      <p class="frame-subtitle">Probability Weights</p>
+    </div>
+    <div class="frame-content">
+      <p>Prospect Theory weights events using decision weights $\pi(p)$ instead of probabilities $p$. We saw that decision weights:</p>
+      <ul>
+        <li>underestimate high probability events and overestimate low probability events;</li>
+        <li>$\pi(p)\gt p$ for $p\lt \hat p$;</li>
+        <li>$\pi(p)+\pi(1-p)\le 1$;</li>
+        <li>$\pi(p)=p$ only for $p=0$, $\hat p$ and $1$.</li>
+      </ul>
+      <p>Notice that $\hat p(\gamma)$ is given.</p>
+      <svg id="pt-weight-widget" class="pw-graph" role="img" aria-label="Decision weight pi(p) against the 45-degree line pi = p, redrawn for the chosen gamma; they cross at p-hat"></svg>
+      <div class="pt-controls">
+        <label class="pt-slider">$\gamma$ <input type="range" id="pt-gamma" min="0.3" max="1" step="0.01" value="0.61"> <output for="pt-gamma" id="pt-gamma-out">0.61</output></label>
+      </div>
     </div>
   </section>
 
@@ -250,9 +306,14 @@
 
     // Math units: x in [-4.5, 4.5], nu in [-4.5, 2.5]; scale 45 px per unit.
     // Plots take y-up values; paths and nodes are y-down, hence the negated nu.
+    // One figure, two uses: the example frame (alpha = 1/2, lambda = 2) and the widget
+    // frame, whose sliders redraw it. The axes never move; for large alpha or lambda the
+    // curve stops at the edge of the box, and a guide whose point leaves the box runs to
+    // the edge without its dot or label.
     const GREY = '#586e75', RED = '#dc322f', BLUE = '#268bd2';
     const X0 = 4;                                  // the gain/loss size shown
-    const nuG = Math.sqrt(X0), nuL = -2 * Math.sqrt(X0);   // nu(x0) = 2, nu(-x0) = -4
+    const TOP = 2.7, BOTTOM = -4.55, XMAX = 4.3;   // the curve's box, inside the axes
+    const MIN_GAP = 0.42;                          // closest two labels may sit on the nu axis
     const lbl = (id, x, y, text, anchor, color, size = 13) => ({
       type: 'node', id, position: { x, y }, label: text, anchor, shape: 'rectangle',
       innerSep: 2, fontSize: size, labelColor: color, fill: 'none', stroke: 'none',
@@ -265,8 +326,23 @@
       type: 'node', id, position: { x, y: -y }, shape: 'circle', radius: 3.2,
       fill: color, stroke: 'none', label: '',
     });
-    try {
-      render(document.getElementById('pt-value-fn'), {
+    // nu(x) = x^alpha for gains, -lambda (-x)^alpha for losses (reference point r = 0)
+    const valueFn = (alpha, lambda) => {
+      const nuG = Math.pow(X0, alpha), nuL = -lambda * nuG;        // nu(x0), nu(-x0)
+      const gainIn = nuG <= TOP, lossIn = nuL >= BOTTOM;
+      const gEnd = Math.min(XMAX, Math.pow(TOP, 1 / alpha));          // where each branch
+      const lEnd = Math.min(XMAX, Math.pow(-BOTTOM / lambda, 1 / alpha));  // leaves the box
+      // samples bunched near 0, where x^alpha is steep for small alpha
+      const at = end => Array.from({ length: 121 }, (_, i) => end * (i / 120) ** 3);
+      // nu(-x) and the mirrored -nu(x) share the right side of the nu axis; when they
+      // nearly coincide, spread them apart, and at lambda = 1 merge them into one label.
+      const equal = Math.abs(nuL + nuG) < 1e-9;
+      let yMirror = -nuG, yLoss = nuL;
+      if (lossIn && !equal && yMirror - yLoss < MIN_GAP) {
+        const mid = (yMirror + yLoss) / 2;
+        yMirror = mid + MIN_GAP / 2; yLoss = mid - MIN_GAP / 2;
+      }
+      return {
         scale: 45, originX: 230, originY: 130, padding: 10,
         katexMacros: (typeof katexMacros !== 'undefined' ? katexMacros : undefined),
         draw: [
@@ -278,25 +354,106 @@
           lbl('gains', 4.9, 0.3, 'gains', 'north', GREY, 11),
           lbl('losses', -4.7, 0.3, 'losses', 'north', GREY, 11),
           // guides: the gain x0 and the loss -x0, plus the mirrored level -nu(x0)
-          dash(X0, 0, X0, nuG, GREY, '8 6'),
-          dash(0, nuG, X0, nuG, GREY, '8 6'),
-          dash(-X0, 0, -X0, nuL, GREY, '8 6'),
-          dash(0, nuL, -X0, nuL, GREY, '8 6'),
+          dash(X0, 0, X0, Math.min(nuG, TOP), GREY, '8 6'),
+          ...(gainIn ? [dash(0, nuG, X0, nuG, GREY, '8 6')] : []),
+          dash(-X0, 0, -X0, Math.max(nuL, BOTTOM), GREY, '8 6'),
+          ...(lossIn ? [dash(0, nuL, -X0, nuL, GREY, '8 6')] : []),
           dash(0, -nuG, -X0, -nuG, BLUE, '3 3'),
           // the value function, one branch per side of the reference point
-          { type: 'plot', expr: x => Math.sqrt(x), domain: [0, 4.3], samples: 80, handler: 'smooth', stroke: RED, strokeWidth: 2.5 },
-          { type: 'plot', expr: x => -2 * Math.sqrt(-x), domain: [-4.3, 0], samples: 80, handler: 'smooth', stroke: RED, strokeWidth: 2.5 },
-          dot('dg', X0, nuG, RED),
-          dot('dl', -X0, nuL, RED),
+          { type: 'plot', expr: x => Math.pow(x, alpha), samplesAt: at(gEnd), handler: 'smooth', stroke: RED, strokeWidth: 2.5 },
+          { type: 'plot', expr: x => -lambda * Math.pow(-x, alpha), samplesAt: at(lEnd).map(x => -x).reverse(), handler: 'smooth', stroke: RED, strokeWidth: 2.5 },
+          ...(gainIn ? [dot('dg', X0, nuG, RED)] : []),
+          ...(lossIn ? [dot('dl', -X0, nuL, RED)] : []),
           // labels
           lbl('tx', X0, 0.2, '$x$', 'north', GREY),
           lbl('tmx', -X0, 0.2, '$-x$', 'north', GREY),
-          lbl('tnux', -0.15, -nuG, '$\\nu(x)$', 'east', GREY),
-          lbl('tnumx', 0.15, -nuL, '$\\nu(-x)$', 'west', GREY),
-          lbl('tmirror', 0.15, nuG, '$-\\nu(x)$', 'west', BLUE, 12),
+          ...(gainIn ? [lbl('tnux', -0.15, -nuG, '$\\nu(x)$', 'east', GREY)] : []),
+          ...(lossIn && !equal ? [lbl('tnumx', 0.15, -yLoss, '$\\nu(-x)$', 'west', GREY)] : []),
+          lbl('tmirror', 0.15, -yMirror, equal ? '$-\\nu(x)=\\nu(-x)$' : '$-\\nu(x)$', 'west', BLUE, 12),
         ],
-      });
+      };
+    };
+
+    try {
+      render(document.getElementById('pt-value-fn'), valueFn(0.5, 2));
     } catch (e) { console.error('pt-value-fn render failed', e); }
+
+    // Widget: redraw on every slider move, at most once per frame
+    const widget = document.getElementById('pt-value-widget');
+    const aIn = document.getElementById('pt-alpha'), lIn = document.getElementById('pt-lambda');
+    const aOut = document.getElementById('pt-alpha-out'), lOut = document.getElementById('pt-lambda-out');
+    let pending = false;
+    const redraw = () => {
+      pending = false;
+      const alpha = +aIn.value, lambda = +lIn.value;
+      aOut.textContent = alpha.toFixed(2);
+      lOut.textContent = lambda.toFixed(1);
+      try { render(widget, valueFn(alpha, lambda)); }
+      catch (e) { console.error('pt-value-widget render failed', e); }
+    };
+    [aIn, lIn].forEach(input => input.addEventListener('input', () => {
+      if (!pending) { pending = true; requestAnimationFrame(redraw); }
+    }));
+    redraw();
+
+    // Decision weights: pi(p) = p^g / (p^g + (1-p)^g)^(1/g) against the line pi = p.
+    // Unit square, scale 300 px per unit; dash() and dot() take y-up values, lbl() y-down.
+    // p-hat, where pi crosses the line, moves with gamma; at gamma = 1, pi(p) = p.
+    const DARK_BLUE = '#1565c0';
+    const weight = (q, g) => q <= 0 ? 0 : q >= 1 ? 1
+      : Math.pow(q, g) / Math.pow(Math.pow(q, g) + Math.pow(1 - q, g), 1 / g);
+    const fixedPoint = g => {            // pi(p) > p below p-hat, pi(p) < p above it
+      let lo = 1e-6, hi = 1 - 1e-6;
+      for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (weight(m, g) > m) lo = m; else hi = m; }
+      return (lo + hi) / 2;
+    };
+    // samples bunched near p = 0 and p = 1, where pi is steep
+    const wAt = Array.from({ length: 161 }, (_, i) => (1 - Math.cos(Math.PI * i / 160)) / 2);
+    const weightFn = g => {
+      const pHat = g < 1 - 1e-9 ? fixedPoint(g) : null;
+      const pLbl = 0.85;
+      return {
+        scale: 300, originX: 40, originY: 340, padding: 10,
+        katexMacros: (typeof katexMacros !== 'undefined' ? katexMacros : undefined),
+        draw: [
+          // the unit square and the axes
+          dash(1, 0, 1, 1, GREY, '4 4'),
+          dash(0, 1, 1, 1, GREY, '4 4'),
+          { type: 'path', points: [{ x: 0, y: 0 }, { x: 1.12, y: 0 }], arrow: '->', stroke: GREY, strokeWidth: 1.6 },
+          { type: 'path', points: [{ x: 0, y: 0 }, { x: 0, y: -1.12 }], arrow: '->', stroke: GREY, strokeWidth: 1.6 },
+          lbl('wp', 1.12, 0.02, '$p$', 'north', GREY),
+          lbl('wpi', 0.03, -1.12, '$\\pi$', 'west', GREY),
+          lbl('w0', -0.02, 0.02, '$0$', 'north east', GREY, 12),
+          lbl('w1x', 1, 0.02, '$1$', 'north', GREY, 12),
+          lbl('w1y', -0.02, -1, '$1$', 'east', GREY, 12),
+          // pi = p, then pi(p) on top
+          { type: 'plot', expr: q => q, domain: [0, 1], samples: 2, handler: 'lineto', stroke: DARK_BLUE, strokeWidth: 2 },
+          { type: 'plot', expr: q => weight(q, g), samplesAt: wAt, handler: 'smooth', stroke: RED, strokeWidth: 2.5 },
+          ...(pHat ? [
+            dash(pHat, 0, pHat, pHat, GREY, '8 6'),
+            dot('whatdot', pHat, pHat, RED),
+            lbl('what', pHat, 0.02, '$\\hat p$', 'north', GREY),
+          ] : []),
+          lbl('wline', 0.55, -0.55, '$p$', 'south east', DARK_BLUE),
+          lbl('wcurve', pLbl, -weight(pLbl, g), '$\\pi(p)$', 'north west', RED),
+        ],
+      };
+    };
+
+    const wWidget = document.getElementById('pt-weight-widget');
+    const gIn = document.getElementById('pt-gamma'), gOut = document.getElementById('pt-gamma-out');
+    let wPending = false;
+    const wRedraw = () => {
+      wPending = false;
+      const g = +gIn.value;
+      gOut.textContent = g.toFixed(2);
+      try { render(wWidget, weightFn(g)); }
+      catch (e) { console.error('pt-weight-widget render failed', e); }
+    };
+    gIn.addEventListener('input', () => {
+      if (!wPending) { wPending = true; requestAnimationFrame(wRedraw); }
+    });
+    wRedraw();
   </script>
 
 </body>

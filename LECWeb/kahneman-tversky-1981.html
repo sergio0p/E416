@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="midterm-01.html">
+  <meta name="nav-next" content="index.html">
+  <title>Kahneman &amp; Tversky (1981) | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+  <style>
+    /* Framing cards: one block per framing of the same problem; a click turns the
+       card over to the next framing, and after the last one back to the first.
+       The card has two sides; each click turns it another half turn and, while the
+       side about to come round still faces away, loads the next framing onto it, so
+       a card can hold any number of framings. Every framing sits in the same grid
+       cell on both sides, so the card is always as tall as its tallest framing.
+       Bodies are .kt-body, not .block-body, so the theme's block-flip script
+       (click a title to show a "?" back) leaves the cards alone. */
+    .kt-card { perspective: 1000px; cursor: pointer; margin: 0.6rem 0 0.3rem; }
+    .kt-card:focus:not(:focus-visible) { outline: none; }
+    .kt-inner {
+      display: grid;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(.2, .8, .2, 1);
+    }
+    .kt-side {
+      grid-area: 1 / 1;
+      display: grid;
+      min-width: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .kt-side-back { transform: rotateY(180deg); }
+    .kt-face { grid-area: 1 / 1; min-width: 0; display: flex; visibility: hidden; }
+    .kt-face.kt-active { visibility: visible; }
+    .kt-face .block { width: 100%; margin: 0; display: flex; flex-direction: column; }
+    .kt-body { flex: 1; background: #fff8e1; color: #000000; padding: 1rem; }
+    .kt-body > p:first-child { margin-top: 0; }
+    .kt-body > p:last-child { margin-bottom: 0; }
+    .kt-body ul { margin: 0.4rem 0; }
+    .kt-body li { margin-bottom: 0.3rem; }
+
+    /* Position marker in the title: which framing of how many */
+    .kt-step { float: right; margin-left: 1rem; font-weight: normal; font-size: 0.85em; }
+
+    /* The paper's results (share of respondents choosing each option, and N).
+       To hide them all, e.g. to poll the class first: .kt-result { display: none; } */
+    .kt-result { color: #c17900; font-weight: bold; white-space: nowrap; }
+
+  </style>
+
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="kahneman-tversky-1981">
+    <div class="section-title-box">
+      <h1>Kahneman &amp; Tversky (1981)</h1>
+    </div>
+    <h2>The Framing of Decisions and the Psychology of Choice</h2>
+
+    <!-- Table of Contents: in-page anchors to each frame's id -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#asian-disease" style="margin-left: 1rem;">1. Asian Disease</a>
+      <a href="#concurrent-decisions" style="margin-left: 1rem;">2. Concurrent Decisions</a>
+      <a href="#pseudocertainty" style="margin-left: 1rem;">3. Pseudocertainty</a>
+      <a href="#epidemic" style="margin-left: 1rem;">4. Epidemic</a>
+    </nav>
+  </section>
+
+  <!-- Frame 1: Problems 1 and 2 (paper p. 453). Two framings: lives saved / lives lost. -->
+  <section class="frame" id="asian-disease">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Asian Disease</h2>
+      <p class="frame-subtitle">Framing of Outcomes</p>
+    </div>
+    <div class="frame-content">
+      <p>Imagine that the U.S. is preparing for the outbreak of an unusual Asian disease, which is expected to kill 600 people. Two alternative programs to combat the disease have been proposed. Assume that the exact scientific estimate of the consequences of the programs are as follows:</p>
+      <div class="kt-card" role="button" tabindex="0" aria-label="Flip to the other framing">
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 1: Gain Framing</div>
+            <div class="kt-body">
+              <ul>
+                <li>If Program A is adopted, 200 people will be saved. <span class="kt-result">[72%]</span></li>
+                <li>If Program B is adopted, there is $1/3$ probability that 600 people will be saved, and $2/3$ probability that no people will be saved. <span class="kt-result">[28%]</span></li>
+              </ul>
+              <p>Which of the two programs would you favor? <span class="kt-result">[N = 152]</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 2: Loss Framing</div>
+            <div class="kt-body">
+              <ul>
+                <li>If Program C is adopted, 400 people will die. <span class="kt-result">[22%]</span></li>
+                <li>If Program D is adopted, there is $1/3$ probability that nobody will die, and $2/3$ probability that 600 people will die. <span class="kt-result">[78%]</span></li>
+              </ul>
+              <p>Which of the two programs would you favor? <span class="kt-result">[N = 155]</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 2: Problems 3 and 4 (paper p. 454). Front: two concurrent decisions
+       (four lotteries); back: the same choices combined into one decision. -->
+  <section class="frame" id="concurrent-decisions">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Concurrent Decisions</h2>
+      <p class="frame-subtitle">Framing of Acts</p>
+    </div>
+    <div class="frame-content">
+      <div class="kt-card" role="button" tabindex="0" aria-label="Flip to the other framing">
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 3: Two Separate Decisions</div>
+            <div class="kt-body">
+              <p>Imagine that you face the following pair of concurrent decisions. First examine both decisions, then indicate the options you prefer. <span class="kt-result">[N = 150]</span></p>
+              <p>Decision (i). Choose between:</p>
+              <ul>
+                <li>A. a sure gain of $\$240$ <span class="kt-result">[84%]</span></li>
+                <li>B. 25% chance to gain $\$1000$, and 75% chance to gain nothing <span class="kt-result">[16%]</span></li>
+              </ul>
+              <p>Decision (ii). Choose between:</p>
+              <ul>
+                <li>C. a sure loss of $\$750$ <span class="kt-result">[13%]</span></li>
+                <li>D. 75% chance to lose $\$1000$, and 25% chance to lose nothing <span class="kt-result">[87%]</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 4: One Combined Decision</div>
+            <div class="kt-body">
+              <p>Choose between: <span class="kt-result">[N = 86]</span></p>
+              <ul>
+                <li>A &amp; D. 25% chance to win $\$240$, and 75% chance to lose $\$760$. <span class="kt-result">[0%]</span></li>
+                <li>B &amp; C. 25% chance to win $\$250$, and 75% chance to lose $\$750$. <span class="kt-result">[100%]</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 3: Problems 5, 6 and 7 (paper p. 455). Three framings, cycled 5 -> 6 -> 7 -> 5. -->
+  <section class="frame" id="pseudocertainty">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Certainty and Pseudocertainty</h2>
+      <p class="frame-subtitle">Framing of Contingencies</p>
+    </div>
+    <div class="frame-content">
+      <p>Each problem was presented to a different group of respondents. Each group was told that one participant in ten, preselected at random, would actually be playing for money. Chance events were realized, in the respondents&rsquo; presence, by drawing a single ball from a bag containing a known proportion of balls of the winning color, and the winners were paid immediately.</p>
+      <div class="kt-card" role="button" tabindex="0" aria-label="Flip to the next framing">
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 5: A Sure Win</div>
+            <div class="kt-body">
+              <p>Which of the following options do you prefer? <span class="kt-result">[N = 77]</span></p>
+              <ul>
+                <li>A. a sure win of $\$30$ <span class="kt-result">[78%]</span></li>
+                <li>B. 80% chance to win $\$45$ <span class="kt-result">[22%]</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 6: A Two-Stage Game</div>
+            <div class="kt-body">
+              <p>Consider the following two-stage game. In the first stage, there is a 75% chance to end the game without winning anything, and a 25% chance to move into the second stage. If you reach the second stage you have a choice between: <span class="kt-result">[N = 85]</span></p>
+              <ul>
+                <li>C. a sure win of $\$30$ <span class="kt-result">[74%]</span></li>
+                <li>D. 80% chance to win $\$45$ <span class="kt-result">[26%]</span></li>
+              </ul>
+              <p>Your choice must be made before the game starts, i.e., before the outcome of the first stage is known. Please indicate the option you prefer.</p>
+            </div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Problem 7: No Sure Win</div>
+            <div class="kt-body">
+              <p>Which of the following options do you prefer? <span class="kt-result">[N = 81]</span></p>
+              <ul>
+                <li>E. 25% chance to win $\$30$ <span class="kt-result">[42%]</span></li>
+                <li>F. 20% chance to win $\$45$ <span class="kt-result">[58%]</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 4: the epidemic versions described in the text (paper pp. 455-456).
+       The paper reports only the majority choice, not percentages. Same cycle as 5/6/7. -->
+  <section class="frame" id="epidemic">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Epidemic</h2>
+      <p class="frame-subtitle">Certainty and Pseudocertainty with Losses</p>
+    </div>
+    <div class="frame-content">
+      <p>A question dealing with the response to an epidemic. Two alternative programs have been proposed.</p>
+      <div class="kt-card" role="button" tabindex="0" aria-label="Flip to the next framing">
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Version 1: A Sure Loss</div>
+            <div class="kt-body">
+              <p>Which program do you prefer?</p>
+              <ul>
+                <li>a sure loss of 75 lives</li>
+                <li>80% chance to lose 100 lives <span class="kt-result">[most]</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Version 2: Two Viruses</div>
+            <div class="kt-body">
+              <p>The risk to life exists only in the event (probability $.10$) that the disease is carried by a particular virus. If the disease is carried by another virus (probability $.90$), no lives are lost. If the critical virus is involved, the two programs yield:</p>
+              <ul>
+                <li>a sure loss of 75 lives</li>
+                <li>80% chance to lose 100 lives <span class="kt-result">[most]</span></li>
+              </ul>
+              <p>Which program do you prefer?</p>
+            </div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">Version 3: No Sure Loss</div>
+            <div class="kt-body">
+              <p>Which program do you prefer?</p>
+              <ul>
+                <li>10% chance to lose 75 lives <span class="kt-result">[most]</span></li>
+                <li>8% chance to lose 100 lives</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="midterm-01.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Midterm 1</a>
+    <a href="index.html" style="color: var(--crane-blue); text-decoration: none;">Index &rarr;</a>
+  </div>
+
+  <!-- Framing cards. Runs during parsing, before DOMContentLoaded, so KaTeX (which
+       renders on DOMContentLoaded) also renders the cloned back side. -->
+  <script>
+    document.querySelectorAll('.kt-card').forEach(card => {
+      const faces = [...card.querySelectorAll(':scope > .kt-face')];
+      const n = faces.length;
+      faces.forEach((face, i) => {
+        const step = document.createElement('span');
+        step.className = 'kt-step';
+        step.textContent = `${i + 1}/${n}`;
+        face.querySelector('.block-title').appendChild(step);
+      });
+
+      // Two sides, each holding every framing; the back side holds clones.
+      const inner = document.createElement('div');
+      inner.className = 'kt-inner';
+      const sides = [0, 1].map(s => {
+        const side = document.createElement('div');
+        side.className = s ? 'kt-side kt-side-back' : 'kt-side';
+        faces.forEach(face => side.appendChild(s ? face.cloneNode(true) : face));
+        inner.appendChild(side);
+        return side;
+      });
+      card.appendChild(inner);
+
+      const show = (side, i) => [...side.children].forEach((face, j) => face.classList.toggle('kt-active', j === i));
+      let turns = 0, current = 0;
+      show(sides[0], 0);
+      show(sides[1], 1 % n);
+      sides[1].setAttribute('aria-hidden', 'true');
+
+      const flip = () => {
+        current = (current + 1) % n;
+        turns += 1;
+        const up = sides[turns % 2], down = sides[(turns + 1) % 2];
+        show(up, current);           // still facing away: load the next framing
+        up.removeAttribute('aria-hidden');
+        down.setAttribute('aria-hidden', 'true');
+        inner.style.transform = `rotateY(${turns * 180}deg)`;
+      };
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      });
+    });
+  </script>
+
+  <!-- KaTeX (katex-macros.js renders the page on load) -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+</body>
+</html>
