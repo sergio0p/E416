@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="kahneman-tversky-1981.html">
+  <meta name="nav-next" content="index.html">
+  <title>Problem Sets' Answer Key | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+  <!-- tikz-svg: the bundle's bare 'mathjs' import must resolve; the shim
+       degrades to null stubs when window.math is absent (diagrams-only page). -->
+  <script type="importmap">
+  { "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+  </script>
+
+  <style>
+    /* One block per question: the title holds the question and the body its
+       answer, so clicking a question flips its answer away (b flips them all).
+       Full width, so a short answer does not shrink its block; the title is not
+       bold, because a whole question in bold reads as shouting. */
+    .qa .block { width: auto; }
+    .qa .block-title { font-weight: normal; }
+    .qa .q-num { font-weight: bold; }
+
+    .ps-fig { max-width: 456px; width: 100%; display: block; margin: 0.5rem auto; }
+
+    /* Frames and blocks clip their overflow, so a display equation wider than a
+       phone would lose its right end. Let it scroll sideways instead. */
+    .katex-display { overflow-x: auto; overflow-y: hidden; padding-bottom: 2px; }
+
+    /* Punctuation moved inside a formula (see the script at the end) keeps the
+       text's font and size, not KaTeX's 1.21em serif. */
+    .katex .katex-punct { font-family: var(--font-sans); font-size: calc(1em / 1.21); }
+
+    /* Safari/WebKit does not paint `position: relative` content inside
+       <foreignObject>, so KaTeX labels in tikz-svg figures lay out correctly but
+       never appear. On WebKit show KaTeX's MathML twin instead. Same rule as
+       behavioral-choice-certainty.html. */
+    @supports (-webkit-backdrop-filter: blur(1px)) {
+      svg foreignObject .katex .katex-html { display: none; }
+      svg foreignObject .katex .katex-mathml {
+        position: static; clip: auto; clip-path: none; height: auto; width: auto;
+        overflow: visible; padding: 0; border: 0; opacity: 1; font-size: 1em;
+      }
+    }
+  </style>
+
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="problem-sets-answer-key">
+    <div class="section-title-box">
+      <h1>Problem Sets' Answer Key</h1>
+    </div>
+
+    <!-- Table of Contents: in-page anchors to each frame's id (blue = default link color) -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#ps-04" style="margin-left: 1rem;">1. PS 4 Setup</a>
+      <a href="#ps-04-q1" style="margin-left: 1rem;">2. PS 4 Q1&ndash;6</a>
+      <a href="#ps-04-q7" style="margin-left: 1rem;">3. PS 4 Q7&ndash;8</a>
+      <a href="#ps-04-q9" style="margin-left: 1rem;">4. PS 4 Q9&ndash;12</a>
+      <br>
+      <a href="#ps-04-q13" style="margin-left: 1rem;">5. PS 4 Q13&ndash;16</a>
+    </nav>
+  </section>
+
+  <!-- Frame 1: Problem Set 4, setup -->
+  <section class="frame" id="ps-04">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Problem Set 4</h2>
+      <p class="frame-subtitle">Setup</p>
+    </div>
+    <div class="frame-content">
+      <p>Two consumers have income $I=120$. Prices are $p_Y=1$ and, initially, $p_X=2$; later $p_X$ rises to $3$.</p>
+      <p>Consumer&nbsp;$T$ is a traditional consumer, with utility $u_T(x,y)=\sqrt{x}+\sqrt{y}$. Consumer&nbsp;$R$ is a reference-dependent consumer, with reference basket $(\bar x,\bar y)=(20,80)$ and utility
+      $$\begin{aligned}&u_R(x,y\mid 20,80)=\sqrt{x}+\sqrt{y}\\ &\qquad+\mu(\sqrt{x}-\sqrt{20})+\mu(\sqrt{y}-\sqrt{80}),\end{aligned}$$
+      where $\mu(\Delta u)=\min(\Delta u,0)+\tfrac12\max(\Delta u,0)$.</p>
+      <p>As in the lecture's <a href="behavioral-choice-certainty.html#numerical-example">numerical example</a>, ${A=(20,80)}$ is the initial basket and $B$ is the basket chosen after the price rise.</p>
+    </div>
+  </section>
+
+  <!-- Frame 2: Part I, questions 1-6 -->
+  <section class="frame" id="ps-04-q1">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Traditional Consumer</h2>
+      <p class="frame-subtitle">Problem Set 4, Questions 1&ndash;6</p>
+    </div>
+    <div class="frame-content qa">
+      <div class="block">
+        <div class="block-title"><span class="q-num">1.</span> Write $\MU_x(x,y)$ and $\MU_y(x,y)$.</div>
+        <div class="block-body">
+          $$\begin{aligned}\MU_x(x,y)&=\frac{1}{2\sqrt{x}},\\ \MU_y(x,y)&=\frac{1}{2\sqrt{y}}.\end{aligned}$$
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">2.</span> Evaluate both at the basket $(20,80)$.</div>
+        <div class="block-body">
+          $$\begin{aligned}\MU_x(20,80)&=\frac{1}{2\sqrt{20}}\approx 0.112,\\ \MU_y(20,80)&=\frac{1}{2\sqrt{80}}\approx 0.056.\end{aligned}$$
+          Since $\sqrt{80}=2\sqrt{20}$, $\MU_x$ is exactly twice $\MU_y$ at this basket.
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">3.</span> With $p_X=2$, is $(20,80)$ on the budget line $2x+y=120$? Show your work.</div>
+        <div class="block-body">Yes: $2\cdot 20+80=40+80=120$.</div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">4.</span> What is the price ratio $p_X/p_Y$?</div>
+        <div class="block-body">$p_X/p_Y=2/1=2$.</div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">5.</span> Compute $\MU_x/p_X$ and $\MU_y/p_Y$ at $(20,80)$. Would moving one dollar from $Y$ to $X$ raise utility?</div>
+        <div class="block-body">
+          $$\begin{aligned}\frac{\MU_x}{p_X}&=\frac{1}{2\sqrt{20}}\cdot\frac12=\frac{1}{4\sqrt{20}}\approx 0.056,\\ \frac{\MU_y}{p_Y}&=\frac{1}{2\sqrt{80}}=\frac{1}{4\sqrt{20}}\approx 0.056.\end{aligned}$$
+          No. The two are equal, so the dollar adds as much utility through $X$ as it takes away through $Y$.
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">6.</span> Compute $\mathrm{MRS}=\MU_x/\MU_y$ at $(20,80)$, and show $\mathrm{MRS}=\sqrt{y/x}$. Compare with the price ratio and conclude.</div>
+        <div class="block-body">
+          $$\begin{aligned}\mathrm{MRS}&=\frac{\MU_x}{\MU_y}=\frac{1/(2\sqrt{x})}{1/(2\sqrt{y})}\\ &=\frac{\sqrt{y}}{\sqrt{x}}=\sqrt{\frac{y}{x}},\end{aligned}$$
+          so at $(20,80)$, $\mathrm{MRS}=\sqrt{80/20}=\sqrt{4}=2=p_X/p_Y$. The basket ${A=(20,80)}$ is on the budget line and the indifference curve is tangent to the budget line there, so $A$ is Consumer&nbsp;$T$'s optimal basket.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 3: Part I, questions 7-8 -->
+  <section class="frame" id="ps-04-q7">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Price of $X$ Rises</h2>
+      <p class="frame-subtitle">Problem Set 4, Questions 7&ndash;8</p>
+    </div>
+    <div class="frame-content qa">
+      <div class="block">
+        <div class="block-title"><span class="q-num">7.</span> $p_X$ rises to $3$. Is $(20,80)$ still affordable? Show your work.</div>
+        <div class="block-body">No: $3\cdot 20+80=140\gt 120$.</div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">8.</span> Solve $\sqrt{y/x}=3$ together with $3x+y=120$.</div>
+        <div class="block-body">
+          $\sqrt{y/x}=3$ gives $y=9x$. Then $3x+9x=12x=120$, so $x=10$ and $y=90$. Consumer&nbsp;$T$ moves to ${B=(10,90)}$: it buys less of $X$, now dearer, and more of $Y$.
+        </div>
+      </div>
+      <p>Budget lines at $p_X=2$ (solid) and $p_X=3$ (dashed), with Consumer&nbsp;$T$'s indifference curves through $A$ (dark) and $B$ (light). Each curve is tangent to its budget line, and $A$ lies outside the new budget set.</p>
+      <svg id="fig-ps4-trad" class="ps-fig"></svg>
+    </div>
+  </section>
+
+  <!-- Frame 4: Part II, questions 9-12 -->
+  <section class="frame" id="ps-04-q9">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Reference-Dependent Consumer</h2>
+      <p class="frame-subtitle">Problem Set 4, Questions 9&ndash;12</p>
+    </div>
+    <div class="frame-content qa">
+      <div class="block">
+        <div class="block-title"><span class="q-num">9.</span> Write $\MU_x$ for $x\lt 20$ and for $x\gt 20$.</div>
+        <div class="block-body">
+          For $x\lt 20$ the change is a loss, ${\mu(\sqrt{x}-\sqrt{20})}={\sqrt{x}-\sqrt{20}}$, so the $x$-terms of $u_R$ are ${2\sqrt{x}-\sqrt{20}}$. For $x\gt 20$ it is a gain, ${\mu(\sqrt{x}-\sqrt{20})}={\tfrac12(\sqrt{x}-\sqrt{20})}$, so they are ${\tfrac32\sqrt{x}-\tfrac12\sqrt{20}}$. Hence
+          $$\MU_x=\begin{cases}\dfrac{1}{\sqrt{x}}, & x\lt 20,\\ \dfrac{3}{4\sqrt{x}}, & x\gt 20.\end{cases}$$
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">10.</span> Write $\MU_y$ for $y\lt 80$ and for $y\gt 80$.</div>
+        <div class="block-body">
+          The same argument, with the reference level $80$:
+          $$\MU_y=\begin{cases}\dfrac{1}{\sqrt{y}}, & y\lt 80,\\ \dfrac{3}{4\sqrt{y}}, & y\gt 80.\end{cases}$$
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">11.</span> Compute $\mathrm{MRS}^{+}$, the $\mathrm{MRS}$ at $(20,80)$ using the expression of the region ${(x\gt 20 \text{ and } y\lt 80)}$. Then compute $\mathrm{MRS}^{-}$, using the expression of the region ${(x\lt 20 \text{ and } y\gt 80)}$.</div>
+        <div class="block-body">
+          With $X$ in gains and $Y$ in losses,
+          $$\begin{aligned}\mathrm{MRS}^{+}&=\frac{3/(4\sqrt{x})}{1/\sqrt{y}}=\frac34\sqrt{\frac{y}{x}}\\ &=\frac34\cdot 2=\frac32.\end{aligned}$$
+          With $X$ in losses and $Y$ in gains,
+          $$\begin{aligned}\mathrm{MRS}^{-}&=\frac{1/\sqrt{x}}{3/(4\sqrt{y})}=\frac43\sqrt{\frac{y}{x}}\\ &=\frac43\cdot 2=\frac83\approx 2.67.\end{aligned}$$
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">12.</span> With $p_X=2$, does the price ratio lie between them? What does that say about $A$?</div>
+        <div class="block-body">
+          Yes: $\mathrm{MRS}^{+}=\tfrac32\le 2\le\tfrac83=\mathrm{MRS}^{-}$. Since $A$ is on the budget line and the price ratio lies between the two one-sided values, $A$ is Consumer&nbsp;$R$'s optimal basket, at the kink. Shifting a dollar from $Y$ to $X$ adds $\tfrac{3}{4\sqrt{20}}\cdot\tfrac12\approx 0.084$ but costs $\tfrac{1}{\sqrt{80}}\approx 0.112$; shifting it from $X$ to $Y$ adds $\tfrac{3}{4\sqrt{80}}\approx 0.084$ but costs $\tfrac{1}{\sqrt{20}}\cdot\tfrac12\approx 0.112$. Either way utility falls.
+        </div>
+      </div>
+      <p>Consumer&nbsp;$R$'s indifference curve through $A$ kinks where it crosses the reference lines $x=\bar x$ and $y=\bar y$ (dash-dotted). The orange rays leave $A$ with slopes $-\mathrm{MRS}^{-}=-\tfrac83$ to the left and $-\mathrm{MRS}^{+}=-\tfrac32$ to the right. The budget line, with slope $-2$, runs between them, so it touches the indifference curve only at $A$.</p>
+      <svg id="fig-ps4-kink" class="ps-fig"></svg>
+    </div>
+  </section>
+
+  <!-- Frame 5: Part II, questions 13-16 -->
+  <section class="frame" id="ps-04-q13">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The New Optimal Basket</h2>
+      <p class="frame-subtitle">Problem Set 4, Questions 13&ndash;16</p>
+    </div>
+    <div class="frame-content qa">
+      <div class="block">
+        <div class="block-title"><span class="q-num">13.</span> Now $p_X=3$. Does it still lie between them? Which good must the consumer cut, and why?</div>
+        <div class="block-body">
+          No: $3\gt\tfrac83=\mathrm{MRS}^{-}$, so the price ratio lies above both one-sided values. Consumer&nbsp;$R$ must cut $X$. Since $3\cdot 20+80=140\gt 120$, $A$ is no longer affordable and something has to go. A dollar saved by cutting $X$ costs $\tfrac{1}{\sqrt{20}}\cdot\tfrac13\approx 0.075$ in utility, while a dollar saved by cutting $Y$ costs $\tfrac{1}{\sqrt{80}}\approx 0.112$. Keeping $X$ at $20$ and cutting $Y$ instead leads to ${C=(20,60)}$, which lies on a lower indifference curve than $B$ (see the figure below).
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">14.</span> Suppose $Y$ stays pinned at its reference level $\bar y=80$. Solve the new budget constraint $3x+\bar y=120$ for $x$, and call that value $x_1$.</div>
+        <div class="block-body">$3x+80=120$ gives $x_1=\tfrac{40}{3}\approx 13.3$.</div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">15.</span> Let ${B=(x_1,80)}$. Compute $\mathrm{MRS}^{+}$ using the expression of the region ${(x\lt 20 \text{ and } y\lt 80)}$, and $\mathrm{MRS}^{-}$ using the expression of the region ${(x\lt 20 \text{ and } y\gt 80)}$.</div>
+        <div class="block-body">
+          At $B$, $\sqrt{y/x}=\sqrt{80/(40/3)}=\sqrt{6}$. With both goods in losses,
+          $$\mathrm{MRS}^{+}=\frac{1/\sqrt{x}}{1/\sqrt{y}}=\sqrt{\frac{y}{x}}=\sqrt{6}\approx 2.45.$$
+          With $X$ in losses and $Y$ in gains,
+          $$\begin{aligned}\mathrm{MRS}^{-}&=\frac{1/\sqrt{x}}{3/(4\sqrt{y})}=\frac43\sqrt{\frac{y}{x}}\\ &=\frac43\sqrt{6}\approx 3.27.\end{aligned}$$
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-title"><span class="q-num">16.</span> Does $p_X/p_Y=3$ lie between them? Since ${B=(x_1,80)}$ is on the budget line, what can we conclude? Is $B$ the optimal basket or not? Why?</div>
+        <div class="block-body">
+          Yes, $\sqrt{6}\approx 2.45\le 3\le 3.27\approx\tfrac43\sqrt{6}$, so $B$, which is on the budget line, is the optimal basket: no shift of a dollar between the goods raises utility. Consumer&nbsp;$R$ absorbs the whole price rise by cutting $X$ from $20$ to $\tfrac{40}{3}$ and keeps $Y$ at its reference level, whereas Consumer&nbsp;$T$ moves to $(10,90)$.
+        </div>
+      </div>
+      <p>The price rise for Consumer&nbsp;$R$: budget lines at $p_X=2$ (solid) and $p_X=3$ (dashed), with the reference lines dash-dotted. The indifference curve through $B$ (light) kinks at $B$, where it crosses $y=\bar y$, and again near $(20,66)$, where it crosses $x=\bar x$. The hollow point ${C=(20,60)}$ keeps $X$ at its reference level but lies below that curve, so Consumer&nbsp;$R$ prefers $B$.</p>
+      <svg id="fig-ps4-refdep" class="ps-fig"></svg>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="kahneman-tversky-1981.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Kahneman &amp; Tversky (1981)</a>
+    <a href="index.html" style="color: var(--crane-blue); text-decoration: none;">Index &rarr;</a>
+  </div>
+
+  <!-- KaTeX (katex-macros.js renders the page on load) -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <!-- tikz-svg: PS 4 figures. Same palette and conventions as the figures in
+       behavioral-choice-certainty.html (blue indifference curves, slate budget
+       lines, dash-dotted reference lines). -->
+  <script type="module">
+    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+
+    // All three figures share one window, x in [0, 44] and y in [0, 130], with X
+    // stretched 3:1 so the action around A and B fills a square figure. A stretch
+    // keeps tangencies and kinks, and which slope lies between which.
+    const KX = 3, S = 2.8, XM = 44, YM = 130, YTOP = 127;
+    const OX = 40, OY = Math.round(YM * S) + 12;
+    const BLUE = '#268bd2', BLUE_L = '#79b0dd', SLATE = '#586e75', ORANGE = '#cb4b16';
+    const DASH = '4 2 1 2', NEW = '7 5', RAY = '5 3';
+    const macros = (typeof katexMacros !== 'undefined' ? katexMacros : undefined);
+    const sq = Math.sqrt;
+
+    // Data (x, y) to the library's y-down plot units.
+    const P = (x, y) => ({ x: KX * x, y: -y });
+    // Invisible label box at data point (x, y), nudged by (dx, dy) pixels, dy up.
+    const label = (id, x, y, text, { anchor, dx = 0, dy = 0, size } = {}) => {
+      const n = { type: 'node', id, position: { x: KX * x + dx / S, y: -y - dy / S }, label: text,
+                  shape: 'rectangle', innerSep: 2, fill: 'none', stroke: 'none' };
+      if (anchor) n.anchor = anchor;
+      if (size) n.fontSize = size;
+      return n;
+    };
+    const axes = pre => [
+      { type: 'path', points: [P(0, 0), P(XM, 0)], arrow: '->', stroke: '#000', strokeWidth: 1.4 },
+      { type: 'path', points: [P(0, 0), P(0, YM)], arrow: '->', stroke: '#000', strokeWidth: 1.4 },
+      label(pre + '-xlab', XM, 0, '$X$', { anchor: 'west', dx: 4 }),
+      label(pre + '-ylab', 0, YM, '$Y$', { anchor: 'south', dy: 4 }),
+    ];
+    const tickX = (id, x, text) => [
+      { type: 'path', points: [{ x: KX * x, y: 0 }, { x: KX * x, y: 4 / S }], stroke: '#000', strokeWidth: 1.2 },
+      label(id, x, 0, text, { anchor: 'north', dy: -5, size: 12 }),
+    ];
+    const tickY = (id, y, text) => [
+      { type: 'path', points: [{ x: -4 / S, y: -y }, { x: 0, y: -y }], stroke: '#000', strokeWidth: 1.2 },
+      label(id, 0, y, text, { anchor: 'east', dx: -6, size: 12 }),
+    ];
+    const guide = pts => ({ type: 'path', points: pts.map(([x, y]) => P(x, y)), dashed: DASH, stroke: SLATE, strokeWidth: 1.1 });
+    const dot = (id, x, y, hollow = false) => ({ type: 'node', id, position: P(x, y), label: '', shape: 'circle',
+      radius: 3.5, innerSep: 0, fill: hollow ? '#ffffff' : '#000000', stroke: hollow ? '#000000' : 'none', strokeWidth: 1.5 });
+    const budgetOld = { type: 'path', points: [P(0, 120), P(XM, 120 - 2 * XM)], stroke: SLATE, strokeWidth: 2 };
+    const budgetNew = { type: 'path', points: [P(0, 120), P(40, 0)], dashed: NEW, stroke: SLATE, strokeWidth: 2 };
+    const budgetLabels = pre => [
+      label(pre + '-p2', 43.5, 120 - 2 * 43.5, '$p_X=2$', { anchor: 'north east', dy: -6, size: 12 }),
+      label(pre + '-p3', 36, 12, '$p_X=3$', { anchor: 'west', dx: 6, size: 12 }),
+    ];
+
+    // Sample points evenly spaced in sqrt(x): dense where the curves are steep.
+    const grid = (x0, x1, n = 48) => Array.from({ length: n + 1 }, (_, i) => {
+      const s = sq(x0) + (sq(x1) - sq(x0)) * i / n; return s * s;
+    });
+    // One smooth arm of an indifference curve y = F(x), for x in [x0, x1]. Kinked
+    // curves are drawn as one arm per region, meeting exactly at the kink.
+    const arm = (F, x0, x1, stroke, strokeWidth) => ({ type: 'plot', samplesAt: grid(x0, x1).map(x => KX * x),
+      expr: X => F(X / KX), handler: 'smooth', stroke, strokeWidth });
+    // The x at which a decreasing curve F reaches height y (bisection on [lo, hi]).
+    const xAt = (F, y, lo, hi) => {
+      for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (F(m) > y) lo = m; else hi = m; }
+      return (lo + hi) / 2;
+    };
+
+    // T: u_T = sqrt(x) + sqrt(y), so the curve at utility U is y = (U - sqrt(x))^2.
+    const icT = U => x => (U - sq(x)) ** 2;
+    // R: u_R = f(x) + g(y). Below the reference each good counts twice (slope 1 + 1),
+    // above it one and a half times (slope 1 + 1/2).
+    const f = x => x <= 20 ? 2 * sq(x) - sq(20) : 1.5 * sq(x) - 0.5 * sq(20);
+    const g = y => y <= 80 ? 2 * sq(y) - sq(80) : 1.5 * sq(y) - 0.5 * sq(80);
+    const gInv = v => (v >= sq(80) ? (v + 0.5 * sq(80)) / 1.5 : (v + sq(80)) / 2) ** 2;
+    const icR = U => x => gInv(U - f(x));
+
+    const fig = (id, draw) => {
+      try {
+        render(document.getElementById(id), { scale: S, originX: OX, originY: OY, padding: 8, katexMacros: macros, draw });
+      } catch (err) { console.warn(id + ' failed', err); }
+    };
+
+    // Keep punctuation on the line of the formula before it. Chrome may break
+    // after any inline-block, and the last box of a KaTeX formula is one, so
+    // "$x$," can leave its "," at the start of the next line; no white-space or
+    // word-joiner setting outside the formula stops it. Moving the punctuation
+    // into that last box does. auto-render wraps each formula in a bare <span>,
+    // so the punctuation is the wrapper's next sibling. Runs after
+    // katex-macros.js has rendered the page (its listener comes first).
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.katex').forEach(k => {
+        if (k.closest('.katex-display, svg')) return;
+        const t = k.parentElement.nextSibling;
+        const m = t && t.nodeType === 3 && t.data.match(/^[,.;:?!)]+/);
+        const bases = k.querySelectorAll('.katex-html > .base');
+        if (!m || !bases.length) return;
+        const punct = document.createElement('span');
+        punct.className = 'katex-punct';
+        punct.textContent = m[0];
+        bases[bases.length - 1].append(punct);
+        t.data = t.data.slice(m[0].length);
+      });
+    });
+
+    // Figure 1: T before and after the price rise (questions 6-8).
+    {
+      const ICA = icT(sq(20) + sq(80)), ICB = icT(sq(10) + sq(90));
+      fig('fig-ps4-trad', [
+        ...axes('ft'),
+        guide([[20, 0], [20, 80], [0, 80]]),
+        guide([[10, 0], [10, 90], [0, 90]]),
+        ...tickX('ft-x10', 10, '$10$'), ...tickX('ft-x20', 20, '$20$'), ...tickX('ft-x40', 40, '$40$'),
+        ...tickY('ft-y80', 80, '$80$'), ...tickY('ft-y90', 90, '$90$'), ...tickY('ft-y120', 120, '$120$'),
+        budgetOld, budgetNew,
+        arm(ICB, xAt(ICB, YTOP, 0.01, 10), XM, BLUE_L, 2),
+        arm(ICA, xAt(ICA, YTOP, 0.01, 20), XM, BLUE, 2.5),
+        dot('ft-A', 20, 80), dot('ft-B', 10, 90),
+        label('ft-Al', 20, 80, '$A$', { anchor: 'south west', dx: 4, dy: 4 }),
+        label('ft-Bl', 10, 90, '$B$', { anchor: 'north east', dx: -4, dy: -4 }),
+        ...budgetLabels('ft'),
+      ]);
+    }
+
+    // Figure 2: R at A with p_X = 2 (questions 11-12). The rays carry the two
+    // one-sided slopes; the budget line runs between them.
+    {
+      const IC = icR(f(20) + g(80));
+      const yL = 118, xL = 20 - (yL - 80) * 3 / 8;     // left ray, slope -8/3
+      const xR = 33, yR = 80 - 1.5 * (xR - 20);        // right ray, slope -3/2
+      fig('fig-ps4-kink', [
+        ...axes('fk'),
+        guide([[20, 0], [20, YM]]), guide([[0, 80], [XM, 80]]),
+        ...tickX('fk-x20', 20, '$20$'),
+        ...tickY('fk-y80', 80, '$80$'), ...tickY('fk-y120', 120, '$120$'),
+        budgetOld,
+        arm(IC, xAt(IC, YTOP, 0.01, 20), 20, BLUE, 2.5),
+        arm(IC, 20, XM, BLUE, 2.5),
+        { type: 'path', points: [P(20, 80), P(xL, yL)], dashed: RAY, stroke: ORANGE, strokeWidth: 1.8 },
+        { type: 'path', points: [P(20, 80), P(xR, yR)], dashed: RAY, stroke: ORANGE, strokeWidth: 1.8 },
+        dot('fk-A', 20, 80),
+        label('fk-Al', 20, 80, '$A$', { anchor: 'south west', dx: 4, dy: 4 }),
+        // each label sits just beyond the far end of its ray
+        label('fk-mm', xL - 0.75, yL + 4, '$\\mathrm{MRS}^{-}$', { size: 12 }),
+        label('fk-mp', xR + 3.5, yR - 5.25, '$\\mathrm{MRS}^{+}$', { size: 12 }),
+        label('fk-p2', 43.5, 120 - 2 * 43.5, '$p_X=2$', { anchor: 'north east', dy: -6, size: 12 }),
+      ]);
+    }
+
+    // Figure 3: R before and after the price rise (questions 13-16).
+    {
+      const x1 = 40 / 3;
+      const ICA = icR(f(20) + g(80)), ICB = icR(f(x1) + g(80));
+      fig('fig-ps4-refdep', [
+        ...axes('fr'),
+        guide([[20, 0], [20, YM]]), guide([[0, 80], [XM, 80]]),
+        guide([[x1, 0], [x1, 80]]), guide([[0, 60], [20, 60]]),
+        ...tickX('fr-x13', x1, '$13.3$'), ...tickX('fr-x20', 20, '$20$'), ...tickX('fr-x40', 40, '$40$'),
+        ...tickY('fr-y60', 60, '$60$'), ...tickY('fr-y80', 80, '$80$'), ...tickY('fr-y120', 120, '$120$'),
+        budgetOld, budgetNew,
+        arm(ICB, xAt(ICB, YTOP, 0.01, x1), x1, BLUE_L, 2),
+        arm(ICB, x1, 20, BLUE_L, 2),
+        arm(ICB, 20, XM, BLUE_L, 2),
+        arm(ICA, xAt(ICA, YTOP, 0.01, 20), 20, BLUE, 2.5),
+        arm(ICA, 20, XM, BLUE, 2.5),
+        dot('fr-A', 20, 80), dot('fr-B', x1, 80), dot('fr-C', 20, 60, true),
+        label('fr-Al', 20, 80, '$A$', { anchor: 'south west', dx: 4, dy: 4 }),
+        label('fr-Bl', x1, 80, '$B$', { anchor: 'north east', dx: -4, dy: -4 }),
+        label('fr-Cl', 20, 60, '$C$', { anchor: 'north east', dx: -4, dy: -4 }),
+        ...budgetLabels('fr'),
+      ]);
+    }
+  </script>
+
+</body>
+</html>
