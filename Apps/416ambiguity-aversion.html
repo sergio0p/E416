@@ -522,7 +522,7 @@ footer {
         <thead><tr><th></th><th id="h2a"></th></tr></thead>
         <tbody></tbody>
       </table>
-      <p class="table-note">The probability of red or blue in the urn that is worst for each action. Fractions such as 30/90 are accepted.</p>
+      <p class="table-note">The probability of red or blue in the urn that is worst for each action. Fractions such as 30/90 or decimals to two places are accepted.</p>
     </section>
 
     <section class="card">
@@ -983,9 +983,9 @@ function checkAnswers() {
     let ok;
     if (want === null) {
       // Staying put: any prior the urn allows is a worst case.
-      ok = got >= prob.lo - 0.006 && got <= prob.hi + 0.006;
+      ok = got >= prob.lo - 0.0101 && got <= prob.hi + 0.0101;
     } else {
-      ok = Math.abs(got - want) < (t === 't1' ? 0.011 : 0.006);
+      ok = Math.abs(got - want) < 0.0101;   // two decimals, rounded or truncated
     }
     inp.classList.add(ok ? 'is-right' : 'is-wrong');
   });
