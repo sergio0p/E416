@@ -443,7 +443,7 @@ footer {
         <p>Pays <span id="payX"></span> if the ball is <em>red or blue</em>, nothing otherwise.</p>
         <div class="param-row">
           <span>Price <span id="pSym"></span></span>
-          <input type="range" id="price" min="0" max="10" step="0.25" value="5">
+          <input type="range" id="price" min="0" max="10" step="0.05" value="5">
           <span class="val" id="priceVal"></span>
         </div>
       </section>
@@ -452,7 +452,7 @@ footer {
         <h2>Utility and wealth</h2>
         <div class="param-row">
           <span><span id="uSym"></span></span>
-          <input type="range" id="gamma" min="0.3" max="3" step="0.05" value="1.5">
+          <input type="range" id="gamma" min="0.3" max="3" step="0.01" value="1.5">
           <span class="val" id="gammaVal"></span>
         </div>
         <p class="hint" id="gammaTag"></p>
@@ -479,16 +479,16 @@ footer {
         <thead><tr><th></th><th id="h1a"></th><th id="h1b"></th></tr></thead>
         <tbody></tbody>
       </table>
-      <p class="table-note">Wealth after the ball is drawn, for each action and each event.</p>
+      <p class="table-note">Wealth after the ball is drawn, for each action and each colour.</p>
     </section>
 
     <section class="card">
       <h2>2. Worst-case probabilities</h2>
       <table id="t2">
-        <thead><tr><th></th><th id="h2a"></th><th id="h2b"></th></tr></thead>
+        <thead><tr><th></th><th id="h2a"></th></tr></thead>
         <tbody></tbody>
       </table>
-      <p class="table-note">The urn, among those the sliders allow, that is worst for each action. Fractions such as 30/90 are accepted.</p>
+      <p class="table-note">The probability of red or blue in the urn that is worst for each action. Fractions such as 30/90 are accepted.</p>
     </section>
 
     <section class="card">
@@ -832,7 +832,7 @@ function renderReadout(pr, res) {
   v.className = 'is-' + res.best;
   v.innerHTML = `Best action: <strong>${names[res.best]}</strong>`;
   $('reservation').innerHTML =
-    `${texHTML('P(A) \\in [' + fmtFrac(pr.lo) + ',\\ ' + fmtFrac(pr.hi) + ']')} for A = ${ev.label}. ` +
+    `${texHTML('P(\\text{red or blue}) \\in [' + fmtFrac(pr.lo) + ',\\ ' + fmtFrac(pr.hi) + ']')}. ` +
     `Buy only below ${texHTML('p_b = ' + fmt(res.pb, 2))}, sell only above ${texHTML('p_s = ' + fmt(res.ps, 2))}.` +
     (res.pb < res.ps ? ` In between, inertia.` : ` No price leaves this decision maker idle.`);
 }
@@ -853,8 +853,8 @@ function buildInputTables() {
     for (const a of ACTIONS) {
       const tr = document.createElement('tr');
       tr.innerHTML = rowName(a) +
-        `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="yes" aria-label="${a.label}, event happens"></td>` +
-        `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="no" aria-label="${a.label}, event does not happen"></td>`;
+        `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="yes" aria-label="${a.label}, red or blue"></td>` +
+        (id === 't1' ? `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="no" aria-label="${a.label}, green"></td>` : '');
       tb.appendChild(tr);
     }
   }
@@ -862,10 +862,9 @@ function buildInputTables() {
 
 function renderHeaders() {
   const ev = currentEvent();
-  $('h1a').textContent = ev.label;
-  $('h1b').textContent = 'not ' + ev.label;
-  $('h2a').innerHTML = texHTML('P(A)');
-  $('h2b').innerHTML = texHTML('P(\\text{not } A)');
+  $('h1a').textContent = 'red or blue';
+  $('h1b').textContent = 'green';
+  $('h2a').innerHTML = texHTML('P(\\text{red or blue})');
 }
 
 function renderTable3(pr, res) {
@@ -922,11 +921,8 @@ function checkAnswers() {
     const want = expected(t, a, e, pr);
     let ok;
     if (want === null) {
-      // Staying put: any prior the sliders allow, with the two cells summing to one.
-      const other = document.querySelector(`input.cell[data-t="t2"][data-a="stay"][data-e="${e === 'yes' ? 'no' : 'yes'}"]`);
-      const q = e === 'yes' ? got : 1 - got;
-      const partner = parseNum(other.value);
-      ok = q >= prob.lo - 0.006 && q <= prob.hi + 0.006 && (Number.isNaN(partner) || Math.abs(got + partner - 1) < 0.012);
+      // Staying put: any prior the urn allows is a worst case.
+      ok = got >= prob.lo - 0.006 && got <= prob.hi + 0.006;
     } else {
       ok = Math.abs(got - want) < (t === 't1' ? 0.011 : 0.006);
     }
@@ -940,7 +936,7 @@ function revealAnswers() {
     const { t, a, e } = inp.dataset;
     const want = expected(t, a, e, pr);
     if (want === null) {
-      inp.value = e === 'yes' ? fmtFrac(pr.lo) : fmtFrac(N - pr.lo);   // one admissible prior among many
+      inp.value = fmtFrac(pr.lo);   // one admissible prior among many
     } else if (t === 't1') {
       inp.value = fmt(want, 2).replace(/\.?0+$/, '');
     } else {
