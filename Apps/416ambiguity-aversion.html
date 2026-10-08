@@ -789,7 +789,9 @@ function drawPlot(pr) {
 
   // End labels for the curves.
   text(gLabels, PX1 + 1.5, yOf(series.buy[steps]) + 1.2, 'buy', 'plot-label is-buy', 'start');
-  text(gLabels, PX1 + 1.5, yOf(series.sell[steps]) + 1.2, 'sell', 'plot-label is-sell', 'start');
+  // The sell label sits under the curve near p = 7, clear of the stay label at the right edge.
+  const iSell = Math.round(steps * 7 / X);
+  text(gLabels, xOf(ps[iSell]), yOf(series.sell[iSell]) + 5.2, 'sell', 'plot-label is-sell', 'middle');
   text(gLabels, PX1 + 1.5, yOf(stay) + 1.2, 'stay', 'plot-label', 'start');
 
   return { pb, ps: psell, best };
