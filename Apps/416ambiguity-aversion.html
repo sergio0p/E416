@@ -435,7 +435,7 @@ footer {
       <section class="card">
         <h2>The urn: 90 balls</h2>
         <div id="urn"></div>
-        <p class="hint" style="margin-top:0.5rem">The number of red balls is known. The rest are blue or green in a proportion nobody knows.</p>
+        <p class="hint" style="margin-top:0.5rem">Red is known. Blue has a lower and an upper bound; green is whatever remains.</p>
       </section>
 
       <section class="card">
@@ -542,27 +542,37 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 
 /* Thirty red for certain, sixty blue-or-green in unknown proportion. */
 let redCount = 30;
+let blueMin = 0, blueMax = 60;
 let price = 5;
 let gamma = 1.5;
 
 /* ==========================================================================
    URN LOGIC
 
-   Red is known exactly. The remaining balls are blue or green in a proportion
-   nobody knows, so each of those two colours ranges over 0 to N - red.
+   Red is known exactly. Blue carries a lower and an upper bound inside the
+   remaining N - red balls, and green is whatever is left over.
    ========================================================================== */
 
+function setRed(v) {
+  redCount = v;
+  blueMax = Math.min(blueMax, N - redCount);
+  blueMin = Math.min(blueMin, blueMax);
+}
+function setBlueMin(v) { blueMin = Math.min(v, N - redCount); blueMax = Math.max(blueMax, blueMin); }
+function setBlueMax(v) { blueMax = Math.min(v, N - redCount); blueMin = Math.min(blueMin, blueMax); }
+
 function bounds() {
+  const rest = N - redCount;
   return {
     red:   { min: redCount, max: redCount },
-    blue:  { min: 0, max: N - redCount },
-    green: { min: 0, max: N - redCount }
+    blue:  { min: blueMin, max: blueMax },
+    green: { min: rest - blueMax, max: rest - blueMin }
   };
 }
 
 /* The feasible range of P(red or blue), as counts out of N. */
 function eventCountRange() {
-  return { lo: redCount, hi: N };
+  return { lo: redCount + blueMin, hi: redCount + blueMax };
 }
 
 function currentEvent() { return EVENT; }
@@ -786,6 +796,14 @@ function drawUtility() {
 function renderUrn() {
   const box = $('urn');
   box.textContent = '';
+  const sliders = {
+    red:  `<div class="slider-pair"><span>count</span><input type="range" min="0" max="${N}" step="1" id="redSlider" aria-label="number of red balls"></div>`,
+    blue: `<div class="slider-pair">
+             <span>min</span><input type="range" min="0" max="${N}" step="1" id="blueMinSlider" aria-label="blue: lower bound">
+             <span>max</span><input type="range" min="0" max="${N}" step="1" id="blueMaxSlider" aria-label="blue: upper bound">
+           </div>`,
+    green: ''
+  };
   for (const c of COLORS) {
     const row = document.createElement('div');
     row.className = 'urn-row';
@@ -795,13 +813,12 @@ function renderUrn() {
         <span class="name"><i class="swatch ${c.key}"></i>${c.name}</span>
         <span class="range-val"></span>
       </div>
-      <div class="span-track"><div class="span-fill ${c.key}"></div></div>` +
-      (c.key === 'red'
-        ? `<div class="slider-pair"><span>count</span><input type="range" min="0" max="${N}" step="1" value="${redCount}" id="redSlider" aria-label="number of red balls"></div>`
-        : '');
+      <div class="span-track"><div class="span-fill ${c.key}"></div></div>` + sliders[c.key];
     box.appendChild(row);
   }
-  $('redSlider').addEventListener('input', e => { redCount = Number(e.target.value); update(); });
+  $('redSlider').addEventListener('input', e => { setRed(Number(e.target.value)); update(); });
+  $('blueMinSlider').addEventListener('input', e => { setBlueMin(Number(e.target.value)); update(); });
+  $('blueMaxSlider').addEventListener('input', e => { setBlueMax(Number(e.target.value)); update(); });
 }
 
 function patchUrn() {
@@ -811,16 +828,21 @@ function patchUrn() {
     const { min, max } = b[c.key];
     row.querySelector('.range-val').textContent = min === max ? `${min}` : `${min} to ${max}`;
     const fill = row.querySelector('.span-fill');
-    fill.style.left = (100 * min / N) + '%';
-    fill.style.width = (100 * (max - min) / N) + '%';
-    if (min === max) { fill.style.left = (100 * min / N) + '%'; fill.style.width = '0.35rem'; fill.style.marginLeft = '-0.175rem'; }
+    if (min === max) {
+      fill.style.left = `calc(${100 * min / N}% - 0.175rem)`; fill.style.width = '0.35rem';
+    } else {
+      fill.style.left = (100 * min / N) + '%'; fill.style.width = (100 * (max - min) / N) + '%';
+    }
   }
+  $('redSlider').value = redCount;
+  $('blueMinSlider').value = blueMin;
+  $('blueMaxSlider').value = blueMax;
 }
 
 function renderProblem(pr) {
   const ev = currentEvent();
   $('problem-text').innerHTML =
-    `An urn holds ${N} balls: ${redCount} red, and ${N - redCount} that are blue or green in an unknown proportion. One ball will be drawn. The lottery pays ${texHTML('X = ' + X)} if the ball is <em>${ev.label}</em>, ` +
+    `An urn holds ${N} balls: ${redCount} red, between ${blueMin} and ${blueMax} blue, and the rest green. One ball will be drawn. The lottery pays ${texHTML('X = ' + X)} if the ball is <em>${ev.label}</em>, ` +
     `and nothing otherwise. You start with wealth ${texHTML('w = ' + W)} and utility ${texHTML('u(w) = ' + gammaLatex())}. ` +
     `At the price ${texHTML('p = ' + fmt(price, 2))} you may buy the lottery, sell it, or stay put.`;
 }
