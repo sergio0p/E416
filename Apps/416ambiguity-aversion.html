@@ -322,6 +322,7 @@ th {
 tr:last-child td { border-bottom: 0; }
 td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 td.work { color: var(--text-muted); font-size: 0.88rem; }
+td.stay-note { text-align: right; line-height: 1.35; }
 .row-name { white-space: nowrap; }
 .row-name .swatch { margin-right: 0.35rem; }
 
@@ -874,9 +875,14 @@ function buildInputTables() {
     tb.textContent = '';
     for (const a of ACTIONS) {
       const tr = document.createElement('tr');
-      tr.innerHTML = rowName(a) +
-        `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="yes" aria-label="${a.label}, red or blue"></td>` +
-        (id === 't1' ? `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="no" aria-label="${a.label}, green"></td>` : '');
+      if (id === 't2' && a.key === 'stay') {
+        // Staying put leaves wealth the same in every colour: no prior is worse than another.
+        tr.innerHTML = rowName(a) + `<td class="work stay-note">No uncertainty ${texHTML('\\Rightarrow')} every probability gives the same expected utility.</td>`;
+      } else {
+        tr.innerHTML = rowName(a) +
+          `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="yes" aria-label="${a.label}, red or blue"></td>` +
+          (id === 't1' ? `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="no" aria-label="${a.label}, green"></td>` : '');
+      }
       tb.appendChild(tr);
     }
   }
