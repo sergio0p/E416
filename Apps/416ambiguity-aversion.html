@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ambiguity Aversion | ECON 416</title>
+<meta name="description" content="Why a decision maker who does not know the odds neither buys nor sells a lottery at the same price.">
+<meta name="theme-color" content="#171310">
+
+<!-- Icons: the ship's apotropaic eye, lifted from the vase -->
+<link rel="icon" href="../favicon.ico" sizes="48x48 32x32 16x16">
+<link rel="icon" type="image/png" href="../img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+
+<!-- Google Analytics -->
+<script async src="/E416/js/ga.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+/* ==========================================================================
+   ECON 416 — Ambiguity aversion
+   Attic red-figure theme, after 416utility-from-preferences.html.
+
+   The conceit: an urn of ninety balls whose composition the student only
+   partly knows. Every slider narrows or widens the set of urns they consider
+   possible. A maxmin decision maker evaluates each action against the worst
+   urn for that action, and the band of prices at which they neither buy nor
+   sell — the inertia — is the reserved figure in the middle of the plot.
+   ========================================================================== */
+
+:root {
+  --attic-black:    #171310;
+  --soot:           #2B211B;
+  --panel-ground:   #12100E;
+  --terracotta:     #B55232;
+  --clay-highlight: #D07852;
+  --deep-oxide:     #71311F;
+  --ancient-cream:  #E6D1AD;
+  --text-muted:     #B79D82;
+
+  --egyptian:       #3E6E8E;
+  --egyptian-light: #6FA3C0;
+
+  /* Yellow ochre, the third pigment of the palette and the third ball. */
+  --ochre:          #C9A227;
+  --ochre-light:    #E2C55C;
+
+  --wash-buy:  rgba(181, 82, 50, 0.38);
+  --wash-sell: rgba(62, 110, 142, 0.42);
+  --wash-stay: rgba(230, 209, 173, 0.16);
+
+  --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-body:    'EB Garamond', Georgia, 'Times New Roman', serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 0 3rem;
+  background: var(--attic-black);
+  color: var(--ancient-cream);
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.28rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 3.5vw, 2.25rem);
+}
+
+/* --------------------------------------------------------------- masthead */
+
+.masthead {
+  background: var(--soot);
+  border-bottom: 2px solid var(--deep-oxide);
+  padding: 1.3rem 0 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0 0 0.6rem;
+}
+
+h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--terracotta);
+  margin: 0 0 0.3rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ stage */
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 23rem;
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  align-items: start;
+}
+
+@media (max-width: 940px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+}
+
+.main-col { display: flex; flex-direction: column; gap: 0.75rem; }
+
+/* ------------------------------------------------------------------- plot */
+
+.plot-frame {
+  width: 100%;
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+  padding: 0.5rem;
+}
+
+#plot {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+.grid-line   { stroke: rgba(230, 209, 173, 0.07); stroke-width: 0.35; }
+.axis-line   { stroke: var(--ancient-cream); stroke-width: 0.8; }
+.tick-mark   { stroke: var(--ancient-cream); stroke-width: 0.6; }
+.tick        { fill: var(--text-muted); font-size: 3.4px; font-family: 'EB Garamond', Georgia, serif; }
+.axis-name   { fill: var(--ancient-cream); font-size: 4.6px; font-style: italic; font-family: 'EB Garamond', Georgia, serif; }
+
+.curve        { fill: none; stroke-width: 1.1; stroke-linejoin: round; }
+.curve-buy    { stroke: var(--clay-highlight); }
+.curve-sell   { stroke: var(--egyptian-light); }
+.curve-stay   { stroke: var(--ancient-cream); stroke-width: 0.9; }
+.curve-ghost  { fill: none; stroke-width: 0.6; stroke-dasharray: 2 1.6; opacity: 0.75; }
+.curve-ghost.curve-buy  { stroke: var(--clay-highlight); }
+.curve-ghost.curve-sell { stroke: var(--egyptian-light); }
+
+.strip-buy  { fill: var(--wash-buy); }
+.strip-sell { fill: var(--wash-sell); }
+.strip-stay { fill: var(--wash-stay); }
+
+.guide        { stroke: rgba(230, 209, 173, 0.45); stroke-width: 0.45; stroke-dasharray: 2.2 1.8; }
+.price-line   { stroke: var(--ancient-cream); stroke-width: 0.7; }
+.price-dot    { fill: var(--ancient-cream); stroke: var(--attic-black); stroke-width: 0.4; }
+.price-dot.is-buy  { fill: var(--clay-highlight); }
+.price-dot.is-sell { fill: var(--egyptian-light); }
+
+.plot-label {
+  fill: var(--ancient-cream);
+  font-size: 4.2px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  paint-order: stroke;
+  stroke: var(--panel-ground);
+  stroke-width: 1.1px;
+  stroke-linejoin: round;
+}
+.plot-label.is-buy  { fill: var(--clay-highlight); }
+.plot-label.is-sell { fill: var(--egyptian-light); }
+.plot-label.is-muted { fill: var(--text-muted); font-size: 3.6px; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.4rem 0.25rem 0;
+}
+.legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.key { width: 1.3rem; height: 0; border-top: 2px solid; display: inline-block; }
+.key.buy  { border-color: var(--clay-highlight); }
+.key.sell { border-color: var(--egyptian-light); }
+.key.stay { border-color: var(--ancient-cream); }
+.key.ghost { border-top-style: dashed; border-color: var(--text-muted); }
+
+/* ------------------------------------------------------------------- rail */
+
+.rail { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.card {
+  background: var(--soot);
+  border: 1px solid var(--deep-oxide);
+  padding: 0.8rem 1rem;
+}
+
+.card h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 0.55rem;
+}
+
+.card p { margin: 0 0 0.5rem; }
+.card p:last-child { margin-bottom: 0; }
+
+.readout { border-left: 3px solid var(--terracotta); }
+#verdict { font-size: 1.15rem; }
+#verdict strong { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.95rem; }
+#verdict.is-buy  strong { color: var(--clay-highlight); }
+#verdict.is-sell strong { color: var(--egyptian-light); }
+#verdict.is-stay strong { color: var(--ancient-cream); }
+.readout .katex { font-size: 1.05em; }
+
+/* ---- urn sliders ---- */
+
+.urn-row { margin-bottom: 0.7rem; }
+.urn-row:last-child { margin-bottom: 0; }
+
+.urn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  margin-bottom: 0.15rem;
+}
+.urn-head .name { display: inline-flex; align-items: center; gap: 0.45rem; }
+.swatch { width: 0.75rem; height: 0.75rem; display: inline-block; flex: 0 0 auto; }
+.swatch.red    { background: var(--terracotta); }
+.swatch.blue   { background: var(--egyptian); }
+.swatch.yellow { background: var(--ochre); }
+.urn-head .range-val { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+/* The known stretch of the composition, painted on a dark track. */
+.span-track {
+  position: relative;
+  height: 0.45rem;
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+  margin: 0.2rem 0 0.3rem;
+}
+.span-fill { position: absolute; top: 0; bottom: 0; }
+.span-fill.red    { background: var(--terracotta); }
+.span-fill.blue   { background: var(--egyptian); }
+.span-fill.yellow { background: var(--ochre); }
+
+.slider-pair { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.1rem 0.5rem; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
+
+input[type="range"] {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--clay-highlight);
+  cursor: pointer;
+}
+input[type="range"]:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 2px; }
+
+.param-row { display: grid; grid-template-columns: auto 1fr auto; gap: 0.6rem; align-items: center; margin-bottom: 0.45rem; }
+.param-row:last-child { margin-bottom: 0; }
+.param-row .val { font-variant-numeric: tabular-nums; min-width: 3.2rem; text-align: right; }
+
+select {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ancient-cream);
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+  border-radius: 0;
+  padding: 0.3rem 0.5rem;
+  width: 100%;
+}
+
+#utility-plot { display: block; width: 100%; height: auto; margin-top: 0.4rem; }
+.u-curve { fill: none; stroke: var(--ancient-cream); stroke-width: 0.9; }
+.u-axis  { stroke: var(--text-muted); stroke-width: 0.5; }
+.u-dot   { fill: var(--clay-highlight); }
+.u-tick  { fill: var(--text-muted); font-size: 3.6px; font-family: 'EB Garamond', Georgia, serif; }
+.u-tag   { fill: var(--text-muted); font-size: 3.6px; font-family: 'EB Garamond', Georgia, serif; font-style: italic; }
+
+/* ---- tables ---- */
+
+.tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+th, td { padding: 0.35rem 0.4rem; border-bottom: 1px solid rgba(113, 49, 31, 0.5); text-align: left; vertical-align: middle; }
+th {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.work { color: var(--text-muted); font-size: 0.88rem; }
+.row-name { white-space: nowrap; }
+.row-name .swatch { margin-right: 0.35rem; }
+
+tr.is-best td { background: rgba(230, 209, 173, 0.08); }
+tr.is-best.is-buy  td { background: var(--wash-buy); }
+tr.is-best.is-sell td { background: var(--wash-sell); }
+tr.is-best td.num { color: var(--ancient-cream); font-weight: 600; }
+
+input.cell {
+  width: 5.2rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ancient-cream);
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+  border-radius: 0;
+  padding: 0.25rem 0.4rem;
+  text-align: right;
+}
+input.cell:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 1px; }
+input.cell.is-right { border-color: var(--ochre); box-shadow: inset 0 0 0 1px var(--ochre); }
+input.cell.is-wrong { border-color: var(--terracotta); box-shadow: inset 0 0 0 1px var(--terracotta); }
+
+.table-note { font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0; }
+
+/* ---- buttons ---- */
+
+button {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.74rem;
+  color: var(--ancient-cream);
+  background: transparent;
+  border: 1px solid var(--deep-oxide);
+  border-radius: 0;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+button:hover, button:focus-visible {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  color: var(--attic-black);
+}
+
+.controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.controls button { flex: 1; }
+
+/* Cinzel is set in caps, but text-transform rewrites KaTeX's glyph spans too. */
+.katex { text-transform: none; letter-spacing: normal; }
+
+.hint { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+
+/* --------------------------------------------------------------- footer */
+
+footer {
+  border-top: 1px solid var(--deep-oxide);
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="container">
+    <p class="eyebrow">ECON 416 &middot; Behavioral Economics</p>
+    <h1>Ambiguity Aversion</h1>
+    <p class="subtitle">Inertia under maxmin expected utility</p>
+  </div>
+</header>
+
+<main class="container">
+  <div class="stage">
+
+    <div class="main-col">
+      <div class="plot-frame">
+        <svg id="plot" viewBox="-16 -8 132 124" aria-label="Maxmin expected utility of buying, selling and staying put, as a function of the price."></svg>
+        <div class="legend">
+          <span><i class="key buy"></i> buy</span>
+          <span><i class="key sell"></i> sell</span>
+          <span><i class="key stay"></i> stay put</span>
+          <span><i class="key ghost"></i> single prior at the midpoint</span>
+        </div>
+      </div>
+
+      <section class="card">
+        <h2>The problem</h2>
+        <p id="problem-text"></p>
+        <p class="hint">A maxmin decision maker judges each action by the worst urn for that action. The sliders on the right set which urns are possible.</p>
+      </section>
+    </div>
+
+    <aside class="rail">
+
+      <section class="card readout" aria-live="polite">
+        <h2>At the current price</h2>
+        <div id="verdict"></div>
+        <p class="hint" id="reservation"></p>
+      </section>
+
+      <section class="card">
+        <h2>The urn: 90 balls</h2>
+        <div id="urn"></div>
+        <p class="hint" style="margin-top:0.5rem">Lower and upper bounds on each colour. The slider you move always wins; the others move only when the total of 90 forces them.</p>
+      </section>
+
+      <section class="card">
+        <h2>The lottery</h2>
+        <div class="param-row">
+          <span>Pays <span id="payX"></span> if</span>
+          <select id="event"></select>
+          <span></span>
+        </div>
+        <div class="param-row">
+          <span>Price <span id="pSym"></span></span>
+          <input type="range" id="price" min="0" max="10" step="0.25" value="5">
+          <span class="val" id="priceVal"></span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Utility and wealth</h2>
+        <div class="param-row">
+          <span><span id="uSym"></span></span>
+          <input type="range" id="gamma" min="0.3" max="3" step="0.05" value="1.5">
+          <span class="val" id="gammaVal"></span>
+        </div>
+        <p class="hint" id="gammaTag"></p>
+        <svg id="utility-plot" viewBox="-8 -6 118 76" aria-label="Utility of wealth"></svg>
+      </section>
+
+      <section class="card">
+        <h2>Controls</h2>
+        <div class="controls">
+          <button id="checkBtn" type="button" title="Mark the answers in tables 1 and 2">Check</button>
+          <button id="revealBtn" type="button" title="Fill tables 1 and 2 with the correct answers">Reveal</button>
+          <button id="resetBtn" type="button" title="Clear the tables">Reset</button>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+
+  <div class="tables">
+
+    <section class="card">
+      <h2>1. Final wealth</h2>
+      <table id="t1">
+        <thead><tr><th></th><th id="h1a"></th><th id="h1b"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="table-note">Wealth after the ball is drawn, for each action and each event.</p>
+    </section>
+
+    <section class="card">
+      <h2>2. Worst-case probabilities</h2>
+      <table id="t2">
+        <thead><tr><th></th><th id="h2a"></th><th id="h2b"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="table-note">The urn, among those the sliders allow, that is worst for each action. Fractions such as 30/90 are accepted.</p>
+    </section>
+
+    <section class="card">
+      <h2>3. Maxmin expected utility</h2>
+      <table id="t3">
+        <thead><tr><th></th><th>Worst-case expected utility</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="table-note">Computed from the sliders. The best action is highlighted and matches the strip under the plot.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Department of Economics &middot; University of North Carolina at Chapel Hill</p>
+  </footer>
+</main>
+
+<script>
+/* ==========================================================================
+   CONFIG
+   ========================================================================== */
+
+const N = 90;                 // balls in the urn
+const W = 10;                 // initial wealth
+const X = 10;                 // the lottery pays X if the event happens
+
+const COLORS = [
+  { key: 'red',    name: 'red'    },
+  { key: 'blue',   name: 'blue'   },
+  { key: 'yellow', name: 'yellow' }
+];
+
+const EVENTS = [
+  { key: 'r',  label: 'red',            set: ['red'] },
+  { key: 'b',  label: 'blue',           set: ['blue'] },
+  { key: 'y',  label: 'yellow',         set: ['yellow'] },
+  { key: 'rb', label: 'red or blue',    set: ['red', 'blue'] },
+  { key: 'ry', label: 'red or yellow',  set: ['red', 'yellow'] },
+  { key: 'by', label: 'blue or yellow', set: ['blue', 'yellow'] }
+];
+
+const ACTIONS = [
+  { key: 'buy',  label: 'Buy'  },
+  { key: 'sell', label: 'Sell' },
+  { key: 'stay', label: 'Stay put' }
+];
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+/* ==========================================================================
+   STATE
+
+   Everything on screen is a function of bounds, event, price and gamma.
+   Every change redraws from scratch.
+   ========================================================================== */
+
+/* Thirty red for certain, sixty blue-or-yellow in unknown proportion. */
+const bounds = {
+  red:    { min: 30, max: 30 },
+  blue:   { min: 0,  max: 60 },
+  yellow: { min: 0,  max: 60 }
+};
+
+let eventKey = 'rb';
+let price = 5;
+let gamma = 1.5;
+
+/* ==========================================================================
+   URN LOGIC
+
+   Feasibility of the bounds, for a total of N balls:
+     min_c <= max_c                       for every colour
+     max_c <= N - sum of the other mins   (a colour cannot crowd out the rest)
+     min_c >= N - sum of the other maxes  (the rest cannot fill the urn alone)
+
+   The slider the student moves is pinned. The other sliders yield, and only
+   by as much as feasibility forces.
+   ========================================================================== */
+
+function others(c) { return COLORS.map(k => k.key).filter(k => k !== c); }
+function sumMin(keys) { return keys.reduce((s, k) => s + bounds[k].min, 0); }
+function sumMax(keys) { return keys.reduce((s, k) => s + bounds[k].max, 0); }
+
+function setBound(c, kind, value) {
+  value = Math.max(0, Math.min(N, Math.round(value)));
+  const old = bounds[c][kind];
+  bounds[c][kind] = value;
+  const rest = others(c);
+
+  if (kind === 'min') {
+    bounds[c].max = Math.max(bounds[c].max, value);
+    if (value > old) {
+      // The mins must still fit in the urn: cut the other mins, in order.
+      let excess = sumMin(COLORS.map(k => k.key)) - N;
+      for (const d of rest) {
+        if (excess <= 0) break;
+        const cut = Math.min(bounds[d].min, excess);
+        bounds[d].min -= cut; excess -= cut;
+      }
+      // And no other colour may crowd out this new floor.
+      for (const d of rest) bounds[d].max = Math.min(bounds[d].max, N - sumMin(others(d)));
+    } else {
+      // A lower floor here may leave the other maxes unable to fill the urn.
+      let need = N - value - sumMax(rest);
+      for (const d of rest) {
+        if (need <= 0) break;
+        const add = Math.min(N - bounds[d].max, need);
+        bounds[d].max += add; need -= add;
+      }
+    }
+  } else {
+    bounds[c].min = Math.min(bounds[c].min, value);
+    if (value < old) {
+      // The maxes must still be able to fill the urn: raise the other maxes.
+      let need = N - sumMax(COLORS.map(k => k.key));
+      for (const d of rest) {
+        if (need <= 0) break;
+        const add = Math.min(N - bounds[d].max, need);
+        bounds[d].max += add; need -= add;
+      }
+      // A smaller ceiling here can force the other floors up.
+      for (const d of rest) bounds[d].min = Math.max(bounds[d].min, N - sumMax(others(d)));
+    } else {
+      // A higher ceiling here must not be crowded out by the other floors.
+      let excess = sumMin(rest) - (N - value);
+      for (const d of rest) {
+        if (excess <= 0) break;
+        const cut = Math.min(bounds[d].min, excess);
+        bounds[d].min -= cut; excess -= cut;
+      }
+    }
+  }
+}
+
+/* The feasible range of P(A) for the event A, as counts out of N. */
+function eventCountRange(ev) {
+  const inA  = ev.set;
+  const outA = COLORS.map(k => k.key).filter(k => !inA.includes(k));
+  const lo = Math.max(sumMin(inA), N - sumMax(outA));
+  const hi = Math.min(sumMax(inA), N - sumMin(outA));
+  return { lo, hi };
+}
+
+function currentEvent() { return EVENTS.find(e => e.key === eventKey); }
+
+/* ==========================================================================
+   DECISION LOGIC
+   ========================================================================== */
+
+function u(w) { return Math.pow(Math.max(w, 0), gamma); }
+
+function wealth(action, p) {
+  switch (action) {
+    case 'buy':  return { yes: W - p + X, no: W - p };
+    case 'sell': return { yes: W + p - X, no: W + p };
+    default:     return { yes: W, no: W };
+  }
+}
+
+/* The worst prior for each action, as P(A). */
+function worstProb(action, pr) {
+  if (action === 'buy')  return pr.lo;   // the buyer fears the event being unlikely
+  if (action === 'sell') return pr.hi;   // the seller fears it being likely
+  return null;                           // staying put: every prior agrees
+}
+
+function value(action, p, pr) {
+  const wl = wealth(action, p);
+  if (action === 'stay') return u(W);
+  const q = worstProb(action, pr);
+  return q * u(wl.yes) + (1 - q) * u(wl.no);
+}
+
+function bestAction(p, pr) {
+  let best = 'stay', bv = value('stay', p, pr);
+  for (const a of ['buy', 'sell']) {
+    const v = value(a, p, pr);
+    if (v > bv + 1e-9) { best = a; bv = v; }
+  }
+  return best;
+}
+
+/* Reservation prices: where the buy and sell values cross the stay value.
+   value('buy') is decreasing in p, value('sell') increasing, so bisection. */
+function solveCross(action, pr) {
+  const target = u(W);
+  let lo = 0, hi = X;
+  const f = p => value(action, p, pr) - target;
+  const fLo = f(lo), fHi = f(hi);
+  if (fLo * fHi > 0) return fLo > 0 ? (action === 'buy' ? X : 0) : (action === 'buy' ? 0 : X);
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (f(lo) * f(mid) <= 0) hi = mid; else lo = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/* ==========================================================================
+   HELPERS
+   ========================================================================== */
+
+const $ = id => document.getElementById(id);
+
+function el(tag, attrs = {}) {
+  const node = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  return node;
+}
+function line(parent, x1, y1, x2, y2, cls) { parent.appendChild(el('line', { x1, y1, x2, y2, class: cls })); }
+function text(parent, x, y, str, cls, anchor) {
+  const node = el('text', { x, y, class: cls });
+  if (anchor) node.setAttribute('text-anchor', anchor);
+  node.textContent = str;
+  parent.appendChild(node);
+  return node;
+}
+
+function tex(target, latex, display = false) {
+  katex.render(latex, target, { throwOnError: false, displayMode: display });
+}
+function texHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+
+function fmt(v, d = 2) { return Number(v).toFixed(d); }
+function fmtFrac(count) { return `${count}/${N}`; }
+function gammaLatex() { return gamma === 1 ? 'w' : `w^{${fmt(gamma, 2).replace(/\.?0+$/, '')}}`; }
+
+/* ==========================================================================
+   DRAW: the value-against-price plot
+   ========================================================================== */
+
+const plot = $('plot');
+const PX0 = 0, PX1 = 100, PY0 = 100, PY1 = 0;   // view box of the data area
+const STRIP_Y = 103, STRIP_H = 4;
+
+function drawPlot(pr) {
+  plot.textContent = '';
+  const ev = currentEvent();
+
+  const steps = 160;
+  const ps = Array.from({ length: steps + 1 }, (_, i) => X * i / steps);
+  const mid = { lo: (pr.lo + pr.hi) / 2 / N, hi: (pr.lo + pr.hi) / 2 / N };
+  const prob = { lo: pr.lo / N, hi: pr.hi / N };
+
+  const series = {
+    buy:  ps.map(p => value('buy',  p, prob)),
+    sell: ps.map(p => value('sell', p, prob)),
+    gbuy: ps.map(p => value('buy',  p, mid)),
+    gsell:ps.map(p => value('sell', p, mid))
+  };
+  const stay = u(W);
+
+  let vmin = stay, vmax = stay;
+  for (const s of Object.values(series)) for (const v of s) { vmin = Math.min(vmin, v); vmax = Math.max(vmax, v); }
+  const pad = (vmax - vmin) * 0.08 || 1;
+  vmin = Math.max(0, vmin - pad); vmax += pad;
+
+  const xOf = p => PX0 + (PX1 - PX0) * p / X;
+  const yOf = v => PY0 - (PY0 - PY1) * (v - vmin) / (vmax - vmin);
+
+  const g = id => { const n = el('g', { id }); plot.appendChild(n); return n; };
+  const gGrid = g('grid'), gStrip = g('strip'), gCurves = g('curves'), gAxes = g('axes'), gGuides = g('guides'), gLabels = g('labels');
+
+  // Grid and axes.
+  for (let p = 0; p <= X; p += 1) line(gGrid, xOf(p), PY0, xOf(p), PY1, 'grid-line');
+  line(gAxes, PX0, PY0, PX1, PY0, 'axis-line');
+  line(gAxes, PX0, PY0, PX0, PY1, 'axis-line');
+  for (let p = 0; p <= X; p += 1) {
+    line(gAxes, xOf(p), PY0, xOf(p), PY0 + 1.6, 'tick-mark');
+    text(gAxes, xOf(p), PY0 + 5.5, String(p), 'tick', 'middle');
+  }
+  const nTicks = 4;
+  for (let i = 0; i <= nTicks; i++) {
+    const v = vmin + (vmax - vmin) * i / nTicks;
+    line(gAxes, PX0, yOf(v), PX0 - 1.6, yOf(v), 'tick-mark');
+    text(gAxes, PX0 - 3, yOf(v) + 1.2, fmt(v, v >= 100 ? 0 : 1), 'tick', 'end');
+    line(gGrid, PX0, yOf(v), PX1, yOf(v), 'grid-line');
+  }
+  text(gAxes, PX1 + 4, PY0 + 1.6, 'p', 'axis-name', 'start');
+  text(gAxes, PX0 - 14, PY1 - 3, 'worst-case EU', 'axis-name', 'start');
+
+  // The strip of best actions along the price axis.
+  let runStart = 0, runBest = bestAction(0, prob);
+  const segs = [];
+  for (let i = 1; i <= steps; i++) {
+    const b = bestAction(ps[i], prob);
+    if (b !== runBest) { segs.push([runStart, ps[i - 1], runBest]); runStart = ps[i - 1]; runBest = b; }
+  }
+  segs.push([runStart, X, runBest]);
+  for (const [a, b, who] of segs) {
+    gStrip.appendChild(el('rect', { x: xOf(a), y: STRIP_Y, width: xOf(b) - xOf(a), height: STRIP_H, class: 'strip-' + who }));
+    if (who === 'stay' && b - a > 1.2) text(gLabels, xOf((a + b) / 2), STRIP_Y + STRIP_H + 4.2, 'inertia', 'plot-label is-muted', 'middle');
+  }
+
+  // Curves.
+  const path = (vals, cls) => {
+    const d = vals.map((v, i) => (i ? 'L' : 'M') + fmt(xOf(ps[i]), 2) + ' ' + fmt(yOf(v), 2)).join(' ');
+    gCurves.appendChild(el('path', { d, class: cls }));
+  };
+  path(series.gbuy, 'curve-ghost curve-buy');
+  path(series.gsell, 'curve-ghost curve-sell');
+  line(gCurves, PX0, yOf(stay), PX1, yOf(stay), 'curve curve-stay');
+  path(series.buy, 'curve curve-buy');
+  path(series.sell, 'curve curve-sell');
+
+  // Reservation prices.
+  const pb = solveCross('buy', prob), psell = solveCross('sell', prob);
+  for (const [p, cls, lab] of [[pb, 'is-buy', 'p_b'], [psell, 'is-sell', 'p_s']]) {
+    line(gGuides, xOf(p), PY0, xOf(p), PY1, 'guide');
+    const t = el('text', { x: xOf(p), y: PY1 - 1.5, class: 'plot-label ' + cls, 'text-anchor': 'middle' });
+    const base = el('tspan'); base.textContent = 'p';
+    const sub = el('tspan', { 'baseline-shift': 'sub', 'font-size': '68%' }); sub.textContent = lab.slice(-1);
+    t.appendChild(base); t.appendChild(sub);
+    gLabels.appendChild(t);
+  }
+
+  // The current price.
+  const best = bestAction(price, prob);
+  line(gGuides, xOf(price), PY0, xOf(price), PY1, 'price-line');
+  const yv = yOf(value(best, price, prob));
+  gLabels.appendChild(el('circle', { cx: xOf(price), cy: yv, r: 1.6, class: 'price-dot is-' + best }));
+
+  // End labels for the curves.
+  text(gLabels, PX1 + 1.5, yOf(series.buy[steps]) + 1.2, 'buy', 'plot-label is-buy', 'start');
+  text(gLabels, PX1 + 1.5, yOf(series.sell[steps]) + 1.2, 'sell', 'plot-label is-sell', 'start');
+  text(gLabels, PX1 + 1.5, yOf(stay) + 1.2, 'stay', 'plot-label', 'start');
+
+  return { pb, ps: psell, best };
+}
+
+/* ==========================================================================
+   DRAW: the utility curve
+   ========================================================================== */
+
+function drawUtility() {
+  const svg = $('utility-plot');
+  svg.textContent = '';
+  const wmax = W + X;
+  const umax = u(wmax);
+  const xOf = w => 100 * w / wmax;
+  const yOf = v => 60 - 60 * v / umax;
+
+  line(svg, 0, 60, 100, 60, 'u-axis');
+  line(svg, 0, 60, 0, 0, 'u-axis');
+  for (const w of [0, 5, 10, 15, 20]) text(svg, xOf(w), 65, String(w), 'u-tick', 'middle');
+  text(svg, 104, 61, 'w', 'u-tag', 'start');
+  text(svg, -2, -1.5, 'u', 'u-tag', 'end');
+
+  const pts = [];
+  for (let i = 0; i <= 80; i++) { const w = wmax * i / 80; pts.push((i ? 'L' : 'M') + fmt(xOf(w), 2) + ' ' + fmt(yOf(u(w)), 2)); }
+  svg.appendChild(el('path', { d: pts.join(' '), class: 'u-curve' }));
+
+  // The wealth levels in play at the current price.
+  const ws = new Set();
+  for (const a of ['buy', 'sell', 'stay']) { const wl = wealth(a, price); ws.add(wl.yes); ws.add(wl.no); }
+  for (const w of ws) svg.appendChild(el('circle', { cx: xOf(w), cy: yOf(u(w)), r: 1.4, class: 'u-dot' }));
+}
+
+/* ==========================================================================
+   RENDER: rail
+   ========================================================================== */
+
+function renderUrn() {
+  const box = $('urn');
+  box.textContent = '';
+  for (const c of COLORS) {
+    const b = bounds[c.key];
+    const row = document.createElement('div');
+    row.className = 'urn-row';
+    row.innerHTML = `
+      <div class="urn-head">
+        <span class="name"><i class="swatch ${c.key}"></i>${c.name}</span>
+        <span class="range-val">${b.min} to ${b.max}</span>
+      </div>
+      <div class="span-track"><div class="span-fill ${c.key}" style="left:${100 * b.min / N}%; width:${100 * (b.max - b.min) / N}%"></div></div>
+      <div class="slider-pair">
+        <span>min</span><input type="range" min="0" max="${N}" step="1" value="${b.min}" data-color="${c.key}" data-kind="min" aria-label="${c.name}: lower bound">
+        <span>max</span><input type="range" min="0" max="${N}" step="1" value="${b.max}" data-color="${c.key}" data-kind="max" aria-label="${c.name}: upper bound">
+      </div>`;
+    box.appendChild(row);
+  }
+  box.querySelectorAll('input[type="range"]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      setBound(e.target.dataset.color, e.target.dataset.kind, Number(e.target.value));
+      update({ keepFocus: e.target });
+    });
+  });
+}
+
+/* Sliders are rebuilt on every update; keep the one being dragged alive by
+   only patching values when it is the active element. */
+function patchUrn() {
+  for (const c of COLORS) {
+    const b = bounds[c.key];
+    const row = $('urn').querySelectorAll('.urn-row')[COLORS.indexOf(c)];
+    row.querySelector('.range-val').textContent = `${b.min} to ${b.max}`;
+    const fill = row.querySelector('.span-fill');
+    fill.style.left = (100 * b.min / N) + '%';
+    fill.style.width = (100 * (b.max - b.min) / N) + '%';
+    row.querySelector('input[data-kind="min"]').value = b.min;
+    row.querySelector('input[data-kind="max"]').value = b.max;
+  }
+}
+
+function renderProblem(pr) {
+  const ev = currentEvent();
+  $('problem-text').innerHTML =
+    `An urn holds ${N} balls, red, blue or yellow. One ball will be drawn. The lottery pays ${texHTML('X = ' + X)} if the ball is <em>${ev.label}</em>, ` +
+    `and nothing otherwise. You start with wealth ${texHTML('w = ' + W)} and utility ${texHTML('u(w) = ' + gammaLatex())}. ` +
+    `At the price ${texHTML('p = ' + fmt(price, 2))} you may buy the lottery, sell it, or stay put.`;
+}
+
+function renderReadout(pr, res) {
+  const ev = currentEvent();
+  const names = { buy: 'buy', sell: 'sell', stay: 'stay put' };
+  const v = $('verdict');
+  v.className = 'is-' + res.best;
+  v.innerHTML = `Best action: <strong>${names[res.best]}</strong>`;
+  $('reservation').innerHTML =
+    `${texHTML('P(A) \\in [' + fmtFrac(pr.lo) + ',\\ ' + fmtFrac(pr.hi) + ']')} for A = ${ev.label}. ` +
+    `Buy only below ${texHTML('p_b = ' + fmt(res.pb, 2))}, sell only above ${texHTML('p_s = ' + fmt(res.ps, 2))}.` +
+    (res.pb < res.ps ? ` In between, inertia.` : ` No price leaves this decision maker idle.`);
+}
+
+/* ==========================================================================
+   RENDER: tables
+   ========================================================================== */
+
+function rowName(a) {
+  const sw = a.key === 'stay' ? '' : `<i class="swatch ${a.key === 'buy' ? 'red' : 'blue'}"></i>`;
+  return `<td class="row-name">${sw}${a.label}</td>`;
+}
+
+function buildInputTables() {
+  for (const id of ['t1', 't2']) {
+    const tb = $(id).querySelector('tbody');
+    tb.textContent = '';
+    for (const a of ACTIONS) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = rowName(a) +
+        `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="yes" aria-label="${a.label}, event happens"></td>` +
+        `<td class="num"><input class="cell" type="text" inputmode="decimal" data-t="${id}" data-a="${a.key}" data-e="no" aria-label="${a.label}, event does not happen"></td>`;
+      tb.appendChild(tr);
+    }
+  }
+}
+
+function renderHeaders() {
+  const ev = currentEvent();
+  $('h1a').textContent = ev.label;
+  $('h1b').textContent = 'not ' + ev.label;
+  $('h2a').innerHTML = texHTML('P(A)');
+  $('h2b').innerHTML = texHTML('P(\\text{not } A)');
+}
+
+function renderTable3(pr, res) {
+  const tb = $('t3').querySelector('tbody');
+  tb.textContent = '';
+  const prob = { lo: pr.lo / N, hi: pr.hi / N };
+  const gl = fmt(gamma, 2).replace(/\.?0+$/, '');
+  const pow = w => gamma === 1 ? `${fmt(w, 2)}` : `${fmt(w, 2)}^{${gl}}`;
+  for (const a of ACTIONS) {
+    const wl = wealth(a.key, price);
+    const v = value(a.key, price, prob);
+    let work;
+    if (a.key === 'stay') {
+      work = `u(${W}) = ${pow(W)}`;
+    } else {
+      const q = worstProb(a.key, prob);
+      const qf = a.key === 'buy' ? fmtFrac(pr.lo) : fmtFrac(pr.hi);
+      const qc = a.key === 'buy' ? fmtFrac(N - pr.lo) : fmtFrac(N - pr.hi);
+      work = `\\tfrac{${qf.split('/')[0]}}{${N}}\\,${pow(wl.yes)} + \\tfrac{${qc.split('/')[0]}}{${N}}\\,${pow(wl.no)}`;
+    }
+    const tr = document.createElement('tr');
+    tr.className = (a.key === res.best ? 'is-best ' : '') + 'is-' + a.key;
+    tr.innerHTML = rowName(a) + `<td class="work">${texHTML(work)}</td><td class="num">${fmt(v, 2)}</td>`;
+    tb.appendChild(tr);
+  }
+}
+
+/* ---- answers for tables 1 and 2 ---- */
+
+function parseNum(s) {
+  s = String(s).trim();
+  if (!s) return NaN;
+  const m = s.match(/^(-?[\d.]+)\s*\/\s*([\d.]+)$/);
+  if (m) return Number(m[1]) / Number(m[2]);
+  return Number(s);
+}
+
+function expected(t, a, e, pr) {
+  if (t === 't1') { const wl = wealth(a, price); return e === 'yes' ? wl.yes : wl.no; }
+  const prob = { lo: pr.lo / N, hi: pr.hi / N };
+  const q = worstProb(a, prob);
+  if (q === null) return null;
+  return e === 'yes' ? q : 1 - q;
+}
+
+function checkAnswers() {
+  const pr = eventCountRange(currentEvent());
+  const prob = { lo: pr.lo / N, hi: pr.hi / N };
+  document.querySelectorAll('input.cell').forEach(inp => {
+    const { t, a, e } = inp.dataset;
+    const got = parseNum(inp.value);
+    inp.classList.remove('is-right', 'is-wrong');
+    if (Number.isNaN(got)) return;
+    const want = expected(t, a, e, pr);
+    let ok;
+    if (want === null) {
+      // Staying put: any prior the sliders allow, with the two cells summing to one.
+      const other = document.querySelector(`input.cell[data-t="t2"][data-a="stay"][data-e="${e === 'yes' ? 'no' : 'yes'}"]`);
+      const q = e === 'yes' ? got : 1 - got;
+      const partner = parseNum(other.value);
+      ok = q >= prob.lo - 0.006 && q <= prob.hi + 0.006 && (Number.isNaN(partner) || Math.abs(got + partner - 1) < 0.012);
+    } else {
+      ok = Math.abs(got - want) < (t === 't1' ? 0.011 : 0.006);
+    }
+    inp.classList.add(ok ? 'is-right' : 'is-wrong');
+  });
+}
+
+function revealAnswers() {
+  const pr = eventCountRange(currentEvent());
+  document.querySelectorAll('input.cell').forEach(inp => {
+    const { t, a, e } = inp.dataset;
+    const want = expected(t, a, e, pr);
+    if (want === null) {
+      inp.value = e === 'yes' ? fmtFrac(pr.lo) : fmtFrac(N - pr.lo);   // one admissible prior among many
+    } else if (t === 't1') {
+      inp.value = fmt(want, 2).replace(/\.?0+$/, '');
+    } else {
+      const count = Math.round(want * N);
+      inp.value = fmtFrac(count);
+    }
+    inp.classList.remove('is-right', 'is-wrong');
+  });
+  checkAnswers();
+}
+
+function resetAnswers() {
+  document.querySelectorAll('input.cell').forEach(inp => { inp.value = ''; inp.classList.remove('is-right', 'is-wrong'); });
+}
+
+/* ==========================================================================
+   UPDATE
+   ========================================================================== */
+
+function update() {
+  const pr = eventCountRange(currentEvent());
+  patchUrn();
+  $('priceVal').textContent = fmt(price, 2);
+  $('gammaVal').textContent = fmt(gamma, 2);
+  $('gammaTag').textContent = gamma > 1.001 ? 'Convex: risk loving.' : gamma < 0.999 ? 'Concave: risk averse.' : 'Linear: risk neutral.';
+  tex($('uSym'), 'u(w) = ' + gammaLatex());
+  const res = drawPlot(pr);
+  drawUtility();
+  renderProblem(pr);
+  renderReadout(pr, res);
+  renderHeaders();
+  renderTable3(pr, res);
+  // Answers already marked are re-marked against the new sliders.
+  if (document.querySelector('input.cell.is-right, input.cell.is-wrong')) checkAnswers();
+}
+
+/* ==========================================================================
+   INIT
+   ========================================================================== */
+
+function init() {
+  const sel = $('event');
+  for (const ev of EVENTS) {
+    const o = document.createElement('option');
+    o.value = ev.key; o.textContent = ev.label;
+    if (ev.key === eventKey) o.selected = true;
+    sel.appendChild(o);
+  }
+  sel.addEventListener('change', e => { eventKey = e.target.value; update(); });
+
+  $('price').addEventListener('input', e => { price = Number(e.target.value); update(); });
+  $('gamma').addEventListener('input', e => { gamma = Number(e.target.value); update(); });
+
+  $('checkBtn').addEventListener('click', checkAnswers);
+  $('revealBtn').addEventListener('click', revealAnswers);
+  $('resetBtn').addEventListener('click', resetAnswers);
+
+  tex($('payX'), 'X = ' + X);
+  tex($('pSym'), 'p');
+
+  renderUrn();
+  buildInputTables();
+  update();
+}
+
+init();
+</script>
+</body>
+</html>
