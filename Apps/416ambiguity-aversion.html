@@ -158,9 +158,6 @@ h1 {
 .curve-buy    { stroke: var(--clay-highlight); }
 .curve-sell   { stroke: var(--egyptian-light); }
 .curve-stay   { stroke: var(--ancient-cream); stroke-width: 0.9; }
-.curve-ghost  { fill: none; stroke-width: 0.6; stroke-dasharray: 2 1.6; opacity: 0.75; }
-.curve-ghost.curve-buy  { stroke: var(--clay-highlight); }
-.curve-ghost.curve-sell { stroke: var(--egyptian-light); }
 
 .strip-buy  { fill: var(--wash-buy); }
 .strip-sell { fill: var(--wash-sell); }
@@ -199,7 +196,6 @@ h1 {
 .key.buy  { border-color: var(--clay-highlight); }
 .key.sell { border-color: var(--egyptian-light); }
 .key.stay { border-color: var(--ancient-cream); }
-.key.ghost { border-top-style: dashed; border-color: var(--text-muted); }
 
 /* ------------------------------------------------------------------- rail */
 
@@ -447,7 +443,6 @@ footer {
           <span><i class="key buy"></i> buy</span>
           <span><i class="key sell"></i> sell</span>
           <span><i class="key stay"></i> stay put</span>
-          <span><i class="key ghost"></i> single prior at the midpoint</span>
         </div>
       </div>
 
@@ -706,14 +701,11 @@ function drawPlot(pr) {
 
   const steps = 160;
   const ps = Array.from({ length: steps + 1 }, (_, i) => X * i / steps);
-  const mid = { lo: (pr.lo + pr.hi) / 2 / N, hi: (pr.lo + pr.hi) / 2 / N };
   const prob = { lo: pr.lo / N, hi: pr.hi / N };
 
   const series = {
     buy:  ps.map(p => value('buy',  p, prob)),
-    sell: ps.map(p => value('sell', p, prob)),
-    gbuy: ps.map(p => value('buy',  p, mid)),
-    gsell:ps.map(p => value('sell', p, mid))
+    sell: ps.map(p => value('sell', p, prob))
   };
   const stay = u(W);
 
@@ -764,8 +756,6 @@ function drawPlot(pr) {
     const d = vals.map((v, i) => (i ? 'L' : 'M') + fmt(xOf(ps[i]), 2) + ' ' + fmt(yOf(v), 2)).join(' ');
     gCurves.appendChild(el('path', { d, class: cls }));
   };
-  path(series.gbuy, 'curve-ghost curve-buy');
-  path(series.gsell, 'curve-ghost curve-sell');
   line(gCurves, PX0, yOf(stay), PX1, yOf(stay), 'curve curve-stay');
   path(series.buy, 'curve curve-buy');
   path(series.sell, 'curve curve-sell');
