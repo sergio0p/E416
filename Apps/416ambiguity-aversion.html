@@ -266,11 +266,44 @@ h1 {
 
 .slider-pair { display: grid; grid-template-columns: 2.4rem 1fr; margin-top: 0.2rem; gap: 0.1rem 0.5rem; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
 
+/* A neutral track and a clay thumb: the thumb is a pointer, not a quantity.
+   Quantity is carried by the coloured span bars above the sliders. */
 input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
+  height: 1.1rem;
   margin: 0;
-  accent-color: var(--clay-highlight);
+  background: transparent;
   cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 0.3rem;
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+}
+input[type="range"]::-moz-range-track {
+  height: 0.3rem;
+  background: var(--panel-ground);
+  border: 1px solid var(--deep-oxide);
+}
+input[type="range"]::-moz-range-progress { background: transparent; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: calc(-0.325rem - 1px);
+  border-radius: 50%;
+  background: var(--clay-highlight);
+  border: 1px solid var(--attic-black);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  background: var(--clay-highlight);
+  border: 1px solid var(--attic-black);
 }
 input[type="range"]:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 2px; }
 
