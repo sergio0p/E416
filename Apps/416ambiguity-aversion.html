@@ -47,9 +47,9 @@
   --egyptian:       #3E6E8E;
   --egyptian-light: #6FA3C0;
 
-  /* Yellow ochre, the third pigment of the palette and the third ball. */
-  --ochre:          #C9A227;
-  --ochre-light:    #E2C55C;
+  /* Copper patina, the verdigris of a weathered bronze: the third ball. */
+  --patina:         #5C9E8E;
+  --patina-light:   #8AC3B3;
 
   --wash-buy:  rgba(181, 82, 50, 0.38);
   --wash-sell: rgba(62, 110, 142, 0.42);
@@ -248,7 +248,7 @@ h1 {
 .swatch { width: 0.75rem; height: 0.75rem; display: inline-block; flex: 0 0 auto; }
 .swatch.red    { background: var(--terracotta); }
 .swatch.blue   { background: var(--egyptian); }
-.swatch.yellow { background: var(--ochre); }
+.swatch.green  { background: var(--patina); }
 .urn-head .range-val { color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
 /* The known stretch of the composition, painted on a dark track. */
@@ -262,9 +262,9 @@ h1 {
 .span-fill { position: absolute; top: 0; bottom: 0; }
 .span-fill.red    { background: var(--terracotta); }
 .span-fill.blue   { background: var(--egyptian); }
-.span-fill.yellow { background: var(--ochre); }
+.span-fill.green  { background: var(--patina); }
 
-.slider-pair { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.1rem 0.5rem; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
+.slider-pair { display: grid; grid-template-columns: 2.4rem 1fr; margin-top: 0.2rem; gap: 0.1rem 0.5rem; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
 
 input[type="range"] {
   width: 100%;
@@ -342,7 +342,7 @@ input.cell {
   text-align: right;
 }
 input.cell:focus-visible { outline: 2px solid var(--clay-highlight); outline-offset: 1px; }
-input.cell.is-right { border-color: var(--ochre); box-shadow: inset 0 0 0 1px var(--ochre); }
+input.cell.is-right { border-color: var(--patina); box-shadow: inset 0 0 0 1px var(--patina); }
 input.cell.is-wrong { border-color: var(--terracotta); box-shadow: inset 0 0 0 1px var(--terracotta); }
 
 .table-note { font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0; }
@@ -420,7 +420,7 @@ footer {
       <section class="card">
         <h2>The problem</h2>
         <p id="problem-text"></p>
-        <p class="hint">A maxmin decision maker judges each action by the worst urn for that action. The sliders on the right set which urns are possible.</p>
+        <p class="hint">A maxmin decision maker judges each action by the worst urn for that action.</p>
       </section>
     </div>
 
@@ -435,16 +435,12 @@ footer {
       <section class="card">
         <h2>The urn: 90 balls</h2>
         <div id="urn"></div>
-        <p class="hint" style="margin-top:0.5rem">Lower and upper bounds on each colour. The slider you move always wins; the others move only when the total of 90 forces them.</p>
+        <p class="hint" style="margin-top:0.5rem">The number of red balls is known. The rest are blue or green in a proportion nobody knows.</p>
       </section>
 
       <section class="card">
         <h2>The lottery</h2>
-        <div class="param-row">
-          <span>Pays <span id="payX"></span> if</span>
-          <select id="event"></select>
-          <span></span>
-        </div>
+        <p>Pays <span id="payX"></span> if the ball is <em>red or blue</em>, nothing otherwise.</p>
         <div class="param-row">
           <span>Price <span id="pSym"></span></span>
           <input type="range" id="price" min="0" max="10" step="0.25" value="5">
@@ -521,19 +517,13 @@ const W = 10;                 // initial wealth
 const X = 10;                 // the lottery pays X if the event happens
 
 const COLORS = [
-  { key: 'red',    name: 'red'    },
-  { key: 'blue',   name: 'blue'   },
-  { key: 'yellow', name: 'yellow' }
+  { key: 'red',   name: 'red'   },
+  { key: 'blue',  name: 'blue'  },
+  { key: 'green', name: 'green' }
 ];
 
-const EVENTS = [
-  { key: 'r',  label: 'red',            set: ['red'] },
-  { key: 'b',  label: 'blue',           set: ['blue'] },
-  { key: 'y',  label: 'yellow',         set: ['yellow'] },
-  { key: 'rb', label: 'red or blue',    set: ['red', 'blue'] },
-  { key: 'ry', label: 'red or yellow',  set: ['red', 'yellow'] },
-  { key: 'by', label: 'blue or yellow', set: ['blue', 'yellow'] }
-];
+/* The lottery pays on red or blue. Red is known; blue and green share the rest. */
+const EVENT = { label: 'red or blue', set: ['red', 'blue'] };
 
 const ACTIONS = [
   { key: 'buy',  label: 'Buy'  },
@@ -550,94 +540,32 @@ const SVGNS = 'http://www.w3.org/2000/svg';
    Every change redraws from scratch.
    ========================================================================== */
 
-/* Thirty red for certain, sixty blue-or-yellow in unknown proportion. */
-const bounds = {
-  red:    { min: 30, max: 30 },
-  blue:   { min: 0,  max: 60 },
-  yellow: { min: 0,  max: 60 }
-};
-
-let eventKey = 'rb';
+/* Thirty red for certain, sixty blue-or-green in unknown proportion. */
+let redCount = 30;
 let price = 5;
 let gamma = 1.5;
 
 /* ==========================================================================
    URN LOGIC
 
-   Feasibility of the bounds, for a total of N balls:
-     min_c <= max_c                       for every colour
-     max_c <= N - sum of the other mins   (a colour cannot crowd out the rest)
-     min_c >= N - sum of the other maxes  (the rest cannot fill the urn alone)
-
-   The slider the student moves is pinned. The other sliders yield, and only
-   by as much as feasibility forces.
+   Red is known exactly. The remaining balls are blue or green in a proportion
+   nobody knows, so each of those two colours ranges over 0 to N - red.
    ========================================================================== */
 
-function others(c) { return COLORS.map(k => k.key).filter(k => k !== c); }
-function sumMin(keys) { return keys.reduce((s, k) => s + bounds[k].min, 0); }
-function sumMax(keys) { return keys.reduce((s, k) => s + bounds[k].max, 0); }
-
-function setBound(c, kind, value) {
-  value = Math.max(0, Math.min(N, Math.round(value)));
-  const old = bounds[c][kind];
-  bounds[c][kind] = value;
-  const rest = others(c);
-
-  if (kind === 'min') {
-    bounds[c].max = Math.max(bounds[c].max, value);
-    if (value > old) {
-      // The mins must still fit in the urn: cut the other mins, in order.
-      let excess = sumMin(COLORS.map(k => k.key)) - N;
-      for (const d of rest) {
-        if (excess <= 0) break;
-        const cut = Math.min(bounds[d].min, excess);
-        bounds[d].min -= cut; excess -= cut;
-      }
-      // And no other colour may crowd out this new floor.
-      for (const d of rest) bounds[d].max = Math.min(bounds[d].max, N - sumMin(others(d)));
-    } else {
-      // A lower floor here may leave the other maxes unable to fill the urn.
-      let need = N - value - sumMax(rest);
-      for (const d of rest) {
-        if (need <= 0) break;
-        const add = Math.min(N - bounds[d].max, need);
-        bounds[d].max += add; need -= add;
-      }
-    }
-  } else {
-    bounds[c].min = Math.min(bounds[c].min, value);
-    if (value < old) {
-      // The maxes must still be able to fill the urn: raise the other maxes.
-      let need = N - sumMax(COLORS.map(k => k.key));
-      for (const d of rest) {
-        if (need <= 0) break;
-        const add = Math.min(N - bounds[d].max, need);
-        bounds[d].max += add; need -= add;
-      }
-      // A smaller ceiling here can force the other floors up.
-      for (const d of rest) bounds[d].min = Math.max(bounds[d].min, N - sumMax(others(d)));
-    } else {
-      // A higher ceiling here must not be crowded out by the other floors.
-      let excess = sumMin(rest) - (N - value);
-      for (const d of rest) {
-        if (excess <= 0) break;
-        const cut = Math.min(bounds[d].min, excess);
-        bounds[d].min -= cut; excess -= cut;
-      }
-    }
-  }
+function bounds() {
+  return {
+    red:   { min: redCount, max: redCount },
+    blue:  { min: 0, max: N - redCount },
+    green: { min: 0, max: N - redCount }
+  };
 }
 
-/* The feasible range of P(A) for the event A, as counts out of N. */
-function eventCountRange(ev) {
-  const inA  = ev.set;
-  const outA = COLORS.map(k => k.key).filter(k => !inA.includes(k));
-  const lo = Math.max(sumMin(inA), N - sumMax(outA));
-  const hi = Math.min(sumMax(inA), N - sumMin(outA));
-  return { lo, hi };
+/* The feasible range of P(red or blue), as counts out of N. */
+function eventCountRange() {
+  return { lo: redCount, hi: N };
 }
 
-function currentEvent() { return EVENTS.find(e => e.key === eventKey); }
+function currentEvent() { return EVENT; }
 
 /* ==========================================================================
    DECISION LOGIC
@@ -859,48 +787,40 @@ function renderUrn() {
   const box = $('urn');
   box.textContent = '';
   for (const c of COLORS) {
-    const b = bounds[c.key];
     const row = document.createElement('div');
     row.className = 'urn-row';
+    row.dataset.color = c.key;
     row.innerHTML = `
       <div class="urn-head">
         <span class="name"><i class="swatch ${c.key}"></i>${c.name}</span>
-        <span class="range-val">${b.min} to ${b.max}</span>
+        <span class="range-val"></span>
       </div>
-      <div class="span-track"><div class="span-fill ${c.key}" style="left:${100 * b.min / N}%; width:${100 * (b.max - b.min) / N}%"></div></div>
-      <div class="slider-pair">
-        <span>min</span><input type="range" min="0" max="${N}" step="1" value="${b.min}" data-color="${c.key}" data-kind="min" aria-label="${c.name}: lower bound">
-        <span>max</span><input type="range" min="0" max="${N}" step="1" value="${b.max}" data-color="${c.key}" data-kind="max" aria-label="${c.name}: upper bound">
-      </div>`;
+      <div class="span-track"><div class="span-fill ${c.key}"></div></div>` +
+      (c.key === 'red'
+        ? `<div class="slider-pair"><span>count</span><input type="range" min="0" max="${N}" step="1" value="${redCount}" id="redSlider" aria-label="number of red balls"></div>`
+        : '');
     box.appendChild(row);
   }
-  box.querySelectorAll('input[type="range"]').forEach(inp => {
-    inp.addEventListener('input', e => {
-      setBound(e.target.dataset.color, e.target.dataset.kind, Number(e.target.value));
-      update({ keepFocus: e.target });
-    });
-  });
+  $('redSlider').addEventListener('input', e => { redCount = Number(e.target.value); update(); });
 }
 
-/* Sliders are rebuilt on every update; keep the one being dragged alive by
-   only patching values when it is the active element. */
 function patchUrn() {
+  const b = bounds();
   for (const c of COLORS) {
-    const b = bounds[c.key];
-    const row = $('urn').querySelectorAll('.urn-row')[COLORS.indexOf(c)];
-    row.querySelector('.range-val').textContent = `${b.min} to ${b.max}`;
+    const row = $('urn').querySelector(`.urn-row[data-color="${c.key}"]`);
+    const { min, max } = b[c.key];
+    row.querySelector('.range-val').textContent = min === max ? `${min}` : `${min} to ${max}`;
     const fill = row.querySelector('.span-fill');
-    fill.style.left = (100 * b.min / N) + '%';
-    fill.style.width = (100 * (b.max - b.min) / N) + '%';
-    row.querySelector('input[data-kind="min"]').value = b.min;
-    row.querySelector('input[data-kind="max"]').value = b.max;
+    fill.style.left = (100 * min / N) + '%';
+    fill.style.width = (100 * (max - min) / N) + '%';
+    if (min === max) { fill.style.left = (100 * min / N) + '%'; fill.style.width = '0.35rem'; fill.style.marginLeft = '-0.175rem'; }
   }
 }
 
 function renderProblem(pr) {
   const ev = currentEvent();
   $('problem-text').innerHTML =
-    `An urn holds ${N} balls, red, blue or yellow. One ball will be drawn. The lottery pays ${texHTML('X = ' + X)} if the ball is <em>${ev.label}</em>, ` +
+    `An urn holds ${N} balls: ${redCount} red, and ${N - redCount} that are blue or green in an unknown proportion. One ball will be drawn. The lottery pays ${texHTML('X = ' + X)} if the ball is <em>${ev.label}</em>, ` +
     `and nothing otherwise. You start with wealth ${texHTML('w = ' + W)} and utility ${texHTML('u(w) = ' + gammaLatex())}. ` +
     `At the price ${texHTML('p = ' + fmt(price, 2))} you may buy the lottery, sell it, or stay put.`;
 }
@@ -992,7 +912,7 @@ function expected(t, a, e, pr) {
 }
 
 function checkAnswers() {
-  const pr = eventCountRange(currentEvent());
+  const pr = eventCountRange();
   const prob = { lo: pr.lo / N, hi: pr.hi / N };
   document.querySelectorAll('input.cell').forEach(inp => {
     const { t, a, e } = inp.dataset;
@@ -1015,7 +935,7 @@ function checkAnswers() {
 }
 
 function revealAnswers() {
-  const pr = eventCountRange(currentEvent());
+  const pr = eventCountRange();
   document.querySelectorAll('input.cell').forEach(inp => {
     const { t, a, e } = inp.dataset;
     const want = expected(t, a, e, pr);
@@ -1041,7 +961,7 @@ function resetAnswers() {
    ========================================================================== */
 
 function update() {
-  const pr = eventCountRange(currentEvent());
+  const pr = eventCountRange();
   patchUrn();
   $('priceVal').textContent = fmt(price, 2);
   $('gammaVal').textContent = fmt(gamma, 2);
@@ -1062,15 +982,6 @@ function update() {
    ========================================================================== */
 
 function init() {
-  const sel = $('event');
-  for (const ev of EVENTS) {
-    const o = document.createElement('option');
-    o.value = ev.key; o.textContent = ev.label;
-    if (ev.key === eventKey) o.selected = true;
-    sel.appendChild(o);
-  }
-  sel.addEventListener('change', e => { eventKey = e.target.value; update(); });
-
   $('price').addEventListener('input', e => { price = Number(e.target.value); update(); });
   $('gamma').addEventListener('input', e => { gamma = Number(e.target.value); update(); });
 
