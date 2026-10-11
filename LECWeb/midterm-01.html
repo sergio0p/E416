@@ -12,6 +12,11 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/beamer-theme.css">
+  <style>
+    /* Question 3's lottery table has four columns; the theme's 1.2rem side
+       padding would push it past a phone's width. */
+    .lottery-table th, .lottery-table td { padding: 0.45rem 0.5rem; text-align: center; }
+  </style>
 
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
@@ -23,6 +28,21 @@
     <div class="section-title-box">
       <h1>Midterm 1</h1>
     </div>
+
+    <!-- Table of Contents: in-page anchors to each frame's id (blue = default link color) -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#coverage" style="margin-left: 1rem;">1. Coverage</a>
+      <a href="#instructions" style="margin-left: 1rem;">2. Instructions</a>
+      <a href="#midterm-1-q1" style="margin-left: 1rem;">3. Q1</a>
+      <a href="#midterm-1-q2" style="margin-left: 1rem;">4. Q2</a>
+      <br>
+      <a href="#midterm-1-q3" style="margin-left: 1rem;">5. Q3</a>
+      <a href="#midterm-1-q4" style="margin-left: 1rem;">6. Q4</a>
+      <a href="#midterm-1-q5" style="margin-left: 1rem;">7. Q5</a>
+      <a href="#midterm-1-q6" style="margin-left: 1rem;">8. Q6</a>
+      <br>
+      <a href="#midterm-1-q7" style="margin-left: 1rem;">9. Q7</a>
+    </nav>
   </section>
 
   <!-- Frame 1: Coverage -->
@@ -62,6 +82,194 @@
         <li>It is strongly recommended that you bring a calculator, scratch paper, a pencil, and an eraser.</li>
         <li>Type all answers directly in the Canvas/YuJa Verity exam.</li>
       </ul>
+    </div>
+  </section>
+
+  <!-- Midterm 1 Answer Key: one frame per exam item, numbered by exam position.
+       Canvas shuffled the answer choices per student, so the key never refers to
+       a choice by its position. Dollar signs sit in their own <span> so KaTeX
+       does not pair them up as math delimiters. -->
+  <section class="frame" id="midterm-1-q1">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 1</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider three goods, X, Y, and Z. Baskets are written as $(X,Y,Z)$.</p>
+      <p><strong>Week 1.</strong> A store sells basket $A=(2,3,1)$ for <span>$</span>9 and basket $B=(3,2,1)$ for <span>$</span>7. Maria buys basket $A$.</p>
+      <p><strong>Week 2.</strong> The store charges <span>$</span>9 for basket $A$ and <span>$</span>10 for basket $B$, and it adds a third basket, $C=(1,1,4)$, also for <span>$</span>10. Maria buys basket $B$.</p>
+      <p>Mark all correct statements.</p>
+      <p><span class="structure">Answer.</span> Recall the <a href="preferences.html#revealed-defs">definitions</a>: the chosen basket is directly revealed preferred to any basket that cost no more, and strictly directly revealed preferred to any basket that cost strictly less.</p>
+      <ul>
+        <li><em>A is strictly directly revealed preferred to B.</em> <strong>True.</strong> In week 1, Maria paid <span>$</span>9 for $A$ when $B$ cost only <span>$</span>7. Since $7\lt 9$, $A\succ_{SDR}B$.</li>
+        <li><em>B is strictly directly revealed preferred to A.</em> <strong>True.</strong> In week 2, Maria paid <span>$</span>10 for $B$ when $A$ cost only <span>$</span>9. Since $9\lt 10$, $B\succ_{SDR}A$.</li>
+        <li><em>B is indirectly revealed preferred to A but not directly.</em> <strong>False.</strong> The &ldquo;not directly&rdquo; part fails: $B\succ_{SDR}A$ implies $B\succeq_{DR}A$.</li>
+        <li><em>Maria&rsquo;s choices violate GARP.</em> <strong>True.</strong> $A\succ_{SDR}B$ implies $A\succeq_{R}B$, and yet $B\succ_{SDR}A$. This is exactly what <a href="preferences.html#garp">GARP</a> rules out.</li>
+        <li><em>Maria&rsquo;s choices can be explained by rational preferences.</em> <strong>False.</strong> When GARP is violated, no rational preferences can rationalize the data.</li>
+        <li><em>Maria&rsquo;s choices violate &ldquo;more is better&rdquo;.</em> <strong>False.</strong> No basket has at least as much of every good as another: $A$ has more Y than $B$, $B$ has more X than $A$, and $C$ has more Z than both. &ldquo;More is better&rdquo; has nothing to say about these choices.</li>
+      </ul>
+      <p>Notice that $C$, which Maria never bought, plays no role here. It is the subject of the next question.</p>
+    </div>
+  </section>
+
+  <section class="frame" id="midterm-1-q2">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 2</p>
+    </div>
+    <div class="frame-content">
+      <p>Return to Maria in the previous question. Basket $C$ was never bought, yet once it was added to the menu Maria switched from $A$ to $B$. Which effect best explains her week 2 choice?</p>
+      <p><span class="structure">Answer.</span> Menu effect.</p>
+      <ul>
+        <li><em>Menu effect.</em> <strong>Correct.</strong> Adding $C$, an option Maria never chose, changed which of the remaining options she picked. That is the <a href="behavioral-choice-certainty.html#menu-effects">definition</a> of a menu effect.</li>
+        <li><em>Decoy effect.</em> <strong>Incorrect.</strong> A <a href="behavioral-choice-certainty.html#decoy-effect">decoy</a> is clearly worse than one option but not clearly worse than the other. $C=(1,1,4)$ has more Z than both $A$ and $B$, so it is not clearly worse than either. This is a menu effect without a decoy.</li>
+        <li><em>Endowment effect.</em> <strong>Incorrect.</strong> The <a href="behavioral-choice-certainty.html#endowment-effect">endowment effect</a> is about valuing an object more once you own it, $\mathrm{WTA}\gt\mathrm{WTP}$. Maria is buying, not selling, in both weeks.</li>
+        <li><em>Availability heuristic.</em> <strong>Incorrect.</strong> It is a rule for judging the probability of an event by how easily it comes to mind. There are no probabilities in Maria&rsquo;s choice.</li>
+        <li><em>Risk aversion.</em> <strong>Incorrect.</strong> <a href="choice-under-uncertainty.html#risk-aversion-frame">Risk aversion</a> is about choosing among lotteries. Maria knows exactly what each basket contains.</li>
+        <li><em>Anchoring and adjustment.</em> <strong>Incorrect.</strong> It is a rule for estimating a number by adjusting from an initial anchor. Maria is not estimating anything.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Question 3: two frames. Students had only the graphs, never the formulas,
+       so every number below can be read off the figure's grid. -->
+  <section class="frame" id="midterm-1-q3">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 3</p>
+    </div>
+    <div class="frame-content">
+      <p>The figures below show four utility (value) functions, where $x$ is a gain ($x\gt 0$) or a loss ($x\lt 0$) relative to the reference point.</p>
+      <img src="img/mt1-q3-utilities.png" alt="Four graphs of utility functions u(x) against x, labeled Figure 1 to Figure 4, drawn on identical axes."
+           style="display: block; margin: 0.75rem auto; max-width: 600px; width: 100%; height: auto;">
+      <p>Match each figure with the statement that describes it. Each figure has exactly one best match; each statement is used at most once.</p>
+      <p><span class="structure">Answer.</span></p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Figure</th><th>Statement</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Figure 1</td><td>Risk averse in gains, risk loving in losses</td></tr>
+          <tr><td>Figure 2</td><td>Risk loving in gains, risk averse in losses</td></tr>
+          <tr><td>Figure 3</td><td>The utility/value function displays loss aversion</td></tr>
+          <tr><td>Figure 4</td><td>Risk loving for gambles involving gains and losses</td></tr>
+        </tbody>
+      </table>
+      <p>There are two ways to find these matches. Both are correct; use whichever you find easier.</p>
+      <p><strong>Way 1: marginal utility.</strong> Marginal utility is the slope of $u$. Decreasing marginal utility ($u$ concave) means risk averse, increasing marginal utility ($u$ convex) means risk loving, and constant marginal utility (a straight line) means risk neutral; see <a href="choice-under-uncertainty.html#expected-utility-theory">Attitudes Towards Risk</a>.</p>
+      <ul>
+        <li><strong>Figure 1.</strong> Over gains, the slope falls as $x$ grows: decreasing marginal utility, so risk averse. Over losses, the slope rises as $x$ approaches 0: increasing marginal utility, so risk loving.</li>
+        <li><strong>Figure 2.</strong> The reverse. Over gains, the slope rises, so risk loving. Over losses, it falls as $x$ approaches 0, so risk averse.</li>
+        <li><strong>Figure 3.</strong> The curvature is the same as in Figure 1, so Figure 3 is also risk averse in gains and risk loving in losses. What sets it apart is the steepness on each side of 0: the loss side is twice as steep. A loss of 1 takes $u$ down to $-2$, while a gain of 1 takes it only up to $1$. Losses hurt more than equal gains please: loss aversion. Figure 3 is exactly the value function of the <a href="behavioral-choice-risk.html#prospect-theory-functions">Prospect Theory</a> example, with $\alpha=\tfrac12$ and $\lambda=2$.</li>
+        <li><strong>Figure 4.</strong> Two straight lines, with slope 1 over losses and slope 2 over gains. Marginal utility is constant on each side, so the individual is risk neutral for gambles with only gains or only losses. At 0 the slope jumps from 1 to 2: marginal utility increases as we cross the reference point, so for gambles with both gains and losses the individual is risk loving. This is loss aversion in reverse: gains loom larger than losses.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="frame" id="midterm-1-q3-cont">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 3 (cont.)</p>
+    </div>
+    <div class="frame-content">
+      <p><strong>Way 2: expected utility versus the utility of the expected value.</strong> Take three lotteries, each paying its two outcomes with probability $\tfrac12$:</p>
+      <ul>
+        <li>losses only, $(-2,0)$, with $\mathrm{E}[X]=-1$;</li>
+        <li>gains only, $(0,2)$, with $\mathrm{E}[X]=1$;</li>
+        <li>gains and losses, $(-1,1)$, with $\mathrm{E}[X]=0$.</li>
+      </ul>
+      <p>Compare</p>
+      $$U(X)=\tfrac12\,u(x_1)+\tfrac12\,u(x_2)\quad\text{with}\quad u(\mathrm{E}[X]).$$
+      <p>If $U(X)\lt u(\mathrm{E}[X])$, the individual is risk averse; if $U(X)\gt u(\mathrm{E}[X])$, risk loving; if they are equal, risk neutral. Geometrically, $U(X)$ is the midpoint of the chord joining the two outcomes on the curve, and $u(\mathrm{E}[X])$ is the height of the curve at $\mathrm{E}[X]$, as in the <a href="choice-under-uncertainty.html#risk-aversion-frame">Risk Aversion</a> frame. Chord below the curve: risk averse. Chord above the curve: risk loving.</p>
+      <p>Each table entry reads $U(X)$ versus $u(\mathrm{E}[X])$:</p>
+      <table class="data-table lottery-table">
+        <thead>
+          <tr><th></th><th>$(-2,0)$</th><th>$(0,2)$</th><th>$(-1,1)$</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Figure 1</td><td>$\tfrac12 u(-2)\gt -1$<br>loving</td><td>$\tfrac12 u(2)\lt 1$<br>averse</td><td>$0=0$<br>neutral</td></tr>
+          <tr><td>Figure 2</td><td>$-2\lt -1$<br>averse</td><td>$2\gt 1$<br>loving</td><td>$0=0$<br>neutral</td></tr>
+          <tr><td>Figure 3</td><td>$\tfrac12 u(-2)\gt -2$<br>loving</td><td>$\tfrac12 u(2)\lt 1$<br>averse</td><td>$-\tfrac12\lt 0$<br>averse</td></tr>
+          <tr><td>Figure 4</td><td>$-1=-1$<br>neutral</td><td>$2=2$<br>neutral</td><td>$\tfrac12\gt 0$<br>loving</td></tr>
+        </tbody>
+      </table>
+      <p>In Figures 1 and 3, $u(\pm 2)$ falls between gridlines, but we do not need its value. We only need to see that $u(2)$ is below 2 (Figures 1 and 3), that $u(-2)$ is above $-2$ (Figure 1), and that $u(-2)$ is above $-4$ (Figure 3).</p>
+      <ul>
+        <li>Figures 1 and 2 can be read straight off the first two columns.</li>
+        <li>Figure 4 is risk loving only for the gamble that mixes gains and losses.</li>
+        <li>Loss aversion does not fit the averse/loving mold, so we adapt. Figure 3 behaves like Figure 1 on the first two lotteries. On the third, Figure 1 is indifferent, but Figure 3 rejects the fair gamble: $U(X)=\tfrac12(-2)+\tfrac12(1)=-\tfrac12\lt 0$. Losing 1 costs 2 utils, while winning 1 brings only 1. That gap between $u(-1)$ and $u(1)$, not the curvature, is loss aversion.</li>
+      </ul>
+      <p>Figures 1 and 3 are both risk averse in gains and risk loving in losses, so Figure 1&rsquo;s statement fits Figure 3 too. Only Figure 3 displays loss aversion, though, and each statement is used at most once. So Figure 3 takes loss aversion, and Figure 1 keeps its statement.</p>
+      <p><strong>The three unused statements.</strong></p>
+      <ul>
+        <li><em>Risk loving for all gambles.</em> This needs increasing marginal utility everywhere, or &ldquo;loving&rdquo; in every column. No figure fits. Figure 4 comes closest, but it is risk neutral for gambles with only gains or only losses.</li>
+        <li><em>Risk averse for all gambles.</em> This needs decreasing marginal utility everywhere, or &ldquo;averse&rdquo; in every column. No figure fits: every row of the table has a &ldquo;loving&rdquo; entry.</li>
+        <li><em>Risk neutral for all gambles.</em> This needs a single straight line, or &ldquo;neutral&rdquo; in every column. Figure 4 is straight on each side but bends at 0.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="frame" id="midterm-1-q4">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 4</p>
+    </div>
+    <div class="frame-content">
+      <p>According to Sapolsky (<em>Behave</em>, &ldquo;The Amygdala&rdquo;), if you asked amygdala experts what behavior their favorite brain structure brings to mind, what would top their list? Mark all that apply.</p>
+      <p><span class="structure">Answer.</span> Fear and anxiety.</p>
+      <p>The answer is in the <a href="brain-biology.html#amygdala">quote</a> from the notes: &ldquo;if you asked amygdala experts what behavior their favorite brain structure brings to mind, &lsquo;aggression&rsquo; wouldn&rsquo;t top their list. It would be fear and anxiety.&rdquo;</p>
+      <ul>
+        <li><em>Aggression.</em> <strong>Incorrect.</strong> This is the trap. The amygdala is involved in aggression, and Sapolsky says so, but aggression is precisely what would not top the experts&rsquo; list.</li>
+        <li><em>Pleasure.</em> <strong>Incorrect.</strong> Reward and pleasure belong to the <a href="brain-biology.html#dopamine">dopamine</a> system. In Sapolsky&rsquo;s words, &ldquo;the amygdala isn&rsquo;t about the pleasure of experiencing pleasure.&rdquo;</li>
+        <li><em>Disgust.</em> <strong>Incorrect.</strong> In the reading, disgust is processed by the insular cortex, which then signals the amygdala.</li>
+        <li><em>Trust.</em> <strong>Incorrect.</strong> It is the opposite: &ldquo;the amygdala injects implicit distrust and vigilance into social decision making.&rdquo;</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="frame" id="midterm-1-q5">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 5</p>
+    </div>
+    <div class="frame-content">
+      <p>In the experiment where a monkey presses a lever to obtain a raisin, in which phase do we see the highest release of dopamine?</p>
+      <p><span class="structure">Answer.</span> When the light comes on, signaling the start of a reward trial.</p>
+      <p>From the <a href="brain-biology.html#dopamine-3">notes</a>: &ldquo;lots of dopamine is released when the light first comes on, signaling the start of the reward trial, before the monkey starts lever pressing.&rdquo;</p>
+      <ul>
+        <li><em>While the monkey is pressing the lever.</em> <strong>Incorrect.</strong> The burst comes before the pressing starts.</li>
+        <li><em>When the monkey receives the raisin, before the monkey eats the raisin.</em> <strong>Incorrect.</strong> This is the trap. The monkey is well trained, so the raisin is exactly what it expects, and an expected raisin brings &ldquo;only a small increase in dopamine.&rdquo;</li>
+        <li><em>After the monkey eats the raisin.</em> <strong>Incorrect.</strong> Same reason: eating the raisin is no news to the monkey.</li>
+        <li><em>When the light goes off at the end of the trial.</em> <strong>Incorrect.</strong> The light that releases dopamine is the one that announces a reward, at the start of the trial.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="frame" id="midterm-1-q6">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 6</p>
+    </div>
+    <div class="frame-content">
+      <p>Briefly explain your answer in Q5.</p>
+      <p><span class="structure">Answer.</span> Dopamine is about the anticipation of a reward, not the reward itself.</p>
+      <p>The dopamine system <a href="brain-biology.html#dopamine-3">codes for discrepancy from expectation</a>. For a well-trained monkey, the raisin is no surprise, so it brings only a small increase in dopamine. The news is the light: it is the first sign that a reward is on its way, and that is when dopamine is released.</p>
+      <p>Why would evolution favor anticipation? Dopamine fuels the <em>pursuit</em> of a reward. It sends the monkey to the lever, as it kept the fox jumping for the grapes. An animal that felt nothing until the food was in its mouth would have little reason to work for it.</p>
+    </div>
+  </section>
+
+  <section class="frame" id="midterm-1-q7">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 1&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 7</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider the following rule of thumb for making a choice:</p>
+      <p>&ldquo;Pick your top three choices. Among them, find the two that are easiest to compare. Choose the better of those two, ignoring the third.&rdquo;</p>
+      <p>Fill in the blanks: This rule of thumb is a ______ that explains the ______ effect.</p>
+      <p><span class="structure">Answer.</span> This rule of thumb is a <strong>heuristic</strong> that explains the <strong>decoy</strong> effect.</p>
+      <p>A rule of thumb, a quick but imperfect mental shortcut, is what the notes call a <a href="brain-biology.html#heuristics-biases">heuristic</a>. A <em>bias</em> is something else: the systematic error a heuristic can lead to.</p>
+      <p>Why the decoy effect? A decoy is easy to compare with the option that beats it. In the <a href="behavioral-choice-certainty.html#decoy-effect">Economist example</a>, the print subscription and the print + web subscription both cost <span>$</span>125, so they are by far the easiest pair to compare. The rule picks the better of the two, print + web, and ignores the web subscription. That is exactly the pull of the decoy. Every decoy effect is a menu effect, but this rule explains the decoy effect specifically, because it needs an option that is easy to compare with another.</p>
     </div>
   </section>
 
