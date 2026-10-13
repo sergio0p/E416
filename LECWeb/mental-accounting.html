@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="kahneman-tversky-1981.html">
+  <meta name="nav-next" content="problem-sets-answer-key.html">
+  <title>Mental Accounting | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+  <style>
+    /* Disclaimer under the chapter title: what the chapter summarizes, linked to the PDF */
+    .section-header .ma-disclaimer {
+      max-width: 36rem;
+      margin: 2rem auto 0;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* Quoted passages from the paper. The script below wraps each word in a
+       .ma-word span and fills them in while the frame is pinned. */
+    .ma-quote { margin: 0.5rem 0 0; font-size: 1.1rem; line-height: 1.6; }
+    .ma-cite { margin: 0.75rem 0 0; text-align: right; color: var(--text-secondary); }
+
+    /* A pause in an unpinned frame: blank space above the next scroll-reveal item,
+       so a stretch of scrolling passes before it appears. */
+    .ma-pause { margin-top: 20vh; }
+
+    /* Framing cards, as in kahneman-tversky-1981.html: one block per framing of the
+       same problem; a click turns the card over to the next framing, and after the
+       last one back to the first. Every framing sits in the same grid cell on both
+       sides, so the card is always as tall as its tallest framing. Bodies are
+       .kt-body, not .block-body, so the theme's block-flip script leaves them alone. */
+    .kt-card { perspective: 1000px; cursor: pointer; margin: 0.6rem 0 0.3rem; }
+    .kt-card:focus:not(:focus-visible) { outline: none; }
+    .kt-inner {
+      display: grid;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(.2, .8, .2, 1);
+    }
+    .kt-side {
+      grid-area: 1 / 1;
+      display: grid;
+      min-width: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .kt-side-back { transform: rotateY(180deg); }
+    .kt-face { grid-area: 1 / 1; min-width: 0; display: flex; visibility: hidden; }
+    .kt-face.kt-active { visibility: visible; }
+    .kt-face .block { width: 100%; margin: 0; display: flex; flex-direction: column; }
+    .kt-body { flex: 1; background: #fff8e1; color: #000000; padding: 1rem; }
+
+    /* Position marker in the title: which framing of how many */
+    .kt-step { float: right; margin-left: 1rem; font-weight: normal; font-size: 0.85em; }
+  </style>
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="mental-accounting">
+    <div class="section-title-box">
+      <h1>Mental Accounting</h1>
+    </div>
+    <p class="ma-disclaimer">The following summarizes Thaler, R. H. (1999), &ldquo;<a href="https://uncch.instructure.com/courses/128467/files/16576472" target="_blank" rel="noopener">Mental Accounting Matters</a>,&rdquo; <em>Journal of Behavioral Decision Making</em>, 12(3), 183&ndash;206. It is recommended that you read the original article besides the summary here.</p>
+
+    <!-- Table of Contents: in-page anchors to each frame's id -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#small-annoyances" style="margin-left: 1rem;">1. Small Annoyances</a>
+      <a href="#swiss-vacation" style="margin-left: 1rem;">2. Swiss Vacation</a>
+      <a href="#king-size-quilt" style="margin-left: 1rem;">3. King-Size Quilt</a>
+      <a href="#three-components" style="margin-left: 1rem;">4. Three Components</a>
+      <br>
+      <a href="#value-function" style="margin-left: 1rem;">5. Value Function</a>
+      <a href="#framing-outcomes" style="margin-left: 1rem;">6. Framing Outcomes</a>
+      <a href="#jacket-calculator" style="margin-left: 1rem;">7. Jacket &amp; Calculator</a>
+      <a href="#hedonic-editing" style="margin-left: 1rem;">8. Hedonic Editing</a>
+      <br>
+      <a href="#temporal-spacing" style="margin-left: 1rem;">9. Temporal Spacing</a>
+      <a href="#temporal-separation" style="margin-left: 1rem;">10. Temporal Separation</a>
+    </nav>
+  </section>
+
+  <!-- Frame 1: first example on p. 183 of the paper -->
+  <section class="frame" id="small-annoyances">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Thaler&rsquo;s Examples</h2>
+      <p class="frame-subtitle">Insurance Against Small Annoyances</p>
+    </div>
+    <div class="frame-content">
+      <blockquote class="ma-quote">&ldquo;A former colleague of mine, a professor of finance, prides himself on being a thoroughly rational man. Long ago he adopted a clever strategy to deal with life&rsquo;s misfortunes. At the beginning of each year he establishes a target donation to the local United Way charity. Then, if anything untoward happens to him during the year, for example an undeserved speeding ticket, he simply deducts this loss from the United Way account. He thinks of it as an insurance policy against small annoyances.&rdquo;</blockquote>
+      <p class="ma-cite">Thaler (1999), p. 183</p>
+    </div>
+  </section>
+
+  <!-- Frame 2: second example, pp. 183-184 of the paper -->
+  <section class="frame" id="swiss-vacation">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Thaler&rsquo;s Examples</h2>
+      <p class="frame-subtitle">A Vacation in Switzerland</p>
+    </div>
+    <div class="frame-content">
+      <blockquote class="ma-quote">&ldquo;A few years ago I gave a talk to a group of executives in Switzerland. After the conference my wife and I spent a week visiting the area. At that time the Swiss franc was at an all-time high relative to the US dollar, so the usual high prices in Switzerland were astronomical. My wife and I comforted ourselves that I had received a fee for the talk that would easily cover the outrageous prices for hotels and meals. Had I received the same fee a week earlier for a talk in New York though, the vacation would have been much less enjoyable.&rdquo;</blockquote>
+      <p class="ma-cite">Thaler (1999), pp. 183&ndash;184</p>
+    </div>
+  </section>
+
+  <!-- Frame 3: third example, p. 184 of the paper -->
+  <section class="frame" id="king-size-quilt">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Thaler&rsquo;s Examples</h2>
+      <p class="frame-subtitle">The King-Size Quilt</p>
+    </div>
+    <div class="frame-content">
+      <blockquote class="ma-quote">&ldquo;A friend of mine was once shopping for a quilted bedspread. She went to a department store and was pleased to find a model she liked on sale. The spreads came in three sizes: double, queen and king. The usual prices for these quilts were $\$200$, $\$250$ and $\$300$ respectively, but during the sale they were all priced at only $\$150$. My friend bought the king-size quilt and was quite pleased with her purchase, though the quilt did hang a bit over the sides of her double bed.&rdquo;</blockquote>
+      <p class="ma-cite">Thaler (1999), p. 184</p>
+    </div>
+  </section>
+
+  <!-- Frame 4: the paper's three components of mental accounting (p. 184), summarized -->
+  <section class="frame overlay-frame" id="three-components">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Three Components of Mental Accounting</h2>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li class="overlay" data-overlay="1"><strong>Outcomes and decisions.</strong> How outcomes are perceived and experienced, and how decisions are made and later evaluated. Mental accounts supply the inputs for both the <em>ex ante</em> and the <em>ex post</em> cost&ndash;benefit analysis. In the quilt example, the value of the &ldquo;deal&rdquo; (<em>transaction utility</em>) enters the purchase decision.</li>
+        <li class="overlay" data-overlay="2"><strong>Assigning activities to accounts.</strong> Spending is grouped into categories (housing, food, &hellip;), sometimes held to budgets; money to spend is labeled as flows (regular income versus windfalls) and as stocks (cash on hand, home equity, pension wealth). The Swiss vacation was paid out of a &ldquo;Swiss lecture&rdquo; account; the United Way account is a flexible way to absorb small losses.</li>
+        <li class="overlay" data-overlay="3"><strong>How often accounts are evaluated.</strong> Accounts can be balanced daily, weekly or yearly, and defined narrowly or broadly: <em>choice bracketing</em>. Poker players are told to &ldquo;never count your money while you&rsquo;re sitting at the table,&rdquo; and the same advice holds for other risky decisions, such as investing.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 5: the value function's three features (p. 185), in the course's notation -->
+  <section class="frame overlay-frame" id="value-function">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Value Function</h2>
+    </div>
+    <div class="frame-content">
+      <p>Thaler assumes the value function (i.e., the utility function $u$) from Prospect Theory:</p>
+      <ul>
+        <li class="overlay" data-overlay="1">The reference point is normalized to zero, and $u(0)=0$.</li>
+        <li class="overlay" data-overlay="2">Risk loving in the loss domain: $u^{\prime}(x)$ is increasing for $x\lt 0$. Risk averse in the gain domain: $u^{\prime}(x)$ is decreasing for $x\gt 0$.</li>
+        <li class="overlay" data-overlay="3">Loss aversion: $-u(-x)\gt u(x)$ for $x\gt 0$.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 6: minimal, topical and comprehensive accounts (p. 186), summarized -->
+  <section class="frame overlay-frame" id="framing-outcomes">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ways of Framing Outcomes</h2>
+    </div>
+    <div class="frame-content">
+      <p>Outcomes can be framed in three ways:</p>
+      <div>
+        <div class="block overlay" data-overlay="1">
+          <div class="block-title">Minimal Account</div>
+          <div class="block-body">Compare two options by their differences<br>only, ignoring everything they have in common.</div>
+        </div>
+        <div class="block overlay" data-overlay="2">
+          <div class="block-title">Topical Account</div>
+          <div class="block-body">Relate the consequences of a choice to a reference level set by the context in which the decision arises.</div>
+        </div>
+        <div class="block overlay" data-overlay="3">
+          <div class="block-title">Comprehensive Account</div>
+          <div class="block-body">Evaluate each option by its effect on total wealth: current wealth, future earnings, the outcomes of other risky holdings, and so on. Economic theory generally assumes this one.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame 7: the jacket and calculator problem (p. 186). Static: no pin, no reveal.
+       Flip card: the prices are the same on both sides; what changes is the product on
+       sale. Front, the jacket; back, the calculator. 1981 prices scaled by about 3.6
+       (CPI) and rounded: jacket $450, calculator $55, a $20 discount on either. -->
+  <section class="frame" id="jacket-calculator">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Framing</h2>
+      <p class="frame-subtitle">The Minimal, Topical, Comprehensive Accounts in Action</p>
+    </div>
+    <div class="frame-content">
+      <div class="kt-card" role="button" tabindex="0" aria-label="Flip to the other version">
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">The Jacket Example</div>
+            <div class="kt-body">Imagine that you are about to purchase a jacket for $\$450$ and a calculator for $\$55$. The jacket salesman informs you that the jacket you wish to buy is on sale for $\$430$ at the other branch of the store, located 20 minutes drive away. Would you make the trip to the other store?</div>
+          </div>
+        </div>
+        <div class="kt-face">
+          <div class="block">
+            <div class="block-title">The Calculator Example</div>
+            <div class="kt-body">Imagine that you are about to purchase a jacket for $\$450$ and a calculator for $\$55$. The calculator salesman informs you that the calculator you wish to buy is on sale for $\$35$ at the other branch of the store, located 20 minutes drive away. Would you make the trip to the other store?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Below the card: no pin; each line fades in on scroll (.scroll-reveal) -->
+      <p class="scroll-reveal ma-pause">The respective accounts in action:</p>
+      <ul>
+        <li class="scroll-reveal"><strong>Minimal account:</strong> $\$20$ against the opportunity cost of 20 minutes in both examples, so the answer should be the same.</li>
+        <li class="scroll-reveal"><strong>Comprehensive account:</strong> with $W^*$ the wealth after both purchases, $u(W^*+\$20)$ against $u(W^*+\text{opportunity cost of 20 minutes})$ in both examples, so again the same answer.</li>
+        <li class="scroll-reveal"><strong>Topical account:</strong> the saving is judged against the price of the product on sale, $u(-35)-u(-55)$ for the calculator versus $u(-430)-u(-450)$ for the jacket. Since $u^{\prime}(x)$ is increasing for $x\lt 0$, the first is larger: people drive for the calculator discount only.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 8: hedonic editing; the four principles quoted from p. 187 -->
+  <section class="frame overlay-frame" id="hedonic-editing">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Hedonic Editing</h2>
+    </div>
+    <div class="frame-content">
+      <p>Hedonic editing:</p>
+      <ul>
+        <li class="overlay" data-overlay="1">Segregate gains (because of decreasing marginal utility for gains).</li>
+        <li class="overlay" data-overlay="2">Integrate losses (because of increasing marginal utility for losses).</li>
+        <li class="overlay" data-overlay="3">Integrate smaller losses with larger gains (to offset loss aversion).</li>
+        <li class="overlay" data-overlay="4">Segregate small gains (silver linings) from larger losses (because the gain function is steepest at the origin, the utility of a small gain can exceed the utility of slightly reducing a large loss).</li>
+      </ul>
+      <div class="overlay" data-overlay="5">$$\nu(x,y)=\max\left(u(x)+u(y),\,u(x+y)\right)$$</div>
+    </div>
+  </section>
+
+  <!-- Frame 9: temporal spacing -->
+  <section class="frame overlay-frame" id="temporal-spacing">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Temporal Spacing</h2>
+      <p class="frame-subtitle">As Hedonic Editing</p>
+    </div>
+    <div class="frame-content">
+      <ul>
+        <li class="overlay" data-overlay="1">Subjects were given two financial outcomes, $x$ and $y$ (for example, a gain of $\$30$ and a loss of $\$9$), and asked who would be happier: someone who had both on the same day, or someone who had them a week or two apart.</li>
+        <li class="overlay" data-overlay="2">Separation in time makes it easier to keep the outcomes apart: close in time, they are integrated, $u(x+y)$; separate in time, they are segregated, $u(x)+u(y)$.</li>
+        <li class="overlay" data-overlay="3">Under hedonic editing, the preferred spacing is the one that attains $\nu(x,y)=\max\left(u(x)+u(y),\,u(x+y)\right)$: separate in time if $u(x)+u(y)\gt u(x+y)$, close in time otherwise.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame 10: Ariely & Zauberman (2000), linked to the Canvas PDF -->
+  <section class="frame overlay-frame" id="temporal-separation">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Temporal Separation</h2>
+      <p class="frame-subtitle">On the Making of an Experience: The Effects of Breaking and Combining Experiences on their Overall Evaluation</p>
+    </div>
+    <div class="frame-content">
+      <p><a href="https://uncch.instructure.com/courses/128467/files/17153807" target="_blank" rel="noopener">Ariely &amp; Zauberman (2000)</a></p>
+      <ul>
+        <li class="overlay" data-overlay="1">Experiment 1, &ldquo;annoying sounds&rdquo;: an alarm-like tone made of ten 5-second blocks at varying loudness.
+          <ul>
+            <li>Continuous: the blocks play back to back.</li>
+            <li>Discrete: 5-second silences break the tone into five parts.</li>
+          </ul>
+        </li>
+        <li class="overlay" data-overlay="2">Experiment 2, &ldquo;performance feedback&rdquo;: a stock portfolio&rsquo;s value changes over time on screen.
+          <ul>
+            <li>Continuous: the value changes smoothly.</li>
+            <li>Discrete: it changes in five distinct steps, over the same total time.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="kahneman-tversky-1981.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Tversky &amp; Kahneman (1981)</a>
+    <a href="problem-sets-answer-key.html" style="color: var(--crane-blue); text-decoration: none;">Problem Sets' Answer Key &rarr;</a>
+  </div>
+
+  <!-- KaTeX (katex-macros.js renders the page on load) -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <!-- Framing cards (copied from kahneman-tversky-1981.html). Runs during parsing,
+       before DOMContentLoaded, so KaTeX (which renders on DOMContentLoaded) also
+       renders the cloned back side. -->
+  <script>
+    document.querySelectorAll('.kt-card').forEach(card => {
+      const faces = [...card.querySelectorAll(':scope > .kt-face')];
+      const n = faces.length;
+      faces.forEach((face, i) => {
+        const step = document.createElement('span');
+        step.className = 'kt-step';
+        step.textContent = `${i + 1}/${n}`;
+        face.querySelector('.block-title').appendChild(step);
+      });
+
+      // Two sides, each holding every framing; the back side holds clones.
+      const inner = document.createElement('div');
+      inner.className = 'kt-inner';
+      const sides = [0, 1].map(s => {
+        const side = document.createElement('div');
+        side.className = s ? 'kt-side kt-side-back' : 'kt-side';
+        faces.forEach(face => side.appendChild(s ? face.cloneNode(true) : face));
+        inner.appendChild(side);
+        return side;
+      });
+      card.appendChild(inner);
+
+      const show = (side, i) => [...side.children].forEach((face, j) => face.classList.toggle('kt-active', j === i));
+      let turns = 0, current = 0;
+      show(sides[0], 0);
+      show(sides[1], 1 % n);
+      sides[1].setAttribute('aria-hidden', 'true');
+
+      const flip = () => {
+        current = (current + 1) % n;
+        turns += 1;
+        const up = sides[turns % 2], down = sides[(turns + 1) % 2];
+        show(up, current);           // still facing away: load the next framing
+        up.removeAttribute('aria-hidden');
+        down.setAttribute('aria-hidden', 'true');
+        inner.style.transform = `rotateY(${turns * 180}deg)`;
+      };
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      });
+    });
+  </script>
+
+  <script>
+    // Where a frame pins: with `target` centered on the screen, or earlier if the
+    // frame's title bar would otherwise ride up past the top edge. Returns the
+    // frame's on-screen top while pinned, for a `top <y>px` start.
+    const pinTop = (frame, target) => {
+      const f = frame.getBoundingClientRect(), t = target.getBoundingClientRect();
+      return Math.max(0, window.innerHeight / 2 - (t.top - f.top + t.height / 2));
+    };
+
+    // Quote reveal: when the quote reaches the middle of the screen the frame pins
+    // and the words fill in, scrubbed by scroll. Once the last word is in, the frame
+    // stays pinned a little longer so the whole passage can be read, then scrolls on.
+    document.querySelectorAll('.ma-quote').forEach(quote => {
+      const frame = quote.closest('.frame');
+      const words = quote.textContent.trim().split(/\s+/).map(w => {
+        const span = document.createElement('span');
+        span.className = 'ma-word';
+        span.textContent = w;
+        return span;
+      });
+      quote.replaceChildren(...words.flatMap((span, i) => i ? [' ', span] : [span]));
+
+      gsap.set(words, { opacity: 0 });
+      const reveal = 0.1 * words.length;
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: frame,
+          start: () => `top ${pinTop(frame, quote)}px`,
+          end: '+=120%',
+          pin: true,
+          scrub: true,
+          invalidateOnRefresh: true
+        }
+      })
+        .to(words, { opacity: 1, stagger: 0.1, duration: 0.3, ease: 'none' })
+        .to({}, { duration: 0.3 * reveal });   // hold: read the full passage
+    });
+
+    // Overlay frames (as in brain-biology.html): pin the frame and reveal one step
+    // per dwell of scrolling. Unlike brain-biology, the content never slides up
+    // under the title bar: the gap between the title and the first item is fixed.
+    document.querySelectorAll('.overlay-frame').forEach(frame => {
+      const overlays = frame.querySelectorAll('.overlay');
+      const count = overlays.length;
+      if (count === 0) return;
+      overlays[0].classList.add('revealed');
+      if (count === 1) return;   // nothing to step through: show it, don't pin
+      const scrollPerOverlay = window.innerHeight * 0.9;
+      const totalScroll = scrollPerOverlay * count;
+
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: `+=${totalScroll}`,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const currentStep = Math.min(Math.floor(self.progress * count), count - 1);
+          overlays.forEach((overlay, i) => {
+            const isOnly = overlay.hasAttribute('data-overlay-only');
+            overlay.classList.toggle('revealed', isOnly ? i === currentStep : i <= currentStep);
+          });
+        }
+      });
+    });
+
+    // Scroll reveal, no pin (lecture-compose skill): the frame just grows down the page.
+    gsap.utils.toArray('.scroll-reveal').forEach(el => {
+      gsap.set(el, { opacity: 0, y: 15 });
+      ScrollTrigger.create({
+        trigger: el, start: 'top 85%', end: 'top 85%',
+        onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }),
+        onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
+      });
+    });
+  </script>
+
+</body>
+</html>
