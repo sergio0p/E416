@@ -58,6 +58,62 @@
 
     /* Position marker in the title: which framing of how many */
     .kt-step { float: right; margin-left: 1rem; font-weight: normal; font-size: 0.85em; }
+
+    /* Comic-book callouts on a horizontally panning stage, copied from
+       probabilities-and-beliefs.html (Biases frame). The list sits on the left of a
+       wide canvas; the balloon for a clicked item opens at the far right, joined to
+       the item by a long amber tail, and the stage pans to it. Clicking the same
+       item again pans back and hides it. Widths are set by the script. */
+    .callout-stage {
+      width: 100%;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .callout-canvas {
+      position: relative;
+      display: grid;
+      grid-template-columns: var(--stage-w, 100%) var(--box-w, 420px);
+      column-gap: var(--stem-gap, 200px);
+      align-items: start;
+    }
+    .callout-list { grid-column: 1; min-width: 0; position: relative; z-index: 1; }   /* text stays readable over a crossing tail */
+    .callout-item { cursor: pointer; }   /* plain text; the pointer cursor is the only affordance */
+    .callout-item:focus-visible { outline: none; }
+    .callout-box { grid-column: 2; grid-row: 1; min-width: 0; position: relative; z-index: 1; }
+    .callout-box[hidden] { display: none; }
+    .callout-box .block { width: 100%; margin: 0; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18); }
+    /* The balloon body is styled like .block-body but is not one, so the theme's
+       block-flip script (Ctrl/right-click on a title shows a "?" back) leaves it alone. */
+    .callout-body { background: #fff8e1; color: #000000; padding: 1rem; border-radius: 0 0 6px 6px; }
+    .callout-body > p:first-child { margin-top: 0; }
+    .callout-body > p:last-child { margin-bottom: 0; }
+    /* Flip card: front = the story, back = the arithmetic. Faces share one grid
+       cell so the card is as tall as its taller face and needs no fixed height. */
+    .flip-card { perspective: 900px; cursor: pointer; }
+    .flip-card:focus:not(:focus-visible) { outline: none; }
+    .flip-inner {
+      display: grid;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(.2, .8, .2, 1);
+    }
+    .flip-front, .flip-back {
+      grid-area: 1 / 1;
+      min-width: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flip-back { transform: rotateY(180deg); }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .callout-tails {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+      display: none;
+    }
   </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
@@ -85,6 +141,7 @@
       <br>
       <a href="#temporal-spacing" style="margin-left: 1rem;">9. Temporal Spacing</a>
       <a href="#temporal-separation" style="margin-left: 1rem;">10. Temporal Separation</a>
+      <a href="#accounting-topics" style="margin-left: 1rem;">11. Mental Accounting</a>
     </nav>
   </section>
 
@@ -269,6 +326,152 @@
     </div>
   </section>
 
+  <!-- Frame 11: the rest of the paper, by where the parentheses go. Comic-book
+       callouts as in the Biases frame of probabilities-and-beliefs.html: each item
+       opens a flip card at the far right, front = the story, back = the arithmetic
+       with u(x) = sqrt(x) for gains and -2 sqrt(-x) for losses (whole numbers). -->
+  <section class="frame" id="accounting-topics">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Mental Accounting</h2>
+    </div>
+    <div class="frame-content">
+      <div class="callout-stage">
+        <div class="callout-canvas">
+          <div class="callout-list">
+            <ul>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-transaction">Transaction utility</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-accounts">Opening and closing accounts</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-decoupling">Decoupling</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-budgeting">Budgeting</span></li>
+              <li><span class="callout-item" role="button" tabindex="0" data-callout="callout-bracketing">Bracketing</span></li>
+            </ul>
+          </div>
+
+          <svg class="callout-tails" aria-hidden="true"></svg>
+
+          <div class="callout-box" id="callout-transaction" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Transaction Utility</div>
+                    <div class="callout-body"><p>A hot day at the beach. A cold beer is worth $\$5$ to you and costs $\$4$. A friend will buy it either at a fancy resort hotel, where you expect a beer to cost $\$5$, or at a run-down grocery store, where you expect it to cost $\$3$.</p></div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">The Arithmetic</div>
+                    <div class="callout-body">
+                      <p>${u(x)=\sqrt{x}}$ for $x\ge 0$, ${u(x)=-2\sqrt{-x}}$ for $x\lt 0$.</p>
+                      <p>Price felt as a loss, segregated: ${u(5)+u(-4)}={\sqrt{5}-4}\approx-1.76$. No beer.</p>
+                      <p>Price netted against the beer, integrated: ${u(5-4)}=1$. This is acquisition utility.</p>
+                      <p>Add transaction utility, ${u(p^*-4)}$, with $p^*$ the price you expect:</p>
+                      <p>Resort, $p^*=5$: ${1+u(1)}=2$. Buy.</p>
+                      <p>Grocery store, $p^*=3$: ${1+u(-1)}=-1$. Don&rsquo;t buy.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-accounts" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Opening and Closing Accounts</div>
+                    <div class="callout-body"><p>You bought two stocks for $\$100$ each. Stock A is now worth $\$125$, stock B $\$84$. You need cash and must sell one of them. A gain or loss stays on paper until the stock is sold; selling closes its account.</p></div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">The Arithmetic</div>
+                    <div class="callout-body">
+                      <p>${u(x)=\sqrt{x}}$ for $x\ge 0$, ${u(x)=-2\sqrt{-x}}$ for $x\lt 0$.</p>
+                      <p>An open account stays out of $u$; only a closed one is felt.</p>
+                      <p>Sell A: $u(25)=5$.</p>
+                      <p>Sell B: $u(-16)=-8$.</p>
+                      <p>You sell the winner, even though taxes favor selling the loser. If B must go, sell it the same day as A: ${u(25-16)}=3\gt{u(25)+u(-16)}=-3$.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-decoupling" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Decoupling</div>
+                    <div class="callout-body"><p>Dinner costs $\$100$. You pay cash at the table, or you put it on the credit card and see it weeks later on a $\$676$ monthly bill, next to $\$576$ of other charges.</p></div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">The Arithmetic</div>
+                    <div class="callout-body">
+                      <p>${u(x)=\sqrt{x}}$ for $x\ge 0$, ${u(x)=-2\sqrt{-x}}$ for $x\lt 0$.</p>
+                      <p>Cash: the payment is felt on its own, $u(-100)=-20$.</p>
+                      <p>Card: the payment is folded into the bill, ${u(-676)-u(-576)}={-52+48}=-4$.</p>
+                      <p>The same $\$100$ hurts a fifth as much on the card.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-budgeting" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Budgeting</div>
+                    <div class="callout-body"><p>A lecture in Switzerland pays a $\$2{,}500$ fee, and the week of vacation after it costs $\$900$. Either the fee and the vacation share a &ldquo;Swiss lecture&rdquo; account, or the fee came a week earlier, for a lecture in New York, and sits in another account.</p></div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">The Arithmetic</div>
+                    <div class="callout-body">
+                      <p>${u(x)=\sqrt{x}}$ for $x\ge 0$, ${u(x)=-2\sqrt{-x}}$ for $x\lt 0$.</p>
+                      <p>One account, integrated: ${u(2500-900)}={u(1600)}=40$.</p>
+                      <p>Two accounts, segregated: ${u(2500)+u(-900)}={50-60}=-10$.</p>
+                      <p>Same fee, same prices: the Swiss lecture account takes the sting out of the vacation.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" id="callout-bracketing" hidden>
+            <div class="flip-card" role="button" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="block">
+                    <div class="block-title">Bracketing</div>
+                    <div class="callout-body"><p>Samuelson offers a colleague a coin flip: win $\$200$ or lose $\$100$. The colleague turns down one flip but would take a hundred of them.</p></div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="block">
+                    <div class="block-title">The Arithmetic</div>
+                    <div class="callout-body">
+                      <p>${u(x)=\sqrt{x}}$ for $x\ge 0$, ${u(x)=-2\sqrt{-x}}$ for $x\lt 0$.</p>
+                      <p>One flip: ${\tfrac12u(200)+\tfrac12u(-100)}\approx{7.07-10}=-2.93$. Reject.</p>
+                      <p>Two flips, each judged alone: ${2\times(-2.93)}=-5.86$.</p>
+                      <p>Two flips judged together: win $\$400$ or $\$100$, or lose $\$200$, with probabilities $\tfrac14$, $\tfrac12$, $\tfrac14$: ${\tfrac14u(400)+\tfrac12u(100)+\tfrac14u(-200)}\approx{5+5-7.07}=2.93$. Accept.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
@@ -409,6 +612,93 @@
         onLeaveBack: () => gsap.to(el, { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' }),
       });
     });
+  </script>
+
+  <script>
+    // Comic-book callouts (copied from probabilities-and-beliefs.html): click a list
+    // item, its balloon opens at the far right of the stage with a long tail from the
+    // item, and the stage pans to it; click the same item again to pan back and close
+    // it. Clicking another item switches balloons. Clicking the balloon flips it:
+    // story / arithmetic.
+    (function initCallouts() {
+      const AMBER = '#f9a825';
+      document.querySelectorAll('.callout-stage').forEach(stage => {
+        const canvas = stage.querySelector('.callout-canvas');
+        const tails  = stage.querySelector('.callout-tails');
+        const boxes  = Array.from(stage.querySelectorAll('.callout-box'));
+        const tail   = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        tail.setAttribute('fill', AMBER);
+        tails.appendChild(tail);
+        let open = null;
+
+        const activate = (el, fn) => {
+          el.addEventListener('click', fn);
+          el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); }
+          });
+        };
+
+        // Sizes. The list column is at most 340px wide; the balloon at most 420px.
+        // The tail is at least 160px long, and longer when the stage has room, so
+        // the balloon sits at the extreme right. On a wide stage everything fits
+        // and nothing pans; on a phone the canvas overflows and the stage pans.
+        function layout() {
+          const stageW = stage.clientWidth;
+          const listW = Math.min(stageW, 340);
+          const wide  = stageW >= listW + 160 + 300;          // room for a 300px balloon and a 160px tail
+          const boxW  = wide ? Math.min(420, stageW - listW - 160) : Math.min(420, Math.round(stageW * 0.85));
+          const gap   = wide ? stageW - listW - boxW : 160;
+          canvas.style.setProperty('--stage-w', `${listW}px`);
+          canvas.style.setProperty('--box-w', `${boxW}px`);
+          canvas.style.setProperty('--stem-gap', `${gap}px`);
+          canvas.style.width = open ? `${listW + gap + boxW}px` : '100%';
+          if (open) drawTail(open);
+        }
+
+        // Tail: tip at the clicked item's right end, base on the balloon's title bar
+        function drawTail(box) {
+          const item = stage.querySelector(`.callout-item[data-callout="${box.id}"]`);
+          const c = canvas.getBoundingClientRect();
+          const i = item.getBoundingClientRect();
+          const t = box.querySelector('.block-title').getBoundingClientRect();
+          const tipX = i.right - c.left + 8, tipY = (i.top + i.bottom) / 2 - c.top;
+          const baseX = t.left - c.left + 1;
+          tail.setAttribute('points', `${tipX},${tipY} ${baseX},${t.top - c.top + 5} ${baseX},${t.bottom - c.top - 5}`);
+          tails.style.display = 'block';
+        }
+
+        function show(box) {
+          boxes.forEach(b => { b.hidden = (b !== box); });
+          box.querySelector('.flip-card').classList.remove('flipped');   // always open on the front
+          open = box;
+          layout();
+          requestAnimationFrame(() => {
+            drawTail(box);
+            stage.scrollTo({ left: stage.scrollWidth, behavior: 'smooth' });
+          });
+        }
+        function close() {
+          if (!open) return;
+          const box = open;
+          open = null;
+          stage.scrollTo({ left: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            box.hidden = true;
+            tails.style.display = 'none';
+            layout();
+          }, 450);
+        }
+
+        stage.querySelectorAll('.callout-item').forEach(item => {
+          const box = document.getElementById(item.dataset.callout);
+          if (box) activate(item, () => (open === box ? close() : show(box)));
+        });
+        // Clicking the balloon flips it between story and arithmetic
+        stage.querySelectorAll('.flip-card').forEach(card => activate(card, () => card.classList.toggle('flipped')));
+        layout();
+        window.addEventListener('resize', layout);
+      });
+    })();
   </script>
 
 </body>
