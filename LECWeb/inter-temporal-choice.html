@@ -101,19 +101,15 @@
   </section>
 
   <!-- Frame: Hyperbolic discounting (source: 1158-1167) -->
-  <section class="frame overlay-frame" id="hyperbolic">
+  <section class="frame" id="hyperbolic">
     <div class="frame-title-bar">
       <h2 class="frame-title">Behavioral Models of Intertemporal Choice</h2>
       <p class="frame-subtitle">Hyperbolic discounting</p>
     </div>
     <div class="frame-content">
       <p>The hyperbolic discounting function is:
-      $$D(t)=\bigl(1+\alpha\cdot t \bigr)^{-\gamma/\alpha}.$$</p>
-      <ul style="font-size:0.92em;">
-        <li class="overlay" data-overlay="1">In the limit, $\alpha\searrow 0$, hyperbolic discounting coincides with exponential discounting. Why?</li>
-        <li class="overlay" data-overlay="2">$\lim_{\alpha\searrow 0}\bigl(1+\alpha\cdot t \bigr)^{-\gamma/\alpha}=\exp\left(-\gamma\cdot t\right).$</li>
-        <li class="overlay" data-overlay="3">We assume that $0\lt \alpha,\gamma\lt +\infty$.</li>
-      </ul>
+      $$D(t)=\bigl(1+\alpha\cdot t \bigr)^{-\gamma/\alpha}$$
+      where ${\alpha\gt 0}$ and ${\gamma\gt 0}$. Notice that as ${\alpha\searrow 0}$, the discount factor converges to ${D(t)=\exp(-\gamma\cdot t)=\delta^{t}}$, where ${\delta=\exp(-\gamma)}$. Thus, exponential discounting is a limit case of hyperbolic discounting.</p>
     </div>
   </section>
 
