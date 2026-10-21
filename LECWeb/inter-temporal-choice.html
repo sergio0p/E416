@@ -22,10 +22,15 @@
     .flip-back { position: absolute; top: 0; left: 0; width: 100%; box-sizing: border-box; transform: rotateY(180deg); background: #fff8e1; border-radius: 6px; padding: 0.5rem 0.8rem; }
     .flip-back p { margin: 0; }
     .flip-back .katex-display { margin: 0.4em 0; overflow-x: auto; overflow-y: hidden; }
+    .flip-back.flush-left .katex-display,
+    .flip-back.flush-left .katex-display > .katex { text-align: left; }
     /* The theme's number circle is inline, so a card (a block) would drop below it;
        pin the circle in the left gutter instead. */
     .flip-list > li { position: relative; }
     .flip-list > li::before { position: absolute; left: 0; top: 0.25em; }
+
+    /* Source line under an example (same look as .ma-cite in mental-accounting.html). */
+    .itc-cite { margin: 0.75rem 0 0; text-align: right; color: var(--text-secondary); }
   </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
@@ -47,10 +52,19 @@
       <br>
       <a href="#dynamic-consistency" style="margin-left: 1rem;">5. Dynamic Consistency</a>
       <a href="#dynamic-consistency-reactions" style="margin-left: 1rem;">6. Naive vs. Strategic</a>
-      <!-- HIDDEN (frames 7-8):
-        #lbd-setup Learning by Doing
-        #lbd-questions Questions
+      <a href="#lbd-setup" style="margin-left: 1rem;">7. Learning by Doing</a>
+      <a href="#lbd-naive" style="margin-left: 1rem;">8. Naive Approach</a>
+      <br>
+      <a href="#lbd-strategic" style="margin-left: 1rem;">9. No Commitment</a>
+      <a href="#lbd-commitment" style="margin-left: 1rem;">10. Commitment</a>
+      <!-- HIDDEN (movie example):
+        #procrastination-movies Procrastination (movies)
       HIDDEN -->
+      <a href="#procrastination" style="margin-left: 1rem;">11. Procrastination</a>
+      <a href="#procrastination-exponential" style="margin-left: 1rem;">12. Exponential Agent</a>
+      <br>
+      <a href="#procrastination-sophisticated" style="margin-left: 1rem;">13. Sophisticated Agent</a>
+      <a href="#procrastination-naive" style="margin-left: 1rem;">14. Naive Agent</a>
     </nav>
   </section>
 
@@ -145,7 +159,6 @@
     </div>
   </section>
 
-  <template id="hidden-lbd"><!-- HIDDEN: Learning by Doing exercise (setup + questions) -->
   <!-- Frame: Learning by doing setup (source: 1183-1188) -->
   <section class="frame fs-10pt" id="lbd-setup">
     <div class="frame-title-bar">
@@ -159,21 +172,21 @@
     </div>
   </section>
 
-  <!-- Frame: Learning by doing questions (source: 1189-1195) -->
-  <section class="frame fs-10pt" id="lbd-questions">
+  <!-- Frame: Learning by doing, naive approach -->
+  <section class="frame fs-10pt" id="lbd-naive">
     <div class="frame-title-bar">
       <h2 class="frame-title">A Learning by Doing Exercise</h2>
-      <p class="frame-subtitle">Questions</p>
+      <p class="frame-subtitle">The Naive Approach</p>
     </div>
     <div class="frame-content">
       <ol class="flip-list">
         <li>
           <div class="flip-card" role="button" tabindex="0">
             <div class="flip-inner">
-              <div class="flip-front">Write the discounted utility at period $t=1$ as a function of the savings $s_{1}$, taking $s_{0}$ as given.</div>
-              <div class="flip-back" aria-hidden="true">
-                <p>Consumption is ${c_{1}=W_{1}-s_{1}=2s_{0}-s_{1}}$ in period $1$ and ${c_{2}=W_{2}=2s_{1}}$ in period $2$, so
-                $$U_{1}(s_{1})=\ln(2s_{0}-s_{1})+\beta\delta\ln(2s_{1})$$</p>
+              <div class="flip-front">Write down the discounted utility as a function of $s_{0}$ and $s_{1}$ only.</div>
+              <div class="flip-back flush-left" aria-hidden="true">
+                <p>Consumption is ${c_{0}=100-s_{0},}$ ${c_{1}=2s_{0}-s_{1},}$ and ${c_{2}=2s_{1},}$ so
+                $$U_{0}(s_{0},s_{1})=\ln(100-s_{0})+\beta\delta\ln(2s_{0}-s_{1})+\beta\delta^{2}\ln(2s_{1})$$</p>
               </div>
             </div>
           </div>
@@ -181,12 +194,13 @@
         <li>
           <div class="flip-card" role="button" tabindex="0">
             <div class="flip-inner">
-              <div class="flip-front">Maximize the discounted utility at period $t=1$ and find the optimal savings $s_{1}$ as a function of $s_{0}$.</div>
+              <div class="flip-front">Write the first-order conditions (FOC) for an interior solution.</div>
               <div class="flip-back" aria-hidden="true">
-                <p>The first-order condition is
-                $$-\frac{1}{2s_{0}-s_{1}}+\frac{\beta\delta}{s_{1}}=0$$
-                so
-                $$s_{1}^{*}=\frac{2\beta\delta}{1+\beta\delta}\,s_{0}$$</p>
+                <p>The first-order conditions are:
+                $$\begin{align*}
+                \frac{\partial U_{0}}{\partial s_{0}}&=-\frac{1}{100-s_{0}}+\frac{2\beta\delta}{2s_{0}-s_{1}}=0\\
+                \frac{\partial U_{0}}{\partial s_{1}}&=-\frac{\beta\delta}{2s_{0}-s_{1}}+\frac{\beta\delta^{2}}{s_{1}}=0
+                \end{align*}$$</p>
               </div>
             </div>
           </div>
@@ -194,27 +208,10 @@
         <li>
           <div class="flip-card" role="button" tabindex="0">
             <div class="flip-inner">
-              <div class="flip-front">Assuming that the optimal savings will be chosen in period $t=1$, write the discounted utility at period $t=0$ as a function of $s_{0}$ only.</div>
+              <div class="flip-front">Solve the FOC for the optimal values of $s_{0}$ and $s_{1}$.</div>
               <div class="flip-back" aria-hidden="true">
-                <p>With $s_{1}^{*}$, consumption is ${c_{1}^{*}=2s_{0}-s_{1}^{*}=\frac{2s_{0}}{1+\beta\delta}}$ and ${c_{2}^{*}=2s_{1}^{*}=\frac{4\beta\delta\,s_{0}}{1+\beta\delta}}$, so
-                $$\begin{aligned}U_{0}(s_{0})&=\ln(100-s_{0})+\beta\delta\ln c_{1}^{*}\\
-                &\quad+\beta\delta^{2}\ln c_{2}^{*}\\
-                &=\ln(100-s_{0})\\
-                &\quad+\beta\delta(1+\delta)\ln s_{0}+K\end{aligned}$$
-                where $K$ collects the terms that do not depend on $s_{0}$.</p>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="flip-card" role="button" tabindex="0">
-            <div class="flip-inner">
-              <div class="flip-front">Find the optimal savings at period $t=0$.</div>
-              <div class="flip-back" aria-hidden="true">
-                <p>The first-order condition is
-                $$-\frac{1}{100-s_{0}}+\frac{\beta\delta(1+\delta)}{s_{0}}=0$$
-                so
-                $$s_{0}^{*}=\frac{100\,\beta\delta(1+\delta)}{1+\beta\delta(1+\delta)}$$</p>
+                <p>The second condition gives ${s_{1}=\delta(2s_{0}-s_{1})}$, so ${s_{1}=\frac{2\delta}{1+\delta}\,s_{0}}$ and ${2s_{0}-s_{1}=\frac{2s_{0}}{1+\delta}}$. Substituting into the first condition, ${\frac{1}{100-s_{0}}=\frac{\beta\delta(1+\delta)}{s_{0}}}$, so
+                $$s_{0}^{*}=\frac{100\,\beta\delta(1+\delta)}{1+\beta\delta(1+\delta)}\quad\text{and}\quad s_{1}^{*}=\frac{200\,\beta\delta^{2}}{1+\beta\delta(1+\delta)}$$</p>
               </div>
             </div>
           </div>
@@ -222,7 +219,199 @@
       </ol>
     </div>
   </section>
+
+  <!-- Frame: Learning by doing, strategic approach without commitment -->
+  <section class="frame fs-10pt" id="lbd-strategic">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Learning by Doing Exercise</h2>
+      <p class="frame-subtitle">The Strategic Approach without Commitment</p>
+    </div>
+    <div class="frame-content">
+      <p>Earlier selves of the consumer anticipate the decisions of the future selves.</p>
+      <ol class="flip-list">
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">At time $t=2$, since all wealth is consumed, write consumption<br>as a function of savings in the past period.</div>
+              <div class="flip-back" aria-hidden="true">
+                $$c_{2}(s_{0},s_{1})=W_{2}=2s_{1}$$
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">At time $t=1$, write the discounted utility of the present self,<br>taking the future self's behavior as given.</div>
+              <div class="flip-back flush-left" aria-hidden="true">
+                <p>Consumption is ${c_{1}=W_{1}-s_{1}=2s_{0}-s_{1},}$ so
+                $$U_{1}(s_{0},s_{1})=\ln(2s_{0}-s_{1})+\beta\delta\ln(2s_{1})$$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Obtain the corresponding FOC and solve for the optimal $s_{1}$.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>The first-order condition is:
+                $$\frac{\partial U_{1}}{\partial s_{1}}=-\frac{1}{2s_{0}-s_{1}}+\frac{\beta\delta}{s_{1}}=0$$
+                so ${s_{1}=\beta\delta(2s_{0}-s_{1})}$ and ${\displaystyle s_{1}^{*}(s_{0})=\frac{2\beta\delta}{1+\beta\delta}\,s_{0}}$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">At time $t=0$, write the discounted utility of the present self,<br>taking the future selves' behavior as given.</div>
+              <div class="flip-back flush-left" aria-hidden="true">
+                <p>Consumption is ${c_{0}=W_{0}-s_{0}=100-s_{0},}$ so
+                $$\begin{align*}
+                U_{0}(s_{0})&=\ln(100-s_{0})+\beta\delta\ln\bigl(2s_{0}-s_{1}^{*}(s_{0})\bigr)+\beta\delta^{2}\ln\bigl(2s_{1}^{*}(s_{0})\bigr)\\
+                &=\ln(100-s_{0})+\beta\delta\ln\left(\frac{2s_{0}}{1+\beta\delta}\right)+\beta\delta^{2}\ln\left(\frac{4\beta\delta\,s_{0}}{1+\beta\delta}\right)
+                \end{align*}$$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Obtain the corresponding FOC and solve for the optimal $s_{0}$.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>The first-order condition is:
+                $$\frac{\partial U_{0}}{\partial s_{0}}=-\frac{1}{100-s_{0}}+\frac{\beta\delta}{s_{0}}+\frac{\beta\delta^{2}}{s_{0}}=0$$
+                so ${s_{0}=\beta\delta(1+\delta)(100-s_{0})}$ and ${\displaystyle s_{0}^{*}=\frac{100\,\beta\delta(1+\delta)}{1+\beta\delta(1+\delta)}}$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Use the optimal value of $s_{0}$ to write the optimal $s_{1}$<br>as a function of $\beta$ and $\delta$ only.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>Substituting $s_{0}^{*}$ into $s_{1}^{*}(s_{0})$:
+                $$s_{1}^{*}=\frac{2\beta\delta}{1+\beta\delta}\,s_{0}^{*}=\frac{200\,\beta^{2}\delta^{2}(1+\delta)}{(1+\beta\delta)\bigl(1+\beta\delta(1+\delta)\bigr)}$$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Frame: Learning by doing, strategic approach with commitment -->
+  <section class="frame fs-10pt" id="lbd-commitment">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Learning by Doing Exercise</h2>
+      <p class="frame-subtitle">The Strategic Approach with Commitment</p>
+    </div>
+    <div class="frame-content">
+      <p>If the naive solution were implemented, the agent would save ${s_{0}=\frac{100\,\beta\delta(1+\delta)}{1+\beta\delta(1+\delta)}}$ in period $0$ and ${s_{1}=\frac{200\,\beta\delta^{2}}{1+\beta\delta(1+\delta)}}$ in period $1$, and the utility would be:
+      $$U_{0}^{\text{ideal}}=\ln\left(\frac{100}{1+\beta\delta(1+\delta)}\right)+\beta\delta\ln\left(\frac{200\,\beta\delta}{1+\beta\delta(1+\delta)}\right)+\beta\delta^{2}\ln\left(\frac{400\,\beta\delta^{2}}{1+\beta\delta(1+\delta)}\right)$$
+      But in period $t=1$, the agent would not choose according to the naive solution; the agent changes its mind and chooses:
+      $$s_{1}=\frac{\beta+\beta\delta}{1+\beta\delta}\cdot\frac{200\,\beta\delta^{2}}{1+\beta\delta(1+\delta)}$$
+      So the actual utility of the naive agent ends up being:
+      $$U_{0}^{\text{actual}}=\ln\left(\frac{100}{1+\beta\delta(1+\delta)}\right)+\beta\delta\ln\left(\frac{200\,\beta\delta(1+\delta)}{(1+\beta\delta)\bigl(1+\beta\delta(1+\delta)\bigr)}\right)+\beta\delta^{2}\ln\left(\frac{400\,\beta^{2}\delta^{2}(1+\delta)}{(1+\beta\delta)\bigl(1+\beta\delta(1+\delta)\bigr)}\right)$$
+      which is lower than the utility of the naive solution:
+      $$U_{0}^{\text{ideal}}-U_{0}^{\text{actual}}=\beta\delta\left[(1+\delta)\ln\left(\frac{1+\beta\delta}{1+\delta}\right)-\delta\ln\beta\right]\gt 0$$</p>
+      <p>If the agent has a commitment device that forces the naive solution to be chosen in period $t=1$, then, as long as the cost of the commitment device is not too high, the agent will commit to the naive solution.</p>
+    </div>
+  </section>
+
+  <template id="hidden-procrastination-movies"><!-- HIDDEN: O'Donoghue & Rabin (1999) movie/report example -->
+  <!-- Frame: Procrastination (movie schedule) -->
+  <section class="frame" id="procrastination-movies">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Procrastination</h2>
+    </div>
+    <div class="frame-content">
+      <p>Suppose you usually go to the movies on Saturdays, and the schedule at the local cinema is <em>Street Fighter</em> this week with utility ${3,}$ <em>Sense and Sensibility</em> next week with utility ${5,}$ <em>Spider-Man: Brand New Day</em> in two weeks with utility ${8,}$ and <em>You Can See Everything</em> in three weeks with utility ${13.}$ Now suppose you must complete a report for work within four weeks, and to do so you must skip the movie on one of the next four Saturdays. When do you complete the report?</p>
+      <p class="itc-cite">Adapted from O&rsquo;Donoghue &amp; Rabin (1999), p. 109</p>
+    </div>
+  </section>
   </template>
+
+  <!-- Frame: Procrastination — The Problem -->
+  <section class="frame" id="procrastination">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Procrastination</h2>
+      <p class="frame-subtitle">The Problem</p>
+    </div>
+    <div class="frame-content">
+      <p>An individual must complete a task exactly once, and completing it costs $26$. Until the task is completed, the individual bears a loss in every single period: the loss in period $t$ is ${L_{t}=t+1,}$ which grows the longer the task is put off. So if the task is completed in period ${\tau,}$ the individual bears the loss $L_{t}$ in each period ${t=0,1,\ldots,\tau-1,}$ pays $26$ in period ${\tau,}$ and bears nothing afterwards.</p>
+      <p>Costs are negative utilities: ${u_{t}=-L_{t}}$ for ${t\lt\tau,}$ ${u_{\tau}=-26,}$ and ${u_{t}=0}$ for ${t\gt\tau.}$ Throughout, ${\delta=0.8}$ and ${\beta=0.5.}$</p>
+      <p>In which period does the individual complete the task?</p>
+    </div>
+  </section>
+
+  <!-- Frame: Procrastination — The Exponential Agent -->
+  <section class="frame" id="procrastination-exponential">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Procrastination</h2>
+      <p class="frame-subtitle">The Exponential Agent</p>
+    </div>
+    <div class="frame-content">
+      <p>Seen from period ${t,}$ with the task still pending, the cost of completing it in period ${\tau\ge t}$ is:
+      $$C_{t}(\tau)=\sum_{s=t}^{\tau-1}\delta^{s-t}L_{s}+\delta^{\tau-t}\cdot 26$$
+      Postponing the task from $\tau$ to $\tau+1$ changes this cost by:
+      $$C_{t}(\tau+1)-C_{t}(\tau)=\delta^{\tau-t}\bigl(L_{\tau}-(1-\delta)\cdot 26\bigr)$$
+      Postponing adds the loss $L_{\tau}$ but saves ${(1-\delta)\cdot 26=5.2,}$ the gain from paying $26$ one period later. Since $L_{\tau}$ grows over time, the agent completes the task in the first period in which ${L_{\tau}\ge 5.2.}$ This period does not depend on ${t,}$ so the exponential agent never changes its mind.</p>
+      <p>Since ${L_{4}=5\lt 5.2\lt 6=L_{5},}$ the exponential agent completes the task in period ${\tau=5.}$</p>
+    </div>
+  </section>
+
+  <!-- Frame: Procrastination — The Sophisticated Agent -->
+  <section class="frame" id="procrastination-sophisticated">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Procrastination</h2>
+      <p class="frame-subtitle">The Sophisticated Agent</p>
+    </div>
+    <div class="frame-content">
+      <p>For a $(\beta,\delta)$-agent in period ${t,}$ with the task still pending, completing the task now costs ${26,}$ while waiting until period ${\tau\gt t}$ costs:
+      $$C_{t}^{\beta}(\tau)=L_{t}+\beta\Bigl[\sum_{s=t+1}^{\tau-1}\delta^{s-t}L_{s}+\delta^{\tau-t}\cdot 26\Bigr]$$
+      A sophisticated agent knows that its future selves are also present-biased, so it solves the problem backward. From period $15$ on, every self completes the task, since waiting costs at least ${L_{t}+\beta\delta\cdot 26=(t+1)+10.4\gt 26.}$ Working backward from there, each self waits until the next self that completes the task. For example, self $13$ expects self $15$ to complete it, so waiting costs ${C_{13}^{\beta}(15)=14+0.5\,(0.8\cdot 15+0.64\cdot 26)=28.32\gt 26.}$</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Self</th><th>Next self to complete</th><th>Cost of waiting</th><th>Decision</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>$14$</td><td>$15$</td><td>$25.4$</td><td>waits</td></tr>
+          <tr><td>$13$</td><td>$15$</td><td>$28.32$</td><td>completes</td></tr>
+          <tr><td>$12$</td><td>$13$</td><td>$23.4$</td><td>waits</td></tr>
+          <tr><td>$11$</td><td>$13$</td><td>$25.52$</td><td>waits</td></tr>
+          <tr><td>$10$</td><td>$13$</td><td>$26.616$</td><td>completes</td></tr>
+          <tr><td>$9$</td><td>$10$</td><td>$20.4$</td><td>waits</td></tr>
+        </tbody>
+      </table>
+      <p>Selves $0$ to $8$ also wait: knowing that self $10$ will complete the task, waiting costs each of them less than $22$. So the sophisticated agent completes the task in period ${\tau=10.}$</p>
+    </div>
+  </section>
+
+  <!-- Frame: Procrastination — The Naive Agent -->
+  <section class="frame" id="procrastination-naive">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Procrastination</h2>
+      <p class="frame-subtitle">The Naive Agent</p>
+    </div>
+    <div class="frame-content">
+      <p>A naive agent believes that its future selves will carry out whatever plan the current self makes. Because $\beta$ multiplies all future costs equally, the best plan for later is the exponential agent&rsquo;s: complete the task in period $5$ if ${t\lt 5,}$ or in period $t+1$ if ${t\ge 5.}$</p>
+      <p>Before period ${5,}$ waiting is cheaper even for the exponential agent, so the naive agent waits. From period $5$ on, the naive agent completes the task now only if ${26\le L_{t}+\beta\delta\cdot 26,}$ that is, if ${L_{t}\ge(1-\beta\delta)\cdot 26=15.6.}$ Since ${L_{14}=15\lt 15.6\lt 16=L_{15},}$ the naive agent completes the task in period ${\tau=15.}$ In every period from $5$ to ${14,}$ it plans to complete the task next period and then postpones again.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Agent</th><th>Completes the task in period</th><th>$C_{0}(\tau)$</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Exponential</td><td>$5$</td><td>$17.14$</td></tr>
+          <tr><td>Sophisticated</td><td>$10$</td><td>$19.74$</td></tr>
+          <tr><td>Naive</td><td>$15$</td><td>$22.40$</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
