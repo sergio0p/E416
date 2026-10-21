@@ -3,12 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="nav-prev" content="behavioral-choice-risk.html">
-  <meta name="nav-next" content="behavioral-games.html">
-  <title>Inter-temporal Choice | ECON 416</title>
+  <meta name="nav-prev" content="mental-accounting.html">
+  <meta name="nav-next" content="problem-sets-answer-key.html">
+  <title>Intertemporal Choice | ECON 416</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <link rel="stylesheet" href="css/beamer-theme.css">
+  <style>
+    /* Flip cards: each exercise question turns over to show its answer. Clicking
+       the card flips it, and its height follows whichever face is showing (set in
+       the script at the bottom). */
+    .flip-card { perspective: 1200px; cursor: pointer; margin-bottom: 0.5rem; }
+    .flip-card:focus:not(:focus-visible) { outline: none; }
+    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.6s ease, height 0.4s ease; }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flip-front { position: relative; }
+    .flip-back { position: absolute; top: 0; left: 0; width: 100%; box-sizing: border-box; transform: rotateY(180deg); background: #fff8e1; border-radius: 6px; padding: 0.5rem 0.8rem; }
+    .flip-back p { margin: 0; }
+    .flip-back .katex-display { margin: 0.4em 0; overflow-x: auto; overflow-y: hidden; }
+    /* The theme's number circle is inline, so a card (a block) would drop below it;
+       pin the circle in the left gutter instead. */
+    .flip-list > li { position: relative; }
+    .flip-list > li::before { position: absolute; left: 0; top: 0.25em; }
+  </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
 </head>
@@ -17,48 +35,48 @@
   <!-- Section Header -->
   <section class="section-header" id="inter-temporal-choice">
     <div class="section-title-box">
-      <h1>Inter-temporal Choice</h1>
+      <h1>Intertemporal Choice</h1>
     </div>
+
+    <!-- Table of Contents: in-page anchors to each frame's id -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#dem-utility" style="margin-left: 1rem;">1. Standard Model</a>
+      <a href="#general-discounting" style="margin-left: 1rem;">2. General Discounting</a>
+      <a href="#beta-delta" style="margin-left: 1rem;">3. $(\beta,\delta)$-Model</a>
+      <a href="#hyperbolic" style="margin-left: 1rem;">4. Hyperbolic</a>
+      <br>
+      <a href="#dynamic-consistency" style="margin-left: 1rem;">5. Dynamic Consistency</a>
+      <a href="#dynamic-consistency-reactions" style="margin-left: 1rem;">6. Naive vs. Strategic</a>
+      <!-- HIDDEN (frames 7-8):
+        #lbd-setup Learning by Doing
+        #lbd-questions Questions
+      HIDDEN -->
+    </nav>
   </section>
 
-  <!-- Frame: Discounted Expected Utility Model (source: 920-928) -->
+  <!-- Frame: Discounted Expected Utility Model -->
   <section class="frame" id="dem-utility">
     <div class="frame-title-bar">
       <h2 class="frame-title">Intertemporal Choice: The Standard Model</h2>
       <p class="frame-subtitle">Discounted Expected Utility Model</p>
     </div>
     <div class="frame-content">
-      <p>In the discounted expected utility model, the <em>per period</em> utility of an individual is:
-      $$u(x_t,\omega_t),$$
-      where:</p>
-      <ol>
-        <li>$x_t$ is the choice that the individual makes at time $t$.</li>
-        <li>$\omega_t$ represents variables (events) that the individual does not control (actions of other agents, random shocks to the economy, etc.).</li>
-        <li>$p_t\bigl(\omega_t \mid x_0,\omega_0,\ldots, x_{t-1}, \omega_{t-1}\bigr)$ is the probability distribution of $\omega_t$, which may depend on the past (choices and events).</li>
-      </ol>
+      <p>Define $u_t$ as the utility received in period $t$. The discounted utility of a utility flow ${\mathbf{u}=(u_0,u_1,\ldots,u_t,\ldots)}$ is:
+      $$U(\mathbf{u})=\sum_{t=0}^{+\infty}\delta^{t}\cdot u_t$$</p>
+      <p>The discount factor $\delta$ is an exogenous parameter that reflects the agent's time preferences: the lower $\delta$, the more impatient the agent. Alternatively, $\delta$ can be interpreted as the probability that the agent survives to the next period.</p>
     </div>
   </section>
 
-  <!-- Frame: DEM goal (source: 929-939) -->
-  <section class="frame fs-10pt" id="dem-goal">
+  <!-- Frame: General Models of Discounting -->
+  <section class="frame" id="general-discounting">
     <div class="frame-title-bar">
-      <h2 class="frame-title">Intertemporal Choice: The Standard Model</h2>
-      <p class="frame-subtitle">Discounted Expected Utility Model</p>
+      <h2 class="frame-title">Intertemporal Choice</h2>
+      <p class="frame-subtitle">General Models of Discounting</p>
     </div>
     <div class="frame-content">
-      <p>We assume the goal of the individual is to choose $\mathbf{x}=(x_0,x_1, \ldots,x_t, \ldots)$ to maximize the discounted expected utility:
-      $$ \max_{\mathbf{x}} \quad\E\!\left[\sum_{t=0}^{T}\delta^t\cdot u(x_t,\omega_t)\right],$$
-      where $0\lt \delta\lt 1$ is the individual's <em>discount factor</em>. That is, we assume the individual is <em>impatient</em>: $u$ units of utility tomorrow are only worth $\delta\cdot u$ units of utility today.</p>
-      <p>Think of the discounted utility as the analog (for an individual) of the present value of a firm's cash flow.</p>
-      <p>The symbol $\E$ denotes the expectation, which we use only in cases where there is uncertainty about the future.</p>
-      <p>Often, the final date is $T=+\infty$ as economic relationships do not come with an &ldquo;expiration date&rdquo;.</p>
-    </div>
-  </section>
-
-  <!-- Section: Behavioral Models -->
-  <section class="section-header" id="behavioral-models">
-    <div class="section-title-box">
-      <h1>Behavioral Models of Intertemporal Choice</h1>
+      <p>Let $D(t)$ be a function of $t$ such that ${D(0)=1}$ and ${0\lt D(t+1)\lt D(t)}$. We call $D(\cdot)$ the discount factor function, and the corresponding discounted utility is:
+      $$U(\mathbf{u})=\sum_{t=0}^{+\infty}D(t)\cdot u_t$$</p>
+      <p>Notice that the standard model&mdash;also called <em>exponential discounting</em>&mdash;is the case in which ${D(t)=\delta^t}$ for ${0\lt\delta\lt 1}$.</p>
     </div>
   </section>
 
@@ -131,6 +149,7 @@
     </div>
   </section>
 
+  <template id="hidden-lbd"><!-- HIDDEN: Learning by Doing exercise (setup + questions) -->
   <!-- Frame: Learning by doing setup (source: 1183-1188) -->
   <section class="frame fs-10pt" id="lbd-setup">
     <div class="frame-title-bar">
@@ -138,9 +157,9 @@
       <p class="frame-subtitle">Setup</p>
     </div>
     <div class="frame-content">
-      <p>A $(\beta,\delta)$-individual lives for three periods $t=0,1,2$. In period $t=0$, the individual has two units of &ldquo;corn&rdquo;, $I_{0}=2$. At each period, he/she chooses an <em>integer</em> amount of &ldquo;corn&rdquo; to consume, $c_{t}$. The remaining &ldquo;corn&rdquo; $s_{t}=I_{t}-c_{t}$ is planted and yields $2\cdot s_{t}$ units of &ldquo;corn&rdquo; in the next period, $I_{t+1}=2\cdot s_{t}$.</p>
-      <p>Consumption of $c_{t}$ units of &ldquo;corn&rdquo; yields utility $\sqrt{c_{t}}$.</p>
-      <p>Notice that in the last period $t=2$ there is no point in saving, so $c_{2}=I_{2}$ and $s_{2}=0$. Thus, we only need to find $c_{0}$ and $c_{1}$. Also, notice that $c_{0}$ must be $0$, $1$, or $2$.</p>
+      <p>A $(\beta,\delta)$-individual lives for three periods $t=0,1,2$ and starts with wealth ${W_{0}=100}$. In each period $t$, the individual consumes $c_{t}$ and saves the rest, ${s_{t}=W_{t}-c_{t}}$. Savings are invested at a 100% rate of return, so next period's wealth is ${W_{t+1}=2\cdot s_{t}}$.</p>
+      <p>Consuming $c_{t}$ yields utility $\ln c_{t}$.</p>
+      <p>Notice that in the last period $t=2$ there is no point in saving, so ${c_{2}=W_{2}}$ and ${s_{2}=0}$. Thus, we only need to find $c_{0}$ and $c_{1}$, where $c_{0}$ can be any amount between $0$ and $W_{0}$, and $c_{1}$ any amount between $0$ and $W_{1}$.</p>
     </div>
   </section>
 
@@ -151,13 +170,63 @@
       <p class="frame-subtitle">Questions</p>
     </div>
     <div class="frame-content">
-      <ol>
-        <li>For each possible value of $c_{0}$, what are the corresponding possible values of $c_{2}$? <em>Hint:</em> if $c_{0}=2$ there is no saving, and therefore income in period $t=1$ is zero, $I_{1}=0$, and so $c_{1}=0$; if $c_{0}=1$ then $s_{0}=1$ and $I_{1}=2$ so $c_{1}$ must be &hellip; or &hellip; or &hellip; (please fill in the blanks and address the case in which $c_{0}=0$).</li>
-        <li>Using the information above, list all possible eight consumption paths. $(c_{0},c_{1},c_{2})=(2,0,0)$ or $(1,2,0)$ or $(1,1,2)$, etc.</li>
-        <li>Assuming $\delta=1/2$ and $\beta=3/4$, what is the optimal consumption path from the point of view of a naive (or strategic with commitment power &mdash; notice both of them will make the same choices) $(\beta,\delta)$-individual?</li>
+      <ol class="flip-list">
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Write the discounted utility at period $t=1$ as a function of the savings $s_{1}$, taking $s_{0}$ as given.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>Consumption is ${c_{1}=W_{1}-s_{1}=2s_{0}-s_{1}}$ in period $1$ and ${c_{2}=W_{2}=2s_{1}}$ in period $2$, so
+                $$U_{1}(s_{1})=\ln(2s_{0}-s_{1})+\beta\delta\ln(2s_{1})$$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Maximize the discounted utility at period $t=1$ and find the optimal savings $s_{1}$ as a function of $s_{0}$.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>The first-order condition is
+                $$-\frac{1}{2s_{0}-s_{1}}+\frac{\beta\delta}{s_{1}}=0$$
+                so
+                $$s_{1}^{*}=\frac{2\beta\delta}{1+\beta\delta}\,s_{0}$$</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Assuming that the optimal savings will be chosen in period $t=1$, write the discounted utility at period $t=0$ as a function of $s_{0}$ only.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>With $s_{1}^{*}$, consumption is ${c_{1}^{*}=2s_{0}-s_{1}^{*}=\frac{2s_{0}}{1+\beta\delta}}$ and ${c_{2}^{*}=2s_{1}^{*}=\frac{4\beta\delta\,s_{0}}{1+\beta\delta}}$, so
+                $$\begin{aligned}U_{0}(s_{0})&=\ln(100-s_{0})+\beta\delta\ln c_{1}^{*}\\
+                &\quad+\beta\delta^{2}\ln c_{2}^{*}\\
+                &=\ln(100-s_{0})\\
+                &\quad+\beta\delta(1+\delta)\ln s_{0}+K\end{aligned}$$
+                where $K$ collects the terms that do not depend on $s_{0}$.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="flip-card" role="button" tabindex="0">
+            <div class="flip-inner">
+              <div class="flip-front">Find the optimal savings at period $t=0$.</div>
+              <div class="flip-back" aria-hidden="true">
+                <p>The first-order condition is
+                $$-\frac{1}{100-s_{0}}+\frac{\beta\delta(1+\delta)}{s_{0}}=0$$
+                so
+                $$s_{0}^{*}=\frac{100\,\beta\delta(1+\delta)}{1+\beta\delta(1+\delta)}$$</p>
+              </div>
+            </div>
+          </div>
+        </li>
       </ol>
     </div>
   </section>
+  </template>
 
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
@@ -174,6 +243,37 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="js/scroll-animations.js"></script>
+
+  <script>
+    // Flip cards: toggle .flipped on click (or Enter/Space), and size the card to
+    // the visible face; refresh ScrollTrigger once the height has settled, since
+    // everything below the card moves.
+    document.querySelectorAll('.flip-card').forEach(card => {
+      const inner = card.querySelector('.flip-inner');
+      const front = card.querySelector('.flip-front');
+      const back = card.querySelector('.flip-back');
+      const fit = () => {
+        const face = card.classList.contains('flipped') ? back : front;
+        inner.style.height = face.offsetHeight + 'px';
+      };
+      const flip = () => {
+        const flipped = card.classList.toggle('flipped');
+        front.setAttribute('aria-hidden', flipped ? 'true' : 'false');
+        back.setAttribute('aria-hidden', flipped ? 'false' : 'true');
+        fit();
+      };
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      });
+      inner.addEventListener('transitionend', e => {
+        if (e.propertyName === 'height') ScrollTrigger.refresh();
+      });
+      new ResizeObserver(fit).observe(front);
+      new ResizeObserver(fit).observe(back);
+      fit();
+    });
+  </script>
 
 </body>
 </html>
