@@ -31,6 +31,11 @@
 
     /* Source line under an example (same look as .ma-cite in mental-accounting.html). */
     .itc-cite { margin: 0.75rem 0 0; text-align: right; color: var(--text-secondary); }
+
+    /* Discounting movie: bare 16:9 iframe at frame width, capped so it fits the
+       window height. */
+    .itc-movie { margin: 2rem auto; width: min(var(--frame-max-width), calc(100vh * 16 / 9)); }
+    .itc-movie iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
   </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
@@ -92,6 +97,11 @@
       $$U(\mathbf{u})=\sum_{t=0}^{+\infty}D(t)\cdot u_t$$</p>
       <p>Notice that the standard model&mdash;also called <em>exponential discounting</em>&mdash;is the case in which ${D(t)=\delta^t}$ for ${0\lt\delta\lt 1}$.</p>
     </div>
+  </section>
+
+  <!-- Movie: present utility as time passes (Animation/discounting-animation.html) -->
+  <section class="itc-movie" id="discounting-movie">
+    <iframe data-src="Animation/discounting-animation.html" title="Discounting: the passage of time"></iframe>
   </section>
 
   <!-- Frame: (β,δ)-model (source: 1142-1157) -->
@@ -457,6 +467,14 @@
       new ResizeObserver(fit).observe(front);
       new ResizeObserver(fit).observe(back);
       fit();
+    });
+
+    // Discounting movie: loading it starts it, so load it only once it is centered
+    // on screen.
+    const movie = document.querySelector('#discounting-movie iframe');
+    ScrollTrigger.create({
+      trigger: movie, start: 'center center', once: true,
+      onEnter: () => { movie.src = movie.dataset.src; }
     });
   </script>
 
