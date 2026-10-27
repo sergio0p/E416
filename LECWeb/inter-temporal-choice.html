@@ -28,6 +28,15 @@
        pin the circle in the left gutter instead. */
     .flip-list > li { position: relative; }
     .flip-list > li::before { position: absolute; left: 0; top: 0.25em; }
+    /* Block flip card (same as E510 markets.html): the whole block turns over to a
+       second block. The bodies use .flip-body, not .block-body, so the "?" flip of
+       js/scroll-animations.js leaves these blocks alone. */
+    .flip-card.block-card { margin: 0.75rem 0 1rem; }
+    .block-card .flip-back { padding: 0; background: none; border-radius: 0; }
+    .block-card .flip-back p { margin: 0 0 1rem 0; }
+    .block-card .block { width: 100%; margin: 0; }
+    .flip-body { background: #fff8e1; color: #000000; padding: 1rem; }
+    .flip-body > :last-child { margin-bottom: 0; }
 
     /* Source line under an example (same look as .ma-cite in mental-accounting.html). */
     .itc-cite { margin: 0.75rem 0 0; text-align: right; color: var(--text-secondary); }
@@ -36,6 +45,9 @@
        window height. */
     .itc-movie { margin: 2rem auto; width: min(var(--frame-max-width), calc(100vh * 16 / 9)); }
     .itc-movie iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+
+    /* Reading link in a frame subtitle keeps the subtitle color. */
+    .frame-subtitle a { color: inherit; text-underline-offset: 0.12em; }
   </style>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
@@ -70,6 +82,11 @@
       <br>
       <a href="#procrastination-sophisticated" style="margin-left: 1rem;">13. Sophisticated Agent</a>
       <a href="#procrastination-naive" style="margin-left: 1rem;">14. Naive Agent</a>
+      <a href="#rubinstein-2003" style="margin-left: 1rem;">15. Rubinstein (2003)</a>
+      <a href="#rubinstein-2003-experiments" style="margin-left: 1rem;">16. Experiments</a>
+      <br>
+      <a href="#rubinstein-q1-q2" style="margin-left: 1rem;">17. Q1 and Q2</a>
+      <a href="#rubinstein-contradiction" style="margin-left: 1rem;">18. Contradiction</a>
     </nav>
   </section>
 
@@ -423,6 +440,137 @@
     </div>
   </section>
 
+  <!-- Frame: Rubinstein (2003) -->
+  <section class="frame" id="rubinstein-2003">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">&ldquo;Economics and Psychology&rdquo;? The Case of Hyperbolic Discounting</h2>
+      <p class="frame-subtitle"><a href="https://uncch.instructure.com/courses/128467/files/16576492" target="_blank" rel="noopener">Rubinstein (2003)</a></p>
+    </div>
+    <div class="frame-content">
+      <p>A general discounting formulation:
+      $$D(t)=\begin{cases} 1 &\text{if } t=0,\\
+      \prod_{k=1}^{t}\delta_k &\text{if } t\gt 0,\end{cases}$$
+      where ${1\gt\delta_{k+1}\ge\delta_k\gt 0}$.</p>
+      <p>Notice that $\delta_t$ is not the discount factor applied to the period-$t$ utility, ${D(t).}$</p>
+      <p>Examples:</p>
+      <ul>
+        <li>Exponential discounting: ${\delta_k=\delta.}$</li>
+        <li>Quasi-hyperbolic discounting: ${\delta_1=\beta\cdot\delta}$ and ${\delta_k=\delta}$ for ${k\gt 1.}$</li>
+        <li>Hyperbolic discounting: ${\delta_k=\left(\frac{1+\alpha\cdot k-\alpha}{1+\alpha\cdot k}\right)^{\gamma/\alpha}.}$</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Frame: Rubinstein (2003) — Experiments -->
+  <section class="frame" id="rubinstein-2003-experiments">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Rubinstein (2003)</h2>
+      <p class="frame-subtitle">Experiments</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card block-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Q1</div>
+              <div class="flip-body">
+                <p>Imagine that you have to choose between the following two options:</p>
+                <ul>
+                  <li>A) Receiving $\$467.00$ on June 17th, 2028.</li>
+                  <li>B) Receiving $\$607.07$ on June 17th, 2029.</li>
+                </ul>
+                <p>What will be your choice?</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Q1</div>
+              <div class="flip-body">
+                <p>Imagine that you have to choose between the following two options:</p>
+                <ul>
+                  <li>A) Receiving $\$467.00$ on June 17th, 2028. (45%)</li>
+                  <li>B) Receiving $\$607.07$ on June 17th, 2029. (55%)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card block-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Q2</div>
+              <div class="flip-body">
+                <p>Imagine that you have to choose between the following two options:</p>
+                <ul>
+                  <li>A) Receiving $\$467.00$ on June 16th, 2029.</li>
+                  <li>B) Receiving $\$467.39$ on June 17th, 2029.</li>
+                </ul>
+                <p>What will be your choice?</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Q2</div>
+              <div class="flip-body">
+                <p>Imagine that you have to choose between the following two options:</p>
+                <ul>
+                  <li>A) Receiving $\$467.00$ on June 16th, 2029. (54%)</li>
+                  <li>B) Receiving $\$467.39$ on June 17th, 2029. (46%)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Rubinstein (2003) — best choices in Q1 and Q2 -->
+  <section class="frame overlay-frame" id="rubinstein-q1-q2">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Rubinstein (2003)</h2>
+      <p class="frame-subtitle">Delay in Q1 and No Delay in Q2</p>
+    </div>
+    <div class="frame-content">
+      <p class="overlay" data-overlay="1">Let $v(x)=x$ be the utility of receiving ${\$x,}$ and measure time in days from today. Let $T$ be June 17th, 2029, so that June 16th, 2029 is day $T-1$ and June 17th, 2028 is day ${T-365.}$ We show that no discount function ${D(t)=\prod_{k=1}^{t}\delta_k}$ with ${1\gt\delta_{k+1}\ge\delta_k\gt 0}$ makes the delay (B) the best choice in Q1 and no delay (A) the best choice in Q2.</p>
+      <div class="overlay" data-overlay="2">
+        <p>B is the best choice in Q1. Divide both sides by ${D(T-365):}$</p>
+        $$607.07\cdot D(T)\ge 467\cdot D(T-365)\iff\prod_{k=T-364}^{T}\delta_k\ge\frac{467}{607.07}.$$
+      </div>
+      <div class="overlay" data-overlay="3">
+        <p>A is the best choice in Q2. Divide both sides by ${D(T-1):}$</p>
+        $$467\cdot D(T-1)\ge 467.39\cdot D(T)\iff\delta_T\le\frac{467}{467.39}.$$
+      </div>
+    </div>
+  </section>
+
+  <!-- Frame: Rubinstein (2003) — the two choices contradict each other -->
+  <section class="frame overlay-frame" id="rubinstein-contradiction">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Rubinstein (2003)</h2>
+      <p class="frame-subtitle">A Contradiction</p>
+    </div>
+    <div class="frame-content">
+      <div class="overlay" data-overlay="1">
+        <p>Since $\delta_k\le\delta_T$ for every ${k\le T,}$ replacing each $\delta_k$ in the product by $\delta_T$ can only raise it, so the inequality for Q1 still holds:</p>
+        $$\delta_T^{365}\ge\prod_{k=T-364}^{T}\delta_k\ge\frac{467}{607.07}\iff\left(\frac{1}{\delta_T}\right)^{365}\le\frac{607.07}{467}.$$
+      </div>
+      <div class="overlay" data-overlay="2">
+        <p>The inequality for Q2 gives ${1/\delta_T\ge 467.39/467=1+0.39/467.}$ Since ${(1+x)^n\ge 1+n\cdot x}$ for ${x\ge 0}$ (expand the product):</p>
+        $$\left(\frac{1}{\delta_T}\right)^{365}\ge\left(1+\frac{0.39}{467}\right)^{365}\ge 1+\frac{365\cdot 0.39}{467}=\frac{609.35}{467}.$$
+      </div>
+      <div class="overlay" data-overlay="3">
+        <p>Together:</p>
+        $$\frac{609.35}{467}\le\left(\frac{1}{\delta_T}\right)^{365}\le\frac{607.07}{467},$$
+        <p>that is, ${609.35\le 607.07,}$ a contradiction. So delay in Q1 together with no delay in Q2 is impossible.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
     <a href="mental-accounting.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Mental Accounting</a>
@@ -475,6 +623,34 @@
     ScrollTrigger.create({
       trigger: movie, start: 'center center', once: true,
       onEnter: () => { movie.src = movie.dataset.src; }
+    });
+
+    // Overlay frames (as in brain-biology.html): pin the frame and reveal one step
+    // per dwell of scrolling. Unlike brain-biology, the content never slides up
+    // under the title bar: the gap between the title and the first item is fixed.
+    document.querySelectorAll('.overlay-frame').forEach(frame => {
+      const overlays = frame.querySelectorAll('.overlay');
+      const count = overlays.length;
+      if (count === 0) return;
+      overlays[0].classList.add('revealed');
+      if (count === 1) return;   // nothing to step through: show it, don't pin
+      const scrollPerOverlay = window.innerHeight * 0.9;
+      const totalScroll = scrollPerOverlay * count;
+
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: `+=${totalScroll}`,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const currentStep = Math.min(Math.floor(self.progress * count), count - 1);
+          overlays.forEach((overlay, i) => {
+            const isOnly = overlay.hasAttribute('data-overlay-only');
+            overlay.classList.toggle('revealed', isOnly ? i === currentStep : i <= currentStep);
+          });
+        }
+      });
     });
   </script>
 
