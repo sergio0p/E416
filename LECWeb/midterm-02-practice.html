@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="nav-prev" content="midterm-02.html">
+  <meta name="nav-next" content="problem-sets-answer-key.html">
+  <title>Midterm 2 Practice | ECON 416</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/beamer-theme.css">
+
+    <!-- Google Analytics -->
+    <script async src="/E416/js/ga.js"></script>
+  <style>
+    /* Flip card (as in E510 midterm-02-practice.html): each question is a block whose
+       back carries its answer. Clicking the card turns it over, and its height follows
+       whichever face is showing (set in the script at the bottom). The body uses
+       .flip-body, not .block-body, so the "?" flip of js/scroll-animations.js leaves
+       these blocks alone. */
+    .flip-card { perspective: 1200px; cursor: pointer; margin: 0.75rem 0 1rem; }
+    .flip-card:focus:not(:focus-visible) { outline: none; }
+    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.6s ease, height 0.4s ease; }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flip-front { position: relative; }
+    .flip-back { position: absolute; top: 0; left: 0; width: 100%; transform: rotateY(180deg); }
+    .flip-card .block { width: 100%; margin: 0; }
+    .flip-body { background: #fff8e1; color: #000000; padding: 1rem; }
+    .flip-body > :last-child { margin-bottom: 0; }
+    /* Lettered options (as in the E510 theme): <ol type="a"> */
+    ol[type="a"] > li::before { content: counter(beamer-enum, lower-alpha); }
+    /* Source of each problem, short form; full entries in the References frame. */
+    .mp-cite { margin: 0.75rem 0 0; text-align: right; color: var(--text-muted); font-size: 0.85em; }
+    .mp-refs li { margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Section Header -->
+  <section class="section-header" id="midterm-2-practice">
+    <div class="section-title-box">
+      <h1>Midterm 2 Practice</h1>
+      <h2>Click on a question to reveal its answer.</h2>
+    </div>
+
+    <!-- Table of Contents -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#practice-value-function" style="margin-left: 1rem;">1. Value Function</a>
+      <a href="#practice-reference-points" style="margin-left: 1rem;">2. Reference Points</a>
+      <a href="#practice-allais" style="margin-left: 1rem;">3. Allais Paradox</a>
+      <a href="#practice-probability-weighting" style="margin-left: 1rem;">4. Probability Weights</a>
+      <br>
+      <a href="#practice-ambiguity" style="margin-left: 1rem;">5. Ambiguity Aversion</a>
+      <a href="#practice-framing" style="margin-left: 1rem;">6. Framing of Outcomes</a>
+      <a href="#practice-mental-accounting" style="margin-left: 1rem;">7. Mental Accounting</a>
+      <br>
+      <a href="#practice-time-inconsistency" style="margin-left: 1rem;">8. Dynamic Consistency</a>
+      <a href="#practice-naive-sophisticated" style="margin-left: 1rem;">9. Naive and Sophisticated</a>
+      <a href="#practice-profiles" style="margin-left: 1rem;">10. Utility Streams</a>
+      <a href="#practice-references" style="margin-left: 1rem;">11. References</a>
+    </nav>
+  </section>
+
+  <!-- Problem 1: the prospect-theory value function -->
+  <section class="frame" id="practice-value-function">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+      <p class="frame-subtitle">Problem 1: The Value Function</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question</div>
+              <div class="flip-body">
+                  <p>Choose the most appropriate answer for the value function of prospect theory.</p>
+                  <ol type="a">
+                  <li>The argument $x$ of the value function $v(x)$ is the absolute level of income.</li>
+                  <li>The argument $x$ of the value function $v(x)$ is the difference from the reference point.</li>
+                  <li>Because of loss aversion, the slope of the value function $v(x)$ is larger when $x$ is negative than when $x$ is positive.</li>
+                  <li>Because of loss aversion, the slope of the value function $v(x)$ is smaller when $x$ is negative than when $x$ is positive.</li>
+                  <li>The typical value function implies risk aversion in the domain of losses and risk loving in the domain of gains.</li>
+                  <li>The typical value function implies risk aversion in the domain of gains and risk loving in the domain of losses.</li>
+                  <li>a, c, and e</li>
+                  <li>a, c, and f</li>
+                  <li>a, d, and e</li>
+                  <li>a, d, and f</li>
+                  <li>b, c, and e</li>
+                  <li>b, c, and f</li>
+                  <li>b, d, and e</li>
+                  <li>b, d, and f</li>
+                  </ol>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer</div>
+              <div class="flip-body">
+                  <p>(l): b, c, and f.</p>
+                  <ul>
+                  <li>(b) Outcomes are gains and losses measured from the reference point.</li>
+                  <li>(c) Loss aversion: $v$ is steeper for losses than for gains.</li>
+                  <li>(f) Risk averse over gains, risk loving over losses.</li>
+                  </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Ogaki &amp; Tanaka (2017), Ch. 4, Multiple-Choice Problem 1</p>
+    </div>
+  </section>
+
+  <!-- Problem 2: reference points and loss aversion -->
+  <section class="frame" id="practice-reference-points">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+      <p class="frame-subtitle">Problem 2: Reference Points</p>
+    </div>
+    <div class="frame-content">
+      <p>A person&rsquo;s value function is ${v(x)=\sqrt{x/2}}$ for gains ${(x\ge 0)}$ and ${v(x)=-2\sqrt{\lvert x\rvert}}$ for losses ${(x\lt 0).}$ She faces the choice between a sure $\$2$ and a 50&ndash;50 gamble that pays $\$4$ if she wins and $\$0$ if she loses. Weight outcomes by their probabilities.</p>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  Show that she is loss averse, in the sense that she suffers more when she loses $\$4$ than she benefits when she receives $\$4$.
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  $$v(4)=\sqrt{2}\approx 1.41,\qquad v(-4)=-2\sqrt{4}=-4.$$
+                  The loss is bigger in absolute value than the gain.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  If she takes the worst possible outcome ($\$0$) as her reference point, what is the value of the sure amount and of the gamble? Which does she prefer?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  Coded as gains: $\$0\to 0$, $\$2\to +2$, $\$4\to +4$.
+                  $$v(2)=1,\qquad \tfrac12 v(0)+\tfrac12 v(4)=\tfrac{\sqrt2}{2}\approx 0.71.$$
+                  She prefers the sure $\$2$: risk averse over gains.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 3</div>
+              <div class="flip-body">
+                  If she takes the best possible outcome ($\$4$) as her reference point, what is the value of the sure amount and of the gamble? Which does she prefer?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 3</div>
+              <div class="flip-body">
+                  Coded as losses: $\$0\to -4$, $\$2\to -2$, $\$4\to 0$.
+                  $$v(-2)=-2\sqrt2\approx -2.83,\qquad \tfrac12 v(-4)+\tfrac12 v(0)=-2.$$
+                  She prefers the gamble: risk loving over losses. Same outcomes, different reference point, opposite choice.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercise 7.9</p>
+    </div>
+  </section>
+
+  <!-- Problem 3: the Allais paradox -->
+  <section class="frame" id="practice-allais">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+      <p class="frame-subtitle">Problem 3: The Allais Paradox</p>
+    </div>
+    <div class="frame-content">
+      <p>Consider the following four lotteries, with prizes in billions of francs:</p>
+      <ul>
+        <li>Lottery 1: $1$ for sure.</li>
+        <li>Lottery 2: $0$ with probability $0.01$, $5$ with probability $0.10$, and $1$ with probability $0.89$.</li>
+        <li>Lottery 3: $1$ with probability $0.11$, and $0$ with probability $0.89$.</li>
+        <li>Lottery 4: $5$ with probability $0.10$, and $0$ with probability $0.90$.</li>
+      </ul>
+      <p>Asked to choose between Lotteries 1 and 2, many people choose Lottery 1. Asked to choose between Lotteries 3 and 4, many people choose Lottery 4. This pattern of choices is the <strong>Allais paradox</strong>.</p>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  Show that no expected utility maximizer, whatever her utility function $u$, can make both choices.
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  Lottery 1 over Lottery 2 (cancel $0.89\,u(1)$):
+                  $$u(1)\gt 0.01\,u(0)+0.10\,u(5)+0.89\,u(1)\iff 0.11\,u(1)\gt 0.01\,u(0)+0.10\,u(5).$$
+                  Lottery 4 over Lottery 3 (cancel $0.89\,u(0)$):
+                  $$0.10\,u(5)+0.90\,u(0)\gt 0.11\,u(1)+0.89\,u(0)\iff 0.11\,u(1)\lt 0.01\,u(0)+0.10\,u(5).$$
+                  The two inequalities contradict each other, whatever $u$ is.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  Explain the Allais paradox using Prospect Theory decision weights $\pi(p)$.
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  Reference point: current wealth, so $v(0)=0$. Lottery 1 over Lottery 2:
+                  $$v(1)\gt\pi(0.10)\,v(5)+\pi(0.89)\,v(1)\iff\bigl(1-\pi(0.89)\bigr)\,v(1)\gt\pi(0.10)\,v(5).$$
+                  Lottery 4 over Lottery 3:
+                  $$\pi(0.10)\,v(5)\gt\pi(0.11)\,v(1).$$
+                  Both choices are consistent exactly when ${\pi(0.11)+\pi(0.89)\lt 1,}$ which decision weights allow: ${\pi(p)+\pi(1-p)\le 1.}$ The sure prize gets full weight; the $0.11$ and $0.89$ chances together get less.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Lotteries from Ogaki &amp; Tanaka (2017), Sec. 3.5.1; questions adapted from Ch. 4, Short Answer/Essay Problem 1</p>
+    </div>
+  </section>
+
+  <!-- Problem 4: probability weighting -->
+  <section class="frame" id="practice-probability-weighting">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Prospect Theory</h2>
+      <p class="frame-subtitle">Problem 4: Probability Weights</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question</div>
+              <div class="flip-body">
+                  Behavioral economists have found that lotteries are an effective way to encourage behavioral change. A person may be more likely to fill in a survey or take a pill if offered a lottery ticket with a $1/1000$ probability of winning $\$1000$ than if offered a cash payment of $\$1$. This might seem counterintuitive, given that people are often risk averse. Use decision weights to explain why lottery tickets can be so appealing.
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer</div>
+              <div class="flip-body">
+                  Sure dollar: $\pi(1)\,v(1)=v(1)$. Ticket: $\pi(1/1000)\,v(1000)$.
+                  <ul>
+                  <li>Risk averse over gains: ${v(1000)\lt 1000\,v(1)}$, which works against the ticket.</li>
+                  <li>Small probabilities are overweighted: ${\pi(1/1000)\gt 1/1000.}$</li>
+                  </ul>
+                  If $\pi(1/1000)$ is large enough, ${\pi(1/1000)\,v(1000)\gt v(1)}$ and the ticket wins.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercise 7.33</p>
+    </div>
+  </section>
+
+  <!-- Problem 5: ambiguity aversion (Ellsberg) -->
+  <section class="frame" id="practice-ambiguity">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Ambiguity</h2>
+      <p class="frame-subtitle">Problem 5: Ambiguity Aversion</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  You can bet on a coin toss: if the coin comes up heads you win, and if it comes up tails you lose. You are ambiguity averse. Would you rather bet on a fair coin (equal probabilities of heads and tails) or on a loaded coin with unknown, unequal probabilities of heads and tails?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  The fair coin. Its probabilities are known; the loaded coin&rsquo;s are not. Same choice as the known urn in the Ellsberg problem.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  You are invited to bet on one of three tennis games. In game 1, two extraordinarily good players face each other. In game 2, two extraordinarily poor players face each other. In game 3, one very good and one very bad player face each other, but you do not know which is which, so as far as you are concerned each player wins with probability $50\%$. You are ambiguity averse. Which game would you be least likely to bet on? Why?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  Game 3. In games 1 and 2 the players are evenly matched, so $50\%$ is a known probability. In game 3 the true probability is close to $0$ or to $1$, and you do not know which: $50\%$ only averages your ignorance. That is the most ambiguous bet.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercises 7.26 and 7.27</p>
+    </div>
+  </section>
+
+  <!-- Problem 6: framing -->
+  <section class="frame" id="practice-framing">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Tversky &amp; Kahneman (1981)</h2>
+      <p class="frame-subtitle">Problem 6: Framing of Outcomes</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  Define the framing effect and give one example.
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  <p>Framing effect: different descriptions of the same choice lead to different decisions.</p>
+                  <p>Asian disease (Tversky &amp; Kahneman, 1981), $600$ lives at stake:</p>
+                  <ul>
+                  <li>Gain frame, &ldquo;$200$ people will be saved&rdquo; vs. a $1/3$ chance that $600$ are saved: $72\%$ choose the sure program (risk averse).</li>
+                  <li>Loss frame, &ldquo;$400$ people will die&rdquo; vs. a $1/3$ chance that nobody dies: $78\%$ choose the gamble (risk loving).</li>
+                  </ul>
+                  <p>Same programs; only the frame changed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  <p>Consider two problems:</p>
+                  <ul>
+                  <li>In addition to whatever you own, you have been given $\$1000$. Choose between (A) a $50\%$ chance of winning $\$1000$ and (B) winning $\$500$ for sure.</li>
+                  <li>In addition to whatever you own, you have been given $\$2000$. Choose between (C) a $50\%$ chance of losing $\$1000$ and (D) losing $\$500$ for sure.</li>
+                  </ul>
+                  <p>In final outcomes, A is the same as C, and B is the same as D. Yet $84\%$ of participants chose B in the first problem and $69\%$ chose C in the second.</p>
+                  <p>Suppose your value function is ${v(x)=\sqrt{x/2}}$ for gains and ${v(x)=-2\sqrt{\lvert x\rvert}}$ for losses, and that you have integrated the gift into your reference point. Weighting outcomes by their probabilities, find the values of A, B, C, and D. Which do you choose in each problem?</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  $$v(A)=\tfrac12\sqrt{500}\approx 11.18,\qquad v(B)=\sqrt{250}\approx 15.81\quad\Rightarrow\quad\text{B}.$$
+                  $$v(C)=\tfrac12\bigl(-2\sqrt{1000}\bigr)\approx -31.62,\qquad v(D)=-2\sqrt{500}\approx -44.72\quad\Rightarrow\quad\text{C}.$$
+                  The gift sets the reference point: the first problem is framed as gains (risk averse), the second as losses (risk loving).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Question 1: Ogaki &amp; Tanaka (2017), Ch. 5, Short Answer/Essay Problem 2. Question 2: Angner (2016), Example 7.7 and Exercise 7.8</p>
+    </div>
+  </section>
+
+  <!-- Problem 7: mental accounting, integration and segregation -->
+  <section class="frame" id="practice-mental-accounting">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Mental Accounting</h2>
+      <p class="frame-subtitle">Problem 7: Hedonic Editing</p>
+    </div>
+    <div class="frame-content">
+      <p>Suppose your value function is ${v(x)=\sqrt{x/3}}$ for gains ${(x\ge 0)}$ and ${v(x)=-3\sqrt{\lvert x\rvert}}$ for losses ${(x\lt 0).}$</p>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  Yesterday you had a decent day: you received a $\$48$ tax refund, and then an old friend repaid a $\$27$ loan you had forgotten about. What is the total value if you integrate the two gains? If you segregate them? From the point of view of value, is it better to integrate or to segregate?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  $$\text{Integrate: } v(75)=\sqrt{25}=5.\qquad\text{Segregate: } v(48)+v(27)=4+3=7.$$
+                  Segregate: risk averse over gains.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  Another day was terrible: you got a $\$144$ speeding ticket on your way to the opera, and then had to pay $\$25$ for a ticket you thought would be free. What is the total value if you integrate the two losses? If you segregate them? Which is better?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  $$\text{Integrate: } v(-169)=-3\cdot 13=-39.\qquad\text{Segregate: } v(-144)+v(-25)=-36-15=-51.$$
+                  Integrate: risk loving over losses.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercises 7.12 and 7.16</p>
+    </div>
+  </section>
+
+  <!-- Problem 8: time inconsistency, exponential vs beta-delta -->
+  <section class="frame" id="practice-time-inconsistency">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Dynamic Consistency</h2>
+      <p class="frame-subtitle">Problem 8: Cancer Screening</p>
+    </div>
+    <div class="frame-content">
+      <p>Colonoscopies detect polyps before they become cancerous, but they are experienced as embarrassing and painful. The typical person, when young, resolves to have a colonoscopy when older, but changes his or her mind as the procedure approaches. Two patients, Abelita and Benny, choose between:</p>
+      <ul>
+        <li>option $a$: a colonoscopy at ${t=1}$ (utility $0$) and being healthy at ${t=2}$ (utility $18$);</li>
+        <li>option $b$: no colonoscopy at ${t=1}$ (utility $6$) and being unhealthy at ${t=2}$ (utility $0$).</li>
+      </ul>
+      <p>Abelita discounts the future exponentially with ${\delta=2/3.}$ Benny is a $(\beta,\delta)$-individual with ${\beta=1/6}$ and ${\delta=1.}$</p>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  What are Abelita&rsquo;s utilities of $a$ and $b$ at ${t=0}$? At ${t=1}$?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  $$t=0:\quad U(a)=\left(\tfrac23\right)^2\cdot 18=8,\qquad U(b)=\tfrac23\cdot 6=4.$$
+                  $$t=1:\quad U(a)=0+\tfrac23\cdot 18=12,\qquad U(b)=6.$$
+                  She prefers $a$ at both dates: time consistent.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  What are Benny&rsquo;s utilities of $a$ and $b$ at ${t=0}$? At ${t=1}$?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  $$t=0:\quad U(a)=\tfrac16\,(0+18)=3,\qquad U(b)=\tfrac16\cdot 6=1.$$
+                  $$t=1:\quad U(a)=0+\tfrac16\cdot 18=3,\qquad U(b)=6.$$
+                  He prefers $a$ at ${t=0}$ but $b$ at ${t=1}$: a preference reversal.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 3</div>
+              <div class="flip-body">
+                  Who acts more like the typical patient? Who is more likely to end up with health issues?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 3</div>
+              <div class="flip-body">
+                  Benny on both counts: he plans the colonoscopy, then skips it when the time comes.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercise 9.5</p>
+    </div>
+  </section>
+
+  <!-- Problem 9: naive and sophisticated beta-delta individuals (addiction) -->
+  <section class="frame" id="practice-naive-sophisticated">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Naive and Sophisticated Agents</h2>
+      <p class="frame-subtitle">Problem 9: Addiction</p>
+    </div>
+    <div class="frame-content">
+      <p>Life has three periods: youth, middle age, and old age. In every period you decide whether to do drugs (&ldquo;hit&rdquo;) or not (&ldquo;refrain&rdquo;). If you are not hooked, hitting gives utility $10$ and refraining $0$. If you are hooked, hitting gives $-8$ and refraining $-25$. In youth you are not hooked; after that, you are hooked exactly when you hit in the previous period. Let ${\delta=1}$ and ${\beta=1/2.}$ What do you do in each period if you are:</p>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  time consistent (${\beta=1}$)?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  <ul>
+                  <li>Old age: no future, so always hit ($10\gt 0$; ${-8\gt -25}$).</li>
+                  <li>Middle age, not hooked: hit ${10-8=2}$, refrain ${0+10=10}$: refrain. Hooked: hit ${-8-8=-16}$, refrain ${-25+10=-15}$: refrain.</li>
+                  <li>Youth: hit ${10-15=-5}$, refrain ${0+10=10}$: refrain.</li>
+                  </ul>
+                  Refrain, refrain, hit.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  time inconsistent and naive?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  <ul>
+                  <li>Youth expects future selves to follow its own plan: refrain ${0+\tfrac12(0+10)=5}$, hit ${10+\tfrac12(-25+10)=2.5}$: refrain.</li>
+                  <li>Middle age, not hooked: hit ${10+\tfrac12(-8)=6}$, refrain ${0+\tfrac12(10)=5}$: hit.</li>
+                  <li>Old age, hooked: hit.</li>
+                  </ul>
+                  Refrain, hit, hit.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 3</div>
+              <div class="flip-body">
+                  time inconsistent and sophisticated?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 3</div>
+              <div class="flip-body">
+                  <ul>
+                  <li>Old age: hit.</li>
+                  <li>Middle age, not hooked: hit (${6\gt 5}$). Hooked: hit ${-8+\tfrac12(-8)=-12}$, refrain ${-25+\tfrac12(10)=-20}$: hit.</li>
+                  <li>Youth knows the middle-aged self will hit either way: hit ${10+\tfrac12(-8-8)=2}$, refrain ${0+\tfrac12(10-8)=1}$: hit.</li>
+                  </ul>
+                  Hit, hit, hit.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercise 9.22</p>
+    </div>
+  </section>
+
+  <!-- Problem 10: preferences over utility streams -->
+  <section class="frame" id="practice-profiles">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Preferences Over Utility Streams</h2>
+      <p class="frame-subtitle">Problem 10: Saving the Best for Last</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                  <p>It is Sunday morning ${(t=0)}$, and you will clean the apartment and go to the movies today: either clean in the morning and go to the movies in the afternoon ${(t=1)}$, or go to the movies in the morning and clean in the afternoon. Cleaning gives you utility $2$; the movies give you $12$. From the point of view of ${t=0}$, what is the utility of cleaning first and of going to the movies first if:</p>
+                  <ul>
+                  <li>you discount exponentially with ${\delta=1/2}$?</li>
+                  <li>you are a $(\beta,\delta)$-individual with ${\beta=1/3}$ and ${\delta=1/2}$?</li>
+                  </ul>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                  $$\text{Exponential: clean first } 2+\tfrac12\cdot 12=8,\qquad\text{movies first } 12+\tfrac12\cdot 2=13.$$
+                  $$(\beta,\delta)\text{: clean first } 2+\tfrac13\cdot\tfrac12\cdot 12=4,\qquad\text{movies first } 12+\tfrac13\cdot\tfrac12\cdot 2\approx 12.33.$$
+                  Both models schedule the pleasant experience first, yet people often clean first and keep the movies for last.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 2</div>
+              <div class="flip-body">
+                  Suppose you add a pleasant tail to an already pleasant episode. If people evaluate the episode with the peak-end rule, will this make them think of the episode as a whole as more or less pleasant?
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 2</div>
+              <div class="flip-body">
+                  Less pleasant, when the tail is milder than the episode&rsquo;s end: the peak is unchanged and the end utility falls, so ${U(\mathbf{u})=f\bigl(\max_t u_t,\,u_T\bigr)}$ falls. The extra pleasant time does not count (duration neglect).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mp-cite">Angner (2016), Exercises 9.12 and 9.14</p>
+    </div>
+  </section>
+
+  <!-- References: full entries for the short citations under each problem -->
+  <section class="frame" id="practice-references">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">References</h2>
+    </div>
+    <div class="frame-content">
+      <ul class="mp-refs">
+        <li>Angner, Erik (2016). <em>A Course in Behavioral Economics</em>, 2nd ed. London: Palgrave Macmillan.</li>
+        <li>Ogaki, Masao, and Saori C. Tanaka (2017). <em>Behavioral Economics: Toward a New Economics by Integration with Traditional Economics</em>. Springer Texts in Business and Economics. Singapore: Springer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
+    <a href="midterm-02.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Midterm 2</a>
+    <a href="problem-sets-answer-key.html" style="color: var(--crane-blue); text-decoration: none;">Problem Sets' Answer Key &rarr;</a>
+  </div>
+
+  <!-- KaTeX (katex-macros.js renders the page on load) -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="js/katex-macros.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/scroll-animations.js"></script>
+
+  <script>
+    // Flip cards: toggle .flipped on click (or Enter/Space), and size the card to
+    // the visible face; refresh ScrollTrigger once the height has settled, since
+    // everything below the card moves. Links inside a card navigate without flipping it.
+    document.querySelectorAll('.flip-card').forEach(card => {
+      const inner = card.querySelector('.flip-inner');
+      const front = card.querySelector('.flip-front');
+      const back = card.querySelector('.flip-back');
+      const fit = () => {
+        const face = card.classList.contains('flipped') ? back : front;
+        inner.style.height = face.offsetHeight + 'px';
+      };
+      const flip = () => {
+        const flipped = card.classList.toggle('flipped');
+        front.setAttribute('aria-hidden', flipped ? 'true' : 'false');
+        back.setAttribute('aria-hidden', flipped ? 'false' : 'true');
+        fit();
+      };
+      card.addEventListener('click', e => { if (!e.target.closest('a')) flip(); });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      });
+      inner.addEventListener('transitionend', e => {
+        if (e.propertyName === 'height') ScrollTrigger.refresh();
+      });
+      new ResizeObserver(fit).observe(front);
+      new ResizeObserver(fit).observe(back);
+      fit();
+    });
+  </script>
+
+</body>
+</html>
