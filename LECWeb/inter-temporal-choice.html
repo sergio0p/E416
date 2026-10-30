@@ -48,7 +48,55 @@
 
     /* Reading link in a frame subtitle keeps the subtitle color. */
     .frame-subtitle a { color: inherit; text-underline-offset: 0.12em; }
+
+    /* Discounting widget (tikz-svg): a model menu, then the graph with its sliders */
+    #discounting-widget [hidden] { display: none !important; }   /* beats the display: flex below */
+    .dw-layout { display: flex; align-items: center; justify-content: center; gap: 1.5rem; }
+    .dw-graph { flex: 1 1 0; min-width: 0; max-width: 600px; height: auto; display: block; }
+    .dw-side { flex: 0 0 16rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .dw-menu { display: flex; flex-direction: column; gap: 0.45rem; }
+    .dw-menu button { font: inherit; font-size: 0.85em; width: 100%; padding: 0.35rem 0.7rem; border: 1px solid var(--crane-amber-dark); border-radius: 6px; background: #fff8e1; color: #000; cursor: pointer; }
+    .dw-menu button:hover:not(:disabled) { background: var(--crane-amber-light); }
+    .dw-menu button:disabled { background: var(--crane-amber-light); cursor: default; }
+    .dw-refresh { margin: 0; font-size: 0.75em; color: var(--text-secondary); }
+    .dw-legend { display: flex; flex-direction: column; gap: 0.15rem; font-size: 0.85em; }
+    .dw-swatch { display: inline-block; width: 1.6em; height: 0.25em; margin-right: 0.4em; vertical-align: middle; border-radius: 2px; }
+    .dw-controls { display: flex; flex-direction: column; gap: 0.35rem; }
+    .dw-slider { display: flex; align-items: center; gap: 0.5rem; }
+    .dw-slider .dw-name { min-width: 2.4em; }
+    .dw-slider input[type="range"] { flex: 1; min-width: 0; accent-color: var(--crane-amber-dark); }
+    .dw-slider output { min-width: 3.6em; font-variant-numeric: tabular-nums; }
+    /* Time range: two range inputs stacked on one track, slim-bar knobs. The inputs
+       ignore the pointer except on their knobs, so either knob can be grabbed; the
+       amber fill between the knobs is the range shown (--lo, --hi set by the script). */
+    .dw-dual { position: relative; flex: 1; min-width: 0; height: 1.4rem; --lo: 0; --hi: 1; }
+    .dw-dual::before, .dw-dual-fill { content: ''; position: absolute; top: 50%; height: 4px; transform: translateY(-50%); border-radius: 2px; }
+    .dw-dual::before { left: 0; right: 0; background: #ddd; }
+    .dw-dual-fill { left: calc(2.5px + (100% - 5px) * var(--lo)); right: calc(2.5px + (100% - 5px) * (1 - var(--hi))); background: var(--crane-amber-dark); }
+    .dw-dual input[type="range"] { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; }
+    .dw-dual input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: transparent; }
+    .dw-dual input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 5px; height: 20px; margin-top: -8px; border: none; border-radius: 1px; background: #5d3a00; cursor: ew-resize; }
+    .dw-dual input[type="range"]::-moz-range-track { height: 4px; background: transparent; }
+    .dw-dual input[type="range"]::-moz-range-thumb { pointer-events: auto; width: 5px; height: 20px; border: none; border-radius: 1px; background: #5d3a00; cursor: ew-resize; }
+
+    /* Safari/WebKit does not paint `position: relative` content inside
+       <foreignObject>, so KaTeX labels in tikz-svg figures lay out correctly but
+       never appear. On WebKit show KaTeX's MathML twin and hide the HTML. Same fix
+       as behavioral-choice-risk.html. */
+    @supports (-webkit-backdrop-filter: blur(1px)) {
+      svg foreignObject .katex .katex-html { display: none; }
+      svg foreignObject .katex .katex-mathml {
+        position: static; clip: auto; clip-path: none; height: auto; width: auto;
+        overflow: visible; padding: 0; border: 0; opacity: 1; font-size: 1em;
+      }
+    }
   </style>
+
+  <!-- tikz-svg: the bundle's bare 'mathjs' import must resolve; the shim
+       degrades to null stubs when window.math is absent (diagrams-only page). -->
+  <script type="importmap">
+  { "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+  </script>
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
 </head>
@@ -67,26 +115,28 @@
       <a href="#beta-delta" style="margin-left: 1rem;">3. $(\beta,\delta)$-Model</a>
       <a href="#hyperbolic" style="margin-left: 1rem;">4. Hyperbolic</a>
       <br>
-      <a href="#dynamic-consistency" style="margin-left: 1rem;">5. Dynamic Consistency</a>
-      <a href="#dynamic-consistency-reactions" style="margin-left: 1rem;">6. Naive vs. Strategic</a>
-      <a href="#lbd-setup" style="margin-left: 1rem;">7. Learning by Doing</a>
-      <a href="#lbd-naive" style="margin-left: 1rem;">8. Naive Approach</a>
+      <a href="#discounting-widget" style="margin-left: 1rem;">5. Discounting Widget</a>
+      <a href="#dynamic-consistency" style="margin-left: 1rem;">6. Dynamic Consistency</a>
+      <a href="#dynamic-consistency-reactions" style="margin-left: 1rem;">7. Naive vs. Strategic</a>
+      <a href="#lbd-setup" style="margin-left: 1rem;">8. Learning by Doing</a>
       <br>
-      <a href="#lbd-strategic" style="margin-left: 1rem;">9. No Commitment</a>
-      <a href="#lbd-commitment" style="margin-left: 1rem;">10. Commitment</a>
+      <a href="#lbd-naive" style="margin-left: 1rem;">9. Naive Approach</a>
+      <a href="#lbd-strategic" style="margin-left: 1rem;">10. No Commitment</a>
+      <a href="#lbd-commitment" style="margin-left: 1rem;">11. Commitment</a>
       <!-- HIDDEN (movie example):
         #procrastination-movies Procrastination (movies)
       HIDDEN -->
-      <a href="#procrastination" style="margin-left: 1rem;">11. Procrastination</a>
-      <a href="#procrastination-exponential" style="margin-left: 1rem;">12. Exponential Agent</a>
+      <a href="#procrastination" style="margin-left: 1rem;">12. Procrastination</a>
       <br>
-      <a href="#procrastination-sophisticated" style="margin-left: 1rem;">13. Sophisticated Agent</a>
-      <a href="#procrastination-naive" style="margin-left: 1rem;">14. Naive Agent</a>
-      <a href="#rubinstein-2003" style="margin-left: 1rem;">15. Rubinstein (2003)</a>
-      <a href="#rubinstein-2003-experiments" style="margin-left: 1rem;">16. Experiments</a>
+      <a href="#procrastination-exponential" style="margin-left: 1rem;">13. Exponential Agent</a>
+      <a href="#procrastination-sophisticated" style="margin-left: 1rem;">14. Sophisticated Agent</a>
+      <a href="#procrastination-naive" style="margin-left: 1rem;">15. Naive Agent</a>
+      <a href="#rubinstein-2003" style="margin-left: 1rem;">16. Rubinstein (2003)</a>
       <br>
-      <a href="#rubinstein-q1-q2" style="margin-left: 1rem;">17. Q1 and Q2</a>
-      <a href="#rubinstein-contradiction" style="margin-left: 1rem;">18. Contradiction</a>
+      <a href="#rubinstein-2003-experiments" style="margin-left: 1rem;">17. Experiments</a>
+      <a href="#rubinstein-q1-q2" style="margin-left: 1rem;">18. Q1 and Q2</a>
+      <a href="#rubinstein-contradiction" style="margin-left: 1rem;">19. Contradiction</a>
+      <a href="#utility-streams" style="margin-left: 1rem;">20. Utility Streams</a>
     </nav>
   </section>
 
@@ -151,6 +201,44 @@
       <p>The hyperbolic discounting function is:
       $$D(t)=\bigl(1+\alpha\cdot t \bigr)^{-\gamma/\alpha}$$
       where ${\alpha\gt 0}$ and ${\gamma\gt 0}$. Notice that as ${\alpha\searrow 0}$, the discount factor converges to ${D(t)=\exp(-\gamma\cdot t)=\delta^{t}}$, where ${\delta=\exp(-\gamma)}$. Thus, exponential discounting is a limit case of hyperbolic discounting.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Discounting widget. Pick a model from the menu (refresh to pick again);
+       the graph shows, seen from period t, the utility of 1000 paid in period 99 (red)
+       and of 2000 paid in period 100 (blue). Purple marks where the two coincide. The
+       menu, legend and sliders sit to the right of the graph. -->
+  <section class="frame" id="discounting-widget">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Behavioral Models of Intertemporal Choice</h2>
+    </div>
+    <div class="frame-content">
+      <div class="dw-layout">
+        <svg id="dw-graph" class="dw-graph" role="img" aria-label="Utility in period t of 1000 paid in period 99 (red) and of 2000 paid in period 100 (blue), for the chosen discounting model"></svg>
+        <div class="dw-side">
+          <div class="dw-menu" id="dw-menu">
+            <button type="button" data-model="exp">Exponential Discounting (standard model)</button>
+            <button type="button" data-model="bd">Quasi-Hyperbolic Discounting ($\beta$-$\delta$ behavioral model)</button>
+            <button type="button" data-model="hyp">Hyperbolic Discounting (general hyperbolic model)</button>
+          </div>
+          <p class="dw-refresh" id="dw-refresh" hidden>Refresh the page to choose another model.</p>
+          <div class="dw-legend" id="dw-legend" hidden>
+            <span><span class="dw-swatch" style="background: #dc322f;"></span>$1000$ paid in period $99$</span>
+            <span><span class="dw-swatch" style="background: #268bd2;"></span>$2000$ paid in period $100$</span>
+            <span id="dw-legend-both" hidden><span class="dw-swatch" style="background: #8e44ad;"></span>the two coincide</span>
+          </div>
+          <div class="dw-controls">
+            <label class="dw-slider" data-models="bd" hidden><span class="dw-name">$\beta$</span> <input type="range" id="dw-beta" min="0.01" max="1" step="0.01" value="0.5"> <output for="dw-beta" id="dw-beta-out">0.50</output></label>
+            <label class="dw-slider" data-models="hyp" hidden><span class="dw-name">$\alpha$</span> <input type="range" id="dw-alpha" min="-3" max="-0.48" step="0.005" value="-1"> <output for="dw-alpha" id="dw-alpha-out">0.10</output></label>
+            <label class="dw-slider" data-models="exp bd hyp" hidden><span class="dw-name">$\delta$</span> <input type="range" id="dw-delta" min="0.01" max="1" step="0.01" value="0.5"> <output for="dw-delta" id="dw-delta-out">0.50</output></label>
+            <span class="dw-slider" data-models="hyp" hidden>$\gamma=-\ln\delta=$ <output id="dw-gamma-out">0.69</output></span>
+            <div class="dw-slider" data-models="exp bd hyp" hidden><span class="dw-name">$t$</span>
+              <div class="dw-dual" id="dw-dual"><div class="dw-dual-fill"></div><input type="range" id="dw-tmin" min="0" max="99" step="1" value="0" aria-label="first period shown"><input type="range" id="dw-tmax" min="0" max="99" step="1" value="99" aria-label="last period shown"></div>
+              <output class="dw-range" id="dw-range-out">0–99</output>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -571,6 +659,26 @@
     </div>
   </section>
 
+  <!-- Frame: Preferences Over Utility Streams -->
+  <section class="frame" id="utility-streams">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Preferences Over Utility Streams</h2>
+    </div>
+    <div class="frame-content">
+      <p>In every discounting model the discount function $D(t)$ is decreasing in $t$, so an individual who discounts the future <em>always</em> prefers to receive gains sooner and to postpone losses.</p>
+      <p>That prediction contradicts factual evidence. Often, &ldquo;when choosing between sequences of events, people will make a point of scheduling the unpleasant experience first and the pleasant one later&rdquo; (Angner, <em>A Course in Behavioral Economics</em>, 2nd ed., Palgrave Macmillan, 2016, p. 207).</p>
+      <p>An alternative to discounting is to evaluate a utility profile with the peak-end rule.</p>
+      <div class="block">
+        <div class="block-title">Peak-End Rule</div>
+        <div class="block-body">
+          <p>Let ${\mathbf{u}=(u_0,u_1,\dots,u_T)}$ be a utility profile, and let $f(x,y)$ be strictly increasing in both arguments. A peak-end rule evaluates $\mathbf{u}$ as
+          $$U(\mathbf{u})=f\Bigl(\max_{t} u_t,\;u_T\Bigr).$$
+          Only two numbers matter: the peak utility $\max_{t} u_t$ and the final utility $u_T$. The rest of the profile is ignored.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
     <a href="mental-accounting.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Mental Accounting</a>
@@ -652,6 +760,186 @@
         }
       });
     });
+  </script>
+
+  <!-- Discounting widget: seen from period t, red is 1000 D(99 - t) and blue is
+       2000 D(100 - t), shown on [t_min, t_max] with t_max at most 99 (after 99 red is
+       already paid and there is nothing to compare), for the discount function D(k)
+       chosen in the menu. -->
+  <script type="module">
+    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+
+    // Pixel units (scale 1): the plot box is W x H px, mapped to t in [t0, t1] and
+    // utility in [y0, y1]. On every redraw y0 and y1 fit the lowest and highest
+    // utility on screen, rounded out to the nearest ticks. Coordinates are y-up;
+    // paths and nodes are y-down, hence the negated heights.
+    const GREY = '#586e75', RED = '#dc322f', BLUE = '#268bd2', PURPLE = '#8e44ad';
+    const W = 500, H = 300;
+    // g(k) is D(k) for k > 0, continued to k = 0. For beta-delta, g(0) = beta while
+    // D(0) = 1: the curve jumps when its payment arrives (open dot = limit, filled
+    // dot = value).
+    const MODELS = {
+      exp: p => k => Math.pow(p.delta, k),
+      bd: p => k => p.beta * Math.pow(p.delta, k),
+      hyp: p => { const gamma = -Math.log(p.delta); return k => Math.pow(1 + p.alpha * k, -gamma / p.alpha); },
+    };
+    const close = (a, b) => (a !== 0 || b !== 0)
+      && Math.abs(a - b) <= 1e-9 * Math.max(Math.abs(a), Math.abs(b));
+    // Tick spacing: 1, 2 or 5 times a power of ten, about `target` ticks per range.
+    const niceStep = (range, target) => {
+      const raw = range / target, mag = 10 ** Math.floor(Math.log10(raw)), n = raw / mag;
+      return mag * (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10);
+    };
+    const ticks = (lo, hi, step) => {
+      const out = [];
+      for (let k = Math.ceil(lo / step - 1e-9); k * step <= hi + 1e-9; k++) out.push(k * step);
+      return out;
+    };
+    // Tick label: plain decimals, or m x 10^e once the ticks are finer than 0.001.
+    const fmt = (v, step) => {
+      if (step >= 1e-3) return String(+v.toFixed(step >= 1 ? 0 : Math.ceil(-Math.log10(step) - 1e-9)));
+      if (Math.abs(v) < step / 2) return '0';
+      const e = Math.floor(Math.log10(Math.abs(v)) + 1e-9);
+      const d = Math.max(0, e - Math.floor(Math.log10(step) + 1e-9));
+      return `${+(v / 10 ** e).toFixed(d)}\\times 10^{${e}}`;
+    };
+
+    const lbl = (id, x, y, text, anchor, color, size = 13) => ({
+      type: 'node', id, position: { x, y }, label: text, anchor, shape: 'rectangle',
+      innerSep: 2, fontSize: size, labelColor: color, fill: 'none', stroke: 'none',
+    });
+    const seg = (x1, y1, x2, y2) => ({
+      type: 'path', points: [{ x: x1, y: y1 }, { x: x2, y: y2 }], stroke: GREY, strokeWidth: 1.2,
+    });
+    const dot = (id, x, y, color, open = false) => ({
+      type: 'node', id, position: { x, y: -y }, shape: 'circle', radius: 3.5,
+      fill: open ? '#ffffff' : color, stroke: open ? color : 'none', strokeWidth: 1.8, label: '',
+    });
+
+    // The view { t0, t1, y0, y1, ys } as pixel maps, and the axes drawn in it.
+    const pixels = v => ({
+      X: t => (t - v.t0) * W / (v.t1 - v.t0),
+      Y: u => (u - v.y0) * H / (v.y1 - v.y0),
+    });
+    const axes = (v, m) => {
+      const items = [
+        { type: 'path', points: [{ x: 0, y: 0 }, { x: W + 15, y: 0 }], arrow: '->', stroke: GREY, strokeWidth: 1.6 },
+        { type: 'path', points: [{ x: 0, y: 0 }, { x: 0, y: -(H + 25) }], arrow: '->', stroke: GREY, strokeWidth: 1.6 },
+        lbl('dw-xt', W + 20, 0, '$t$', 'west', GREY),
+        lbl('dw-yt', -8, -(H + 30), 'utility in period $t$', 'south west', GREY),
+      ];
+      const xs = niceStep(v.t1 - v.t0, 10);
+      ticks(v.t0, v.t1, xs).forEach((t, i) => {
+        items.push(seg(m.X(t), 0, m.X(t), 4), lbl(`dw-x${i}`, m.X(t), 6, `$${fmt(t, xs)}$`, 'north', GREY, 11));
+      });
+      ticks(v.y0, v.y1, v.ys).forEach((u, i) => {
+        items.push(seg(-4, -m.Y(u), 0, -m.Y(u)), lbl(`dw-y${i}`, -6, -m.Y(u), `$${fmt(u, v.ys)}$`, 'east', GREY, 11));
+      });
+      return items;
+    };
+
+    // Samples of both curves on [t0, t1] (t1 <= 99), the stretches where they coincide,
+    // red's payment dot when 99 is in range, and the lowest and highest utility.
+    const series = (g, t0, t1) => {
+      const red = t => 1000 * g(99 - t), blue = t => 2000 * g(100 - t);
+      const tb = Array.from({ length: 1001 }, (_, i) => t0 + (t1 - t0) * i / 1000);
+      const runs = [];
+      let run = [];
+      const flush = () => { if (run.length > 1) runs.push(run); run = []; };
+      tb.forEach(t => { if (close(red(t), blue(t))) run.push(t); else flush(); });
+      flush();
+      const atRed = u => close(u, blue(99)) ? PURPLE : RED;
+      const dots = [], jump = Math.abs(g(0) - 1) > 1e-12;
+      if (t1 >= 99) {
+        if (jump) dots.push({ t: 99, u: 1000 * g(0), color: atRed(1000 * g(0)), open: true });
+        dots.push({ t: 99, u: 1000, color: atRed(1000) });
+      }
+      const us = [...tb.map(red), ...tb.map(blue), ...dots.map(d => d.u)];
+      return { red, blue, tb, runs, dots, lo: Math.min(...us), hi: Math.max(...us) };
+    };
+    const curve = (ts, f, m, color, width = 2.5) => ({
+      type: 'plot', coordinates: ts.map(t => ({ x: m.X(t), y: m.Y(f(t)) })),
+      handler: 'lineto', stroke: color, strokeWidth: width,
+    });
+
+    const svg = document.getElementById('dw-graph');
+    const menu = document.getElementById('dw-menu');
+    const legend = document.getElementById('dw-legend');
+    const legendBoth = document.getElementById('dw-legend-both');
+    const params = ['beta', 'alpha', 'delta'], ids = [...params, 'tmin', 'tmax'];
+    const inputs = Object.fromEntries(ids.map(k => [k, document.getElementById(`dw-${k}`)]));
+    const outputs = Object.fromEntries(params.map(k => [k, document.getElementById(`dw-${k}-out`)]));
+    const gammaOut = document.getElementById('dw-gamma-out');
+    const dual = document.getElementById('dw-dual'), rangeOut = document.getElementById('dw-range-out');
+    let model = null, pending = false;
+
+    const redraw = () => {
+      pending = false;
+      let v = { t0: 0, t1: 99, y0: 0, y1: 2000, ys: 500 }, s = null;
+      if (model) {
+        const p = Object.fromEntries(ids.map(k => [k, +inputs[k].value]));
+        // The alpha slider is log10(alpha), from 0.001 to 0.33; alpha keeps two
+        // significant digits so the readout is the value used.
+        p.alpha = +(10 ** p.alpha).toPrecision(2);
+        params.forEach(k => { outputs[k].textContent = k === 'alpha' ? p[k].toPrecision(2) : p[k].toFixed(2); });
+        gammaOut.textContent = (-Math.log(p.delta)).toFixed(2);
+        rangeOut.textContent = `${p.tmin}–${p.tmax}`;
+        dual.style.setProperty('--lo', p.tmin / 99);
+        dual.style.setProperty('--hi', p.tmax / 99);
+        s = series(MODELS[model](p), p.tmin, p.tmax);
+        const ys = niceStep(s.hi - s.lo || Math.abs(s.hi) || 1, 5);
+        v = { t0: p.tmin, t1: p.tmax, ys, y0: Math.floor(s.lo / ys + 1e-9) * ys, y1: Math.ceil(s.hi / ys - 1e-9) * ys };
+        if (v.y1 <= v.y0) v.y1 = v.y0 + ys;
+        legendBoth.hidden = s.runs.length === 0;
+      }
+      const m = pixels(v);
+      const draw = axes(v, m);
+      if (s) {
+        // red and blue, then purple over every stretch where they coincide, then the dots
+        draw.push(curve(s.tb, s.blue, m, BLUE));
+        draw.push(curve(s.tb, s.red, m, RED));
+        s.runs.forEach(r => draw.push(curve(r, s.red, m, PURPLE, 2.9)));
+        s.dots.forEach((d, i) => draw.push(dot(`dw-d${i}`, m.X(d.t), m.Y(d.u), d.color, d.open)));
+      }
+      try {
+        render(svg, {
+          scale: 1, originX: 0, originY: 0, padding: 0, viewBox: [-85, -355, 630, 385],
+          katexMacros: (typeof katexMacros !== 'undefined' ? katexMacros : undefined),
+          draw,
+        });
+      } catch (e) { console.error('dw-graph render failed', e); }
+    };
+
+    // Choosing a model keeps its button (disabled), hides the other two, and shows
+    // that model's sliders; a page refresh brings the menu back.
+    menu.addEventListener('click', e => {
+      const button = e.target.closest('button[data-model]');
+      if (!button || model) return;
+      model = button.dataset.model;
+      menu.querySelectorAll('button').forEach(b => { b.hidden = b !== button; });
+      button.disabled = true;
+      document.getElementById('dw-refresh').hidden = false;
+      legend.hidden = false;
+      document.querySelectorAll('#discounting-widget [data-models]').forEach(el => {
+        el.hidden = !el.dataset.models.split(' ').includes(model);
+      });
+      redraw();
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+    });
+    // The two time knobs stay at least one period apart. When they meet, the one that
+    // can still move sits on top: t_min near the right end, t_max elsewhere.
+    const keepOrder = moved => {
+      const { tmin, tmax } = inputs;
+      if (+tmin.value >= +tmax.value) {
+        if (moved === tmin) tmin.value = +tmax.value - 1; else tmax.value = +tmin.value + 1;
+      }
+      tmin.style.zIndex = +tmin.value >= 50 ? 2 : 1;
+    };
+    Object.values(inputs).forEach(input => input.addEventListener('input', () => {
+      if (input === inputs.tmin || input === inputs.tmax) keepOrder(input);
+      if (!pending) { pending = true; requestAnimationFrame(redraw); }
+    }));
+    redraw();
   </script>
 
 </body>
