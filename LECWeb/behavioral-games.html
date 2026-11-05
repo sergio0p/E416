@@ -10,25 +10,68 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <link rel="stylesheet" href="css/beamer-theme.css">
 
+  <!-- tikz-svg: the bundle's bare 'mathjs' import must resolve; the shim
+       degrades to null stubs when window.math is absent (diagrams-only page). -->
+  <script type="importmap">
+  { "imports": { "mathjs": "./tikz-svg/examples-v2/mathjs-shim.js" } }
+  </script>
+
   <style>
-    .tikz-placeholder {
-      border: 2px dashed #999;
-      background: #fafafa;
-      padding: 1.2rem;
-      margin: 0.8rem auto;
-      text-align: center;
-      color: #555;
-      font-style: italic;
-      max-width: 520px;
-      font-size: 0.85em;
-    }
-    .tikz-placeholder .tikz-label {
-      font-weight: bold;
-      color: #b7410e;
+    /* Handwriting face for the "Nash eq. = ..." note (Beamer's \augie). */
+    @font-face {
+      font-family: 'Augie';
+      src: url('fonts/augie.woff2') format('woff2'),
+           url('fonts/augie.woff') format('woff');
+      font-weight: normal;
       font-style: normal;
-      display: block;
-      margin-bottom: 0.4rem;
     }
+
+    /* tikz-svg figures (source: 416/E416_LEC_FA25.tex 1264-1489). */
+    .gt-fig { width: 100%; display: block; margin: 0.75rem auto; }
+    .br-fig { max-width: 520px; }
+    .tree-fig { max-width: 420px; }
+    #fig-dictator { max-width: 260px; }
+
+    /* Best-response figures: the Beamer overlays (<2,4-> stars, <3-> circles,
+       <5-> Nash note) as scroll steps. The library rebuilds the SVG's children
+       after fonts load, so visibility is CSS keyed on stable ids plus a class
+       on the persistent <svg> — never state set on the rendered children. */
+    svg.br-fig [id*="-br1-"], svg.br-fig [id*="-br2-"], svg.br-fig [id*="-nash-"] {
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    svg.br-fig.show-br1 [id*="-br1-"],
+    svg.br-fig.show-br2 [id*="-br2-"],
+    svg.br-fig.show-nash [id*="-nash-"] { opacity: 1; }
+
+    /* Coordination-game frame: two columns as in the 411/511 slide, matrix left and
+       list right. The list comes first in the DOM because the overlay script steps
+       through .overlay items in document order; `order` puts the matrix on the left. */
+    .bos-cols { display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+    .bos-cols .bos-list { flex: 0 1 30rem; margin: 0; }
+    .bos-cols .bos-matrix { order: -1; flex: 0 0 auto; width: 280px; }
+    /* break lines only between formulas, never inside one */
+    .bos-list .katex { white-space: nowrap; }
+    #fig-bos { margin: 0; }
+    /* \only<5>: player 2's side in blue. \only<6>: player 1's side in red, cell
+       slashes included (TikZ's |[red]| colours the whole cell node). */
+    #fig-bos text { transition: fill 0.4s ease; }
+    #fig-bos path { transition: stroke 0.4s ease; }
+    #game-theory-review[data-step="5"] #fig-bos [id*="bos-p2"] text { fill: #268bd2; }
+    #game-theory-review[data-step="6"] #fig-bos [id*="bos-p1"] text { fill: #dc322f; }
+    #game-theory-review[data-step="6"] #fig-bos path[id^="bos-p1-slash"] { stroke: #dc322f; }
+
+    /* Safari/WebKit does not paint `position: relative` content inside
+       <foreignObject>, so KaTeX labels in tikz-svg figures never appear. On
+       WebKit only (guarded by -webkit-backdrop-filter), show KaTeX's MathML
+       twin and hide the HTML rendering. Same fix as behavioral-choice-certainty. */
+    @supports (-webkit-backdrop-filter: blur(1px)) {
+      svg foreignObject .katex .katex-html { display: none; }
+      svg foreignObject .katex .katex-mathml {
+        position: static; clip: auto; clip-path: none; height: auto; width: auto;
+        overflow: visible; padding: 0; border: 0; opacity: 1; font-size: 1em;
+      }
+    }
+
     .payoff-matrix {
       border-collapse: collapse;
       margin: 0.8rem auto;
@@ -55,8 +98,12 @@
     </div>
   </section>
 
-  <!-- Frame: Game Theory quick review (source: 1198-1259) -->
-  <section class="frame overlay-frame" id="game-theory-review">
+  <!-- Frame: Game Theory quick review (source: 1198-1259). The example is the B/S
+       version from ECON 411/511 (E411_LEC_SPR_25.tex 257, "A coordination game (aka
+       Battle of Sexes)"). Six scroll steps, as the Beamer overlays: <1->, <2->, <3->
+       list items, \only<4> the matrix, \only<5> player 2 in blue, \only<6> player 1
+       in red. Steps 5-6 add no item: data-steps="6" + CSS on data-step. -->
+  <section class="frame overlay-frame" id="game-theory-review" data-steps="6">
     <div class="frame-title-bar">
       <h2 class="frame-title">Game Theory</h2>
       <p class="frame-subtitle">A Quick Review</p>
@@ -67,24 +114,18 @@
         <div class="block-body">A (static) game is a list of players, their available actions, and their payoffs.</div>
       </div>
       <p style="text-align:center;"><em>Example: A coordination game.</em></p>
-      <ul>
-        <li class="overlay" data-overlay="1">$I = \{1,2\}$</li>
-        <li class="overlay" data-overlay="2">$S_1=S_2=\{W,M\}$, where $W$ stands for &ldquo;Windows&rdquo; and $M$ stands for &ldquo;Mac&rdquo;.<br>
-          $S=S_1\times S_2=\{ (W,W),(W,M),(M,W),(M,M)\}$</li>
-        <li class="overlay" data-overlay="3">$u_1(W,W)=u_2(M,M)=3$, $u_1(M,M)=u_2(W,W)=2$,<br>
-          $u_1(W,M)=u_1(M,W)=u_2(W,M)=u_2(M,W)=0$.</li>
-      </ul>
-      <div class="overlay" data-overlay="4">
-        <table class="payoff-matrix">
-          <thead>
-            <tr><th></th><th>W</th><th>M</th></tr>
-          </thead>
-          <tbody>
-            <tr><th>W</th><td>3, 2</td><td>0, 0</td></tr>
-            <tr><th>M</th><td>0, 0</td><td>2, 3</td></tr>
-          </tbody>
-        </table>
-        <p style="text-align:center;"><small>Player 1 chooses rows, Player 2 chooses columns.</small></p>
+      <div class="bos-cols">
+        <ul class="bos-list">
+          <li class="overlay" data-overlay="1">$I = \{1,2\}$</li>
+          <li class="overlay" data-overlay="2">$S_1=S_2=\{B,S\}$,<br>
+            $S=S_1\times S_2=\{ (B,B),(B,S),(S,B),(S,S)\}$</li>
+          <li class="overlay" data-overlay="3">$u_1(B,B)=u_2(S,S)=3$, $u_1(S,S)=u_2(B,B)=2$,<br>
+            $u_1(B,S)=u_1(S,B)=0$,<br>
+            $u_2(B,S)=u_2(S,B)=0$.</li>
+        </ul>
+        <div class="overlay bos-matrix" data-overlay="4">
+          <svg id="fig-bos" class="gt-fig" role="img" aria-label="Payoff matrix: (B,B) pays 3 to player 1 and 2 to player 2; (S,S) pays 2 and 3; mismatches pay 0 to both"></svg>
+        </div>
       </div>
     </div>
   </section>
@@ -117,10 +158,7 @@
           <tr><th>Hare</th><td>1, 0</td><td><strong>1, 1</strong></td></tr>
         </tbody>
       </table>
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Diagram &mdash; source lines 1264-1297]</span>
-        Best response plot in $(S_1, S_2)$ space with axes labeled $S$ (Stag) and $H$ (Hare). Blue stars at $(S,S)$ and $(H,H)$ mark Player 2's best responses; red circles at the same points mark Player 1's best responses. Where they coincide we have Nash equilibria. Note: Nash eq. = all players are best responding, best response curves cross.
-      </div>
+      <svg id="fig-stag" class="gt-fig br-fig" role="img" aria-label="Best responses in the Stag Hunt: both players best respond at (S,S) and (H,H)"></svg>
     </div>
   </section>
 
@@ -140,10 +178,7 @@
           <tr><th>Shirk</th><td>10, 1</td><td><strong>2, 2</strong></td></tr>
         </tbody>
       </table>
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Diagram &mdash; source lines 1315-1347]</span>
-        Best response plot in $(S_1, S_2)$ space with axes labeled $E$ (Effort) and $S$ (Shirk). Best responses for both players coincide at $(S,S)$, which is the unique Nash equilibrium.
-      </div>
+      <svg id="fig-pd" class="gt-fig br-fig" role="img" aria-label="Best responses in the Prisoners' Dilemma: they cross only at (S,S)"></svg>
     </div>
   </section>
 
@@ -192,10 +227,7 @@
     </div>
     <div class="frame-content">
       <p>Consider the game represented by the following game tree:</p>
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1386-1399]</span>
-        Player 1 (red node) chooses $x$, then Player 2 (green node) observes $x$ and chooses $y$. Terminal node payoffs: $u_1(x,y)$ above, $u_2(x,y)$ below.
-      </div>
+      <svg id="fig-two-stage" class="gt-fig tree-fig" role="img" aria-label="Game tree: player 1 chooses x, player 2 chooses y, payoffs u1(x,y) and u2(x,y)"></svg>
       <p>The game is as in the previous slide but now player 1 chooses $x$ first and then player 2 observes $x$ and chooses $y$. The subgame perfect Nash equilibrium is found by backward induction. We analyze the game at the last stage first: for each $x$ we find player 2's best response $BR_2(x)$ by solving
       $$\diff{ }{y}u_2(x,y)=0.$$
       Notice that this best response coincides with the one found in the simultaneous-move game.</p>
@@ -237,10 +269,7 @@
       <p class="frame-subtitle">The Ultimatum Game</p>
     </div>
     <div class="frame-content">
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1420-1437]</span>
-        Player 1 chooses demand $x$; Player 2 then says Yes (Y) yielding $(x, 1-x)$, or No (N) yielding $(0,0)$.
-      </div>
+      <svg id="fig-ultimatum" class="gt-fig tree-fig" role="img" aria-label="Ultimatum game tree: player 1 demands x; player 2 says Y for (x, 1-x) or N for (0,0)"></svg>
       <div class="block">
         <div class="block-title">The Ultimatum Game</div>
         <div class="block-body">Player 1 makes demand $x$ and Player 2, after observing it, says either yes or no. Payoffs are: $u_1(x,y)=x$, $u_2(x,y)=1-x$, and $u_1(x,n)=u_2(x,n)=0.$</div>
@@ -259,10 +288,7 @@
       <p class="frame-subtitle">The Ultimatum Game</p>
     </div>
     <div class="frame-content">
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1452-1469]</span>
-        Same ultimatum-game tree as above.
-      </div>
+      <svg id="fig-ultimatum-2" class="gt-fig tree-fig" role="img" aria-label="Ultimatum game tree: player 1 demands x; player 2 says Y for (x, 1-x) or N for (0,0)"></svg>
       <ul>
         <li>Thus player 2 has two strategies that can be part of a subgame perfect equilibrium:
           $$s^*(x)=y\text{ for all } x\quad\text{ and }\quad s^{**}(x)=\begin{cases}y\,\text{ if } &x\lt 1,\\ n\,\text{ if } &x=1.\end{cases}$$
@@ -280,10 +306,7 @@
       <p class="frame-subtitle">The Dictatorship Game</p>
     </div>
     <div class="frame-content">
-      <div class="tikz-placeholder">
-        <span class="tikz-label">[TikZ Game Tree &mdash; source lines 1483-1489]</span>
-        Player 1 chooses $x$ and the payoff is $(x, 1-x)$ &mdash; Player 2 has no move.
-      </div>
+      <svg id="fig-dictator" class="gt-fig tree-fig" role="img" aria-label="Dictator game tree: player 1 chooses x; payoffs (x, 1-x)"></svg>
     </div>
   </section>
 
@@ -374,6 +397,233 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="js/scroll-animations.js"></script>
+
+  <script>
+    // Overlay frames (as in brain-biology.html and mental-accounting.html): pin the
+    // frame and reveal one step per dwell of scrolling. The content never slides up
+    // under the title bar: the gap between the title and the first item is fixed.
+    // A frame's data-steps adds steps that reveal no new item (Beamer \only<n>
+    // recolourings); the current step is exposed as data-step for CSS.
+    document.querySelectorAll('.overlay-frame').forEach(frame => {
+      const overlays = frame.querySelectorAll('.overlay');
+      if (overlays.length === 0) return;
+      const count = Math.max(overlays.length, Number(frame.dataset.steps) || 0);
+      overlays[0].classList.add('revealed');
+      frame.dataset.step = '1';
+      if (count === 1) return;   // nothing to step through: show it, don't pin
+      const scrollPerOverlay = window.innerHeight * 0.9;
+      const totalScroll = scrollPerOverlay * count;
+
+      ScrollTrigger.create({
+        trigger: frame,
+        start: 'top top',
+        end: `+=${totalScroll}`,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const currentStep = Math.min(Math.floor(self.progress * count), count - 1);
+          overlays.forEach((overlay, i) => {
+            const isOnly = overlay.hasAttribute('data-overlay-only');
+            overlay.classList.toggle('revealed', isOnly ? i === currentStep : i <= currentStep);
+          });
+          frame.dataset.step = String(currentStep + 1);
+        }
+      });
+    });
+  </script>
+
+  <!-- tikz-svg: the six game figures (source: 416/E416_LEC_FA25.tex 1264-1489).
+       Coordinates are the original TikZ cm, y-up; negated on the way in
+       because SVG is y-down. -->
+  <script type="module">
+    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+
+    const MACROS = (typeof katexMacros !== 'undefined' ? katexMacros : undefined);
+    const BLUE = '#268bd2', RED = '#dc322f', GREEN = '#859900', INK = '#000';
+    const SANS = "'Computer Modern Sans', 'Helvetica Neue', Arial, sans-serif";
+    const HAND = "'Augie', cursive";
+    const DOTS = '1.5 2.5';   // TikZ "densely dotted"
+    // invisible label box; coordinate (zero-size anchor for arrows); tree leaf
+    const lbl  = { shape: 'rectangle', innerSep: 3, fontSize: 16, fill: 'none', stroke: 'none' };
+    const pt   = { shape: 'circle', radius: 0.5, innerSep: 0, label: '', fill: 'none', stroke: 'none' };
+    const leaf = { shape: 'circle', radius: 2.4, innerSep: 0, label: '', fill: INK, stroke: 'none' };
+
+    // ---- Best-response plots: Stag Hunt and Prisoners' Dilemma ---------------
+    // Scroll steps follow the Beamer overlays: 1 axes + legend, 2 BR2 stars
+    // (<2,4->), 3 BR1 circles alone (<3->, stars off), 4 both, 5 Nash note (<5->).
+    function brFigure(svgId, frameId, P, { ticks, stars, circles, arrows }) {
+      const svg = document.getElementById(svgId);
+      const draw = [];
+      // dotted guides first (TikZ background layer): BR2 verticals, BR1 horizontals
+      stars.forEach(([x, y], i) => draw.push({ type: 'path', id: `${P}-br2-v${i}`,
+        points: [{ x, y: 0 }, { x, y: -y }], dashed: DOTS, stroke: BLUE, strokeWidth: 1.4 }));
+      circles.forEach(([x, y], i) => draw.push({ type: 'path', id: `${P}-br1-h${i}`,
+        points: [{ x: 0, y: -y }, { x, y: -y }], dashed: DOTS, stroke: RED, strokeWidth: 1.4 }));
+      draw.push(
+        // axes and ticks
+        { type: 'path', points: [{ x: -0.3, y: 0 }, { x: 7, y: 0 }], arrow: '->', stroke: INK, strokeWidth: 1.4 },
+        { type: 'path', points: [{ x: 0, y: 0.3 }, { x: 0, y: -4 }], arrow: '->', stroke: INK, strokeWidth: 1.4 },
+        ...[2, 4, 6].map(x => ({ type: 'path', points: [{ x, y: 0.1 }, { x, y: -0.1 }], stroke: INK, strokeWidth: 1 })),
+        ...[1, 3].map(y => ({ type: 'path', points: [{ x: 0, y: -y }, { x: -0.1, y: -y }], stroke: INK, strokeWidth: 1 })),
+        // axis and tick labels
+        { type: 'node', id: `${P}-s1`, position: { x: 7.3, y: 0 }, label: '$S_1$', anchor: 'west', ...lbl },
+        { type: 'node', id: `${P}-s2`, position: { x: -0.3, y: -4.2 }, label: '$S_2$', anchor: 'east', ...lbl },
+        { type: 'node', id: `${P}-x1`, position: { x: 2, y: 0 }, label: `$${ticks[0]}$`, anchor: 'north', ...lbl },
+        { type: 'node', id: `${P}-x2`, position: { x: 6, y: 0 }, label: `$${ticks[1]}$`, anchor: 'north', ...lbl },
+        { type: 'node', id: `${P}-y1`, position: { x: 0, y: -1 }, label: `$${ticks[0]}$`, anchor: 'east', ...lbl },
+        { type: 'node', id: `${P}-y2`, position: { x: 0, y: -3 }, label: `$${ticks[1]}$`, anchor: 'east', ...lbl },
+        // legend: TikZ `ellipse, draw, drop shadow, fit={(q)(w)(e)}`. The fit ellipse
+        // circumscribes the labels' box (radii = √2 × (half-size + inner seps)) and is
+        // centred on the glyphs (0.1 below the label boxes' centre: KaTeX boxes carry
+        // extra depth under BR_2), not on any one label. The node is unfilled, so the
+        // offset grey shadow shows through: grey interior, white sliver top-left.
+        { type: 'node', id: `${P}-legend-sh`, position: { x: 3.08 + 0.07, y: -5.60 + 0.07 }, shape: 'ellipse',
+          rx: 123, ry: 47, label: '', fill: '#bfbfbf', stroke: 'none' },
+        { type: 'node', id: `${P}-legend`, position: { x: 3.08, y: -5.60 }, shape: 'ellipse',
+          rx: 123, ry: 47, label: '', fill: 'none', stroke: INK, strokeWidth: 1.6 },
+        { type: 'node', id: `${P}-leg0`, position: { x: 2, y: -6 }, label: 'Legend:', ...lbl, fontFamily: SANS },
+        { type: 'node', id: `${P}-leg1`, position: { x: 4, y: -6 }, label: '$BR_1=\\circ$', ...lbl, labelColor: RED },
+        { type: 'node', id: `${P}-leg2`, position: { x: 3, y: -5.4 }, label: '$BR_2=\\star$', ...lbl, labelColor: BLUE },
+      );
+      // marks: BR2 = blue star, BR1 = red ring (ring drawn larger so both read when they coincide)
+      stars.forEach(([x, y], i) => draw.push({ type: 'node', id: `${P}-br2-s${i}`, position: { x, y: -y },
+        shape: 'star', outerRadius: 7, pointRatio: 2.3, innerSep: 0, label: '', fill: BLUE, stroke: 'none' }));
+      circles.forEach(([x, y], i) => draw.push({ type: 'node', id: `${P}-br1-c${i}`, position: { x, y: -y },
+        shape: 'circle', radius: 9, innerSep: 0, label: '', fill: 'none', stroke: RED, strokeWidth: 1.8 }));
+      // Nash note (handwritten) with green arrows to the equilibria
+      draw.push({ type: 'node', id: `${P}-nash-note`, position: { x: 9, y: -3 },
+        label: 'Nash eq. = all players are best responding, best response curves cross.',
+        ...lbl, textWidth: 132, align: 'left', fontFamily: HAND, fontSize: 15 });
+      arrows.forEach(([x, y, out, inn], i) => draw.push(
+        { type: 'node', id: `${P}-nash-t${i}`, position: { x, y: -y }, ...pt },
+        { type: 'edge', id: `${P}-nash-a${i}`, from: `${P}-nash-note`, to: `${P}-nash-t${i}`,
+          out, in: inn, arrow: '->', stroke: GREEN, strokeWidth: 2.6 }));
+
+      render(svg, { scale: 44, originX: 60, originY: 300, padding: 8, katexMacros: MACROS, draw });
+
+      const step = s => {
+        svg.classList.toggle('show-br2', s === 2 || s >= 4);
+        svg.classList.toggle('show-br1', s >= 3);
+        svg.classList.toggle('show-nash', s >= 5);
+      };
+      step(1);
+      // Pin the frame at the top and walk the five steps across the pinned scroll.
+      ScrollTrigger.create({
+        trigger: document.getElementById(frameId),
+        start: 'top top',
+        end: () => '+=' + (window.innerHeight * 2.2),
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: self => step(1 + Math.min(4, Math.floor(self.progress * 5))),
+      });
+    }
+
+    try {
+      brFigure('fig-stag', 'br-nash-example', 'stag', {
+        ticks: ['S', 'H'], stars: [[2, 1], [6, 3]], circles: [[2, 1], [6, 3]],
+        arrows: [[2, 1.3, 150, 90], [6, 2.7, -150, -90]],
+      });
+    } catch (err) { console.warn('stag hunt figure failed', err); }
+    try {
+      brFigure('fig-pd', 'prisoners-dilemma', 'pd', {
+        ticks: ['E', 'S'], stars: [[2, 3], [6, 3]], circles: [[6, 1], [6, 3]],
+        arrows: [[6, 2.7, -150, -90]],
+      });
+    } catch (err) { console.warn('prisoners dilemma figure failed', err); }
+
+    // ---- Coordination game (Battle of the Sexes) payoff matrix --------------------
+    // As in ECON 411/511: split cells (player 1's payoff top-left, player 2's
+    // bottom-right) and a diagonal corner with "Player 2" over "Player 1". Pixel
+    // coordinates, y-down. Ids carry bos-p1 / bos-p2 so the frame's data-step can
+    // recolour each player's side from CSS.
+    try {
+      const SERIF = "KaTeX_Main, 'Times New Roman', serif";
+      const C = 70, H = C / 2, STEP = C + 12, D = 15, O = 17;   // cell, half, pitch; slash and payoff offsets
+      const txt = { ...lbl, fontFamily: SERIF, fontSize: 22 };
+      const pays = [[['3', '2'], ['0', '0']], [['0', '0'], ['2', '3']]];
+      const acts = ['B', 'S'];
+      const draw = [];
+      for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
+        const x = c * STEP, y = r * STEP;
+        draw.push(
+          { type: 'node', id: `bos-cell-${r}${c}`, position: { x, y }, shape: 'rectangle', halfWidth: H, halfHeight: H,
+            label: '', fill: 'none', stroke: INK, strokeWidth: 1.3 },
+          { type: 'path', id: `bos-p1-slash-${r}${c}`, points: [{ x: x - D, y: y + D }, { x: x + D, y: y - D }],
+            stroke: INK, strokeWidth: 1.1 },
+          { type: 'node', id: `bos-p1-pay-${r}${c}`, position: { x: x - O, y: y - O }, label: pays[r][c][0], ...txt },
+          { type: 'node', id: `bos-p2-pay-${r}${c}`, position: { x: x + O, y: y + O }, label: pays[r][c][1], ...txt },
+        );
+      }
+      acts.forEach((a, i) => draw.push(
+        { type: 'node', id: `bos-p2-col-${i}`, position: { x: i * STEP, y: -H - 17 }, label: a, ...txt },
+        { type: 'node', id: `bos-p1-row-${i}`, position: { x: -H - 19, y: i * STEP }, label: a, ...txt },
+      ));
+      draw.push(
+        { type: 'path', points: [{ x: -H, y: -H }, { x: -H - 62, y: -H - 62 }], stroke: INK, strokeWidth: 1.1 },
+        // labels parallel to the line, one each side (library rotate: positive = clockwise on screen)
+        { type: 'node', id: 'bos-p2-name', position: { x: -H - 31 + 9, y: -H - 31 - 9 }, label: 'Player 2',
+          rotate: 45, ...lbl, fontFamily: SERIF, fontSize: 15 },
+        { type: 'node', id: 'bos-p1-name', position: { x: -H - 31 - 9, y: -H - 31 + 9 }, label: 'Player 1',
+          rotate: 45, ...lbl, fontFamily: SERIF, fontSize: 15 },
+      );
+      render(document.getElementById('fig-bos'), { scale: 1, originX: 0, originY: 0, padding: 6, draw });
+    } catch (err) { console.warn('coordination game matrix failed', err); }
+
+    // ---- Game trees -------------------------------------------------------------
+    const player = (id, x, y, n) => ({ type: 'node', id, position: { x, y }, label: `Player ${n}`, ...lbl, fontFamily: SANS });
+    const branch = { arrow: 'none', stroke: INK, strokeWidth: 1.2, labelSide: 'left' };
+
+    // Two-stage game: 1 --x--> 2 --y--> payoff circle split
+    try {
+      render(document.getElementById('fig-two-stage'), {
+        scale: 40, originX: 40, originY: 60, padding: 8, katexMacros: MACROS,
+        draw: [
+          { type: 'node', id: 'ts-p1', position: { x: 0, y: 0 }, label: '$1$', shape: 'circle', radius: 13,
+            fontSize: 16, fill: RED, stroke: 'none', labelColor: '#fff', shadow: true },
+          { type: 'node', id: 'ts-p2', position: { x: 4, y: 0 }, label: '$2$', shape: 'circle', radius: 13,
+            fontSize: 16, fill: GREEN, stroke: 'none', labelColor: '#fff', shadow: true },
+          { type: 'node', id: 'ts-pay', position: { x: 8, y: 0 }, shape: 'circle split', radius: 46,
+            label: ['$u_1(x,y)$', '$u_2(x,y)$'], fontSize: 15, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
+          { type: 'edge', from: 'ts-p1', to: 'ts-p2', label: '$x$', ...branch, arrow: '->' },
+          { type: 'edge', from: 'ts-p2', to: 'ts-pay', label: '$y$', ...branch, arrow: '->' },
+        ],
+      });
+    } catch (err) { console.warn('two-stage tree failed', err); }
+
+    // Ultimatum game (drawn twice): Player 1 --x-- Player 2, then N (up) to 0,0 and Y (down) to x,1-x
+    function ultimatum(svgId, P) {
+      render(document.getElementById(svgId), {
+        scale: 40, originX: 50, originY: 70, padding: 8, katexMacros: MACROS,
+        draw: [
+          player(`${P}-p1`, 0, 0, 1),
+          player(`${P}-p2`, 3.5, 0, 2),
+          { type: 'node', id: `${P}-n`, position: { x: 7, y: -1 }, ...leaf },
+          { type: 'node', id: `${P}-y`, position: { x: 7, y: 1 }, ...leaf },
+          { type: 'node', id: `${P}-nl`, position: { x: 7.08, y: -1 }, label: '$0,0$', anchor: 'west', ...lbl },
+          { type: 'node', id: `${P}-yl`, position: { x: 7.08, y: 1 }, label: '$x,1-x$', anchor: 'west', ...lbl },
+          { type: 'edge', from: `${P}-p1`, to: `${P}-p2`, label: '$x$', ...branch },
+          { type: 'edge', from: `${P}-p2`, to: `${P}-n`, label: 'N', sloped: true, fontFamily: SANS, ...branch },
+          { type: 'edge', from: `${P}-p2`, to: `${P}-y`, label: 'Y', sloped: true, fontFamily: SANS, ...branch },
+        ],
+      });
+    }
+    try { ultimatum('fig-ultimatum', 'ug1'); } catch (err) { console.warn('ultimatum tree failed', err); }
+    try { ultimatum('fig-ultimatum-2', 'ug2'); } catch (err) { console.warn('ultimatum tree (2) failed', err); }
+
+    // Dictator game: Player 1 --x-- leaf x,1-x (player 2 has no move)
+    try {
+      render(document.getElementById('fig-dictator'), {
+        scale: 40, originX: 50, originY: 30, padding: 8, katexMacros: MACROS,
+        draw: [
+          player('dg-p1', 0, 0, 1),
+          { type: 'node', id: 'dg-leaf', position: { x: 3.5, y: 0 }, ...leaf },
+          { type: 'node', id: 'dg-ll', position: { x: 3.58, y: 0 }, label: '$x,1-x$', anchor: 'west', ...lbl },
+          { type: 'edge', from: 'dg-p1', to: 'dg-leaf', label: '$x$', ...branch },
+        ],
+      });
+    } catch (err) { console.warn('dictator tree failed', err); }
+  </script>
 
 </body>
 </html>
