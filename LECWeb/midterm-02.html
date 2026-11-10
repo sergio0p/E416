@@ -12,6 +12,27 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/beamer-theme.css">
+  <style>
+    /* Flip card (as in midterm-02-practice.html): each question is a block whose
+       back carries its answer. Clicking the card turns it over, and its height follows
+       whichever face is showing (set in the script at the bottom). The body uses
+       .flip-body, not .block-body, so the "?" flip of js/scroll-animations.js leaves
+       these blocks alone. */
+    .flip-card { perspective: 1200px; cursor: pointer; margin: 0.75rem 0 1rem; }
+    .flip-card:focus:not(:focus-visible) { outline: none; }
+    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.6s ease, height 0.4s ease; }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flip-front { position: relative; }
+    .flip-back { position: absolute; top: 0; left: 0; width: 100%; transform: rotateY(180deg); }
+    .flip-card .block { width: 100%; margin: 0; }
+    .flip-body { background: #fff8e1; color: #000000; padding: 1rem; }
+    .flip-body > :last-child { margin-bottom: 0; }
+    /* Source line under a quoted passage. */
+    .mt-cite { text-align: right; color: var(--text-muted); font-size: 0.85em; }
+    /* Display equations wider than a phone scroll sideways instead of clipping. */
+    .flip-body .katex-display { overflow-x: auto; overflow-y: hidden; padding-bottom: 2px; }
+  </style>
 
     <!-- Google Analytics -->
     <script async src="/E416/js/ga.js"></script>
@@ -22,12 +43,27 @@
   <section class="section-header" id="midterm-2">
     <div class="section-title-box">
       <h1>Midterm 2</h1>
+      <h2>Click on a question to reveal its answer.</h2>
     </div>
 
     <!-- Table of Contents: in-page anchors to each frame's id (blue = default link color) -->
     <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
       <a href="#coverage" style="margin-left: 1rem;">1. Coverage</a>
       <a href="#instructions" style="margin-left: 1rem;">2. Instructions</a>
+      <a href="#midterm-2-q1" style="margin-left: 1rem;">3. Q1</a>
+      <a href="#midterm-2-q3" style="margin-left: 1rem;">4. Q3</a>
+      <br>
+      <a href="#midterm-2-q6" style="margin-left: 1rem;">5. Q6&ndash;Q9</a>
+      <a href="#midterm-2-q12" style="margin-left: 1rem;">6. Q12&ndash;Q14</a>
+      <a href="#midterm-2-q15" style="margin-left: 1rem;">7. Q15&ndash;Q17</a>
+      <a href="#midterm-2-q19" style="margin-left: 1rem;">8. Q19</a>
+      <br>
+      <a href="#midterm-2-q20" style="margin-left: 1rem;">9. Q20</a>
+      <a href="#midterm-2-q21" style="margin-left: 1rem;">10. Q21</a>
+      <a href="#midterm-2-q22" style="margin-left: 1rem;">11. Q22</a>
+      <a href="#midterm-2-q23" style="margin-left: 1rem;">12. Q23</a>
+      <br>
+      <a href="#midterm-2-q24" style="margin-left: 1rem;">13. Q24</a>
     </nav>
   </section>
 
@@ -62,6 +98,626 @@
     </div>
   </section>
 
+  <!-- Midterm 2 Answer Key: questions numbered by exam position (Canvas quiz 141536),
+       the same numbers the exam's own text uses ("Questions 6 to 9"). Each question is
+       a flip card: the question on the front, the answer on the back. The 0-point
+       optional items (Q2, Q4, Q10, Q18) are left out; the two settings (Q5, Q11) sit
+       above their cards. Canvas shuffled the answer choices per student, so the key
+       never refers to a choice by its position. The dollar sign sits in its own <span>
+       so KaTeX does not pair it up as a math delimiter. -->
+
+  <!-- Question 1: Thaler's snowstorm (matching) -->
+  <section class="frame" id="midterm-2-q1">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 1</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 1</div>
+              <div class="flip-body">
+                <p>&ldquo;My friend Jeffrey and I were given two tickets to a professional basketball game in Buffalo, normally a 75-minute drive from Rochester. On the day of the game there was a snowstorm and we sensibly decided to skip the game. But Jeffrey, who is not an economist, remarked &lsquo;if we had paid full price for those tickets we would have gone!&rsquo;&rdquo;</p>
+                <p class="mt-cite">Richard H. Thaler, &ldquo;From Cashews to Nudges: The Evolution of Behavioral Economics,&rdquo; Nobel Prize Lecture, December 8, 2017, p. 489</p>
+                <p>Choose the BEST pairings. When deciding between A) driving to the game and B) skipping the game:</p>
+                <ul>
+                  <li>Uses the price paid for the tickets as a reference point</li>
+                  <li>Compares the utility of total wealth plus the monetary value of watching the game and driving 75 minutes through a snowstorm with the utility of total wealth plus the corresponding opportunity cost</li>
+                  <li>Ignores sunk costs</li>
+                </ul>
+                <p>Choices: budgeting, comprehensive account, hedonic editing, minimal account, present bias, topical account.</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 1</div>
+              <div class="flip-body">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>Statement</th><th>Account</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Uses the price paid for the tickets as a reference point</td><td>Topical account</td></tr>
+                    <tr><td>Compares the utility of total wealth plus &hellip; with the utility of total wealth plus the corresponding opportunity cost</td><td>Comprehensive account</td></tr>
+                    <tr><td>Ignores sunk costs</td><td>Minimal account</td></tr>
+                  </tbody>
+                </table>
+                <p>Recall the three <a href="mental-accounting.html#framing-outcomes">ways of framing outcomes</a>.</p>
+                <ul>
+                  <li><em>Topical account.</em> It relates the consequences of a choice to a reference level set by the context. Jeffrey&rsquo;s remark makes the price paid that reference: had they paid full price, skipping the game would have felt like losing that money, so they would have gone.</li>
+                  <li><em>Comprehensive account.</em> It evaluates each option by its effect on total wealth: total wealth plus the game and the drive through the snowstorm, against total wealth plus whatever else they could do with the evening. This is the comprehensive account of the <a href="mental-accounting.html#jacket-calculator">jacket and calculator</a> example.</li>
+                  <li><em>Minimal account.</em> It compares the options by their differences only, ignoring everything they have in common. The price of the tickets is the same whether they drive or stay home, so it drops out: the minimal account ignores sunk costs.</li>
+                </ul>
+                <p><strong>The three unused choices.</strong></p>
+                <ul>
+                  <li><em>Hedonic editing.</em> It is about combining two or more outcomes: segregate or integrate them; see <a href="mental-accounting.html#hedonic-editing">Hedonic Editing</a>. None of the statements combines outcomes.</li>
+                  <li><em>Budgeting.</em> It assigns spending to categories, sometimes held to budgets; see <a href="mental-accounting.html#three-components">The Three Components of Mental Accounting</a>. The statements compare two options, not categories of spending.</li>
+                  <li><em>Present bias.</em> It belongs to intertemporal choice: the present gets extra weight; see the <a href="inter-temporal-choice.html#beta-delta">$(\beta,\delta)$-model</a>. Both options play out on the same evening.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 3: probability weighting (multiple choice) -->
+  <section class="frame" id="midterm-2-q3">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 3</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 3</div>
+              <div class="flip-body">
+                <p>Pick the probability weighting function that best showcases the assumptions of Prospect Theory.</p>
+                <ul>
+                  <li>$\pi(0.1)=0.1\lt\pi(0.3)=0.3\lt\pi(0.7)=0.7\lt\pi(0.9)=0.9$</li>
+                  <li>$\pi(0)=0.1\lt\pi(0.3)=0.5\lt\pi(0.9)=0.85\lt\pi(1)=1$</li>
+                  <li>$\pi(0.1)=0.05\lt\pi(0.3)=0.2\lt\pi(0.7)=0.8\lt\pi(0.9)=0.95$</li>
+                  <li>$\pi(0)=0\lt\pi(0.3)=0.5\lt\pi(0.9)=0.85\lt\pi(1)=1$</li>
+                  <li>$\pi(0.1)=0.2\lt\pi(0.3)=0.5\lt\pi(0.7)=0.85\lt\pi(0.9)=0.95$</li>
+                  <li>$\pi(0)=0\lt\pi(0.3)=0.5\lt\pi(0.9)=0.85\lt\pi(1)=0.9$</li>
+                  <li>$\pi(0.1)=0.05\lt\pi(0.3)=0.15\lt\pi(0.7)=0.5\lt\pi(0.9)=0.75$</li>
+                  <li>$\pi(0)=0\lt\pi(0.3)=0.5\gt\pi(0.9)=0.45\lt\pi(1)=1$</li>
+                  <li>$\pi(0)=0.1\lt\pi(0.3)=0.5\lt\pi(0.9)=0.85\lt\pi(1)=0.9$</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 3</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $\pi(0)=0\lt\pi(0.3)=0.5\lt\pi(0.9)=0.85\lt\pi(1)=1$.</p>
+                <p>Recall the <a href="behavioral-choice-risk.html#prospect-theory-weights">decision weights</a> of Prospect Theory: they overestimate unlikely events, $\pi(p)\gt p$ for small $p$; they underestimate likely events, with $\pi(p)+\pi(1-p)\le 1$; and $\pi(p)=p$ only at $p=0$, $\hat p$, and $1$. They also increase with $p$: a likelier event never weighs less.</p>
+                <ul>
+                  <li><em>$\pi(0.1)=0.1\lt\pi(0.3)=0.3\lt\pi(0.7)=0.7\lt\pi(0.9)=0.9$.</em> <strong>Incorrect.</strong> Every weight equals its probability: this is expected utility theory, with no distortion at all.</li>
+                  <li><em>$\pi(0)=0.1\lt\cdots\lt\pi(1)=1$.</em> <strong>Incorrect.</strong> An impossible event gets weight $0.1$; Prospect Theory has $\pi(0)=0$.</li>
+                  <li><em>$\pi(0.1)=0.05\lt\pi(0.3)=0.2\lt\pi(0.7)=0.8\lt\pi(0.9)=0.95$.</em> <strong>Incorrect.</strong> Prospect Theory in reverse: the unlikely event is underweighted, $\pi(0.1)=0.05\lt 0.1$, and the likely one overweighted, $\pi(0.9)=0.95\gt 0.9$.</li>
+                  <li><em>$\pi(0)=0\lt\pi(0.3)=0.5\lt\pi(0.9)=0.85\lt\pi(1)=1$.</em> <strong>Correct.</strong> It shows every assumption at once: the impossible event gets no weight and the certain event full weight, the unlikely event is overweighted, $\pi(0.3)=0.5\gt 0.3$, the likely event is underweighted, $\pi(0.9)=0.85\lt 0.9$, and the weights increase.</li>
+                  <li><em>$\pi(0.1)=0.2\lt\pi(0.3)=0.5\lt\pi(0.7)=0.85\lt\pi(0.9)=0.95$.</em> <strong>Incorrect.</strong> Likely events are overweighted too, $\pi(0.9)=0.95\gt 0.9$, and $\pi(0.3)+\pi(0.7)=1.35\gt 1$ breaks $\pi(p)+\pi(1-p)\le 1$.</li>
+                  <li><em>$\pi(0)=0\lt\cdots\lt\pi(1)=0.9$.</em> <strong>Incorrect.</strong> A certain event loses weight; Prospect Theory has $\pi(1)=1$.</li>
+                  <li><em>$\pi(0.1)=0.05\lt\pi(0.3)=0.15\lt\pi(0.7)=0.5\lt\pi(0.9)=0.75$.</em> <strong>Incorrect.</strong> Unlikely events are underweighted too, $\pi(0.1)=0.05\lt 0.1$, against $\pi(p)\gt p$ for small $p$.</li>
+                  <li><em>$\pi(0)=0\lt\pi(0.3)=0.5\gt\pi(0.9)=0.45\lt\pi(1)=1$.</em> <strong>Incorrect.</strong> The weights fall from $\pi(0.3)=0.5$ to $\pi(0.9)=0.45$: a likelier event weighs less, which Prospect Theory rules out.</li>
+                  <li><em>$\pi(0)=0.1\lt\cdots\lt\pi(1)=0.9$.</em> <strong>Incorrect.</strong> Both endpoints are wrong: the impossible event gets weight and the certain event loses some.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Questions 5-9: Ellsberg at the holiday party (setting + four numerical) -->
+  <section class="frame" id="midterm-2-q6">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Questions 6 to 9</p>
+    </div>
+    <div class="frame-content">
+      <p>You have just started a new job at a company with 90 employees. At the holiday party, the company will draw one employee&rsquo;s name at random, and you may bet on the department of the employee drawn. You know that 30 employees work in Sales. Each of the other 60 works in either Marketing or IT, but as a newcomer you have no idea how they split: any number of them, from 0 to 60, may work in Marketing.</p>
+      <p>Each lottery below pays <span>$</span>900 if its event happens and nothing otherwise.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Lottery</th><th>Wins if the employee drawn works in</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S</td><td>Sales</td></tr>
+          <tr><td>M</td><td>Marketing</td></tr>
+          <tr><td>SI</td><td>Sales or IT</td></tr>
+          <tr><td>MI</td><td>Marketing or IT</td></tr>
+        </tbody>
+      </table>
+      <p>You face two decision problems: choose between S and M, and choose between SI and MI.</p>
+      <p>You are ambiguity averse and use max-min expected utility: the value of a lottery is its lowest expected utility over all possible splits of the 60 employees, and you choose the lottery with the highest value. Your utility of money is $u(x)=x$.</p>
+      <p>Below, $m$ is the number of Marketing employees, $m\in\{0,1,\ldots,60\}$; see <a href="behavioral-choice-risk.html#ambiguity-aversion">Max Min Expected Utility Theory</a>.</p>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 6</div>
+              <div class="flip-body">The max-min expected utility of lottery S is:</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 6</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $300$.</p>
+                <p>Sales has 30 of the 90 employees whatever the split, so the expected utility is the same for every $m$:</p>
+                $$\tfrac{30}{90}\cdot 900=300.$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 7</div>
+              <div class="flip-body">The max-min expected utility of lottery M is:</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 7</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $0$.</p>
+                <p>With $m$ employees in Marketing, the expected utility is</p>
+                $$\tfrac{m}{90}\cdot 900=10m,$$
+                <p>which is lowest at $m=0$, when nobody works in Marketing.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 8</div>
+              <div class="flip-body">The max-min expected utility of lottery SI is:</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 8</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $300$.</p>
+                <p>Sales or IT has $30+(60-m)=90-m$ employees, so the expected utility is</p>
+                $$\tfrac{90-m}{90}\cdot 900=10(90-m),$$
+                <p>which is lowest at $m=60$, when nobody works in IT: $10\cdot 30=300$.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 9</div>
+              <div class="flip-body">The max-min expected utility of lottery MI is:</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 9</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $600$.</p>
+                <p>Marketing or IT has 60 of the 90 employees whatever the split:</p>
+                $$\tfrac{60}{90}\cdot 900=600.$$
+                <p>Putting the four together, you choose S over M ($300\gt 0$) and MI over SI ($600\gt 300$): the <a href="behavioral-choice-risk.html#ambiguity-probs">Ellsberg pattern</a>. No single belief about $m$ produces it with expected utility: S beats M only if $300\gt 10m$, that is, $m\lt 30$, while MI beats SI only if $600\gt 10(90-m)$, that is, $m\gt 30$.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Questions 11-14: the freelance commission, exponential agent -->
+  <section class="frame" id="midterm-2-q12">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Questions 12 to 14</p>
+    </div>
+    <div class="frame-content">
+      <p>You are a freelance designer, and you have accepted a commission that is due tomorrow. You can do the work today or on any later day. Doing it takes a full day of effort, which costs you 60 on the day you do it, and you submit the work that same day. The client pays you 100 the day after you submit. The contract, however, has a late penalty: for each day past the deadline that you submit, the payment falls by 10. For example, if you do the work today or tomorrow, there is no penalty, but if you do it the day after tomorrow, you get only 90, paid the following day. If you never do the work, you bear no cost and receive no payment.</p>
+      <p>Costs and payments are measured in utility.</p>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 12</div>
+              <div class="flip-body">Assume the standard model (exponential discounting) with $\delta=0.9$. What is the utility of submitting today?</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 12</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $30$.</p>
+                <p>The cost of 60 falls today; the payment of 100 arrives tomorrow, one period away:</p>
+                $$-60+0.9\cdot 100=-60+90=30.$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 13</div>
+              <div class="flip-body">Assume the standard model (exponential discounting) with $\delta=0.9$. What is the utility, as of today, of submitting tomorrow, on the deadline?</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 13</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $27$.</p>
+                <p>The cost falls tomorrow; the full payment of 100 arrives the day after:</p>
+                $$0.9\cdot(-60)+0.9^2\cdot 100=-54+81=27.$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 14</div>
+              <div class="flip-body">Assume the standard model (exponential discounting) with $\delta=0.9$. What is the utility, as of today, of submitting one day after the deadline?</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 14</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $17.01$.</p>
+                <p>The cost falls the day after tomorrow; the payment, cut to 90, arrives the day after that:</p>
+                $$0.9^2\cdot(-60)+0.9^3\cdot 90=-48.6+65.61=17.01.$$
+                <p>Since $30\gt 27\gt 17.01$, and later days are worth even less, the exponential agent submits today; see <a href="inter-temporal-choice.html#procrastination-exponential">The Exponential Agent</a>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Questions 15-17: the same setting, naive (beta, delta) agent -->
+  <section class="frame" id="midterm-2-q15">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Questions 15 to 17</p>
+    </div>
+    <div class="frame-content">
+      <p>The setting of <a href="#midterm-2-q12">Questions 12 to 14</a>. In the <a href="inter-temporal-choice.html#beta-delta">$(\beta,\delta)$-model</a>, today&rsquo;s utility is not discounted, and every future utility is multiplied by $\beta\,\delta^t$.</p>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 15</div>
+              <div class="flip-body">Assume a naive quasi-hyperbolic ($\beta$-$\delta$) agent with $\beta=0.7$ and $\delta=0.9$. What is the utility of submitting today?</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 15</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $3$.</p>
+                <p>The cost falls today, undiscounted; the payment arrives tomorrow, discounted by $\beta\delta=0.63$:</p>
+                $$-60+0.7\cdot 0.9\cdot 100=-60+63=3.$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 16</div>
+              <div class="flip-body">Assume a naive quasi-hyperbolic ($\beta$-$\delta$) agent with $\beta=0.7$ and $\delta=0.9$. What is the utility, as of today, of submitting tomorrow, on the deadline?</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 16</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $18.9$.</p>
+                <p>Both the cost and the payment are in the future, so $\beta$ multiplies both, and the answer is $\beta$ times the answer to Question 13:</p>
+                $$0.7\cdot\bigl(0.9\cdot(-60)+0.9^2\cdot 100\bigr)=0.7\cdot 27=18.9.$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 17</div>
+              <div class="flip-body">Assume a naive quasi-hyperbolic ($\beta$-$\delta$) agent with $\beta=0.7$ and $\delta=0.9$. What is the utility, as of today, of submitting one day after the deadline?</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 17</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $11.907$.</p>
+                <p>Again $\beta$ times the exponential answer, here the answer to Question 14:</p>
+                $$0.7\cdot\bigl(0.9^2\cdot(-60)+0.9^3\cdot 90\bigr)=0.7\cdot 17.01=11.907.$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 19: the naive agent's plan (essay) -->
+  <section class="frame" id="midterm-2-q19">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 19</p>
+    </div>
+    <div class="frame-content">
+      <p>The setting of <a href="#midterm-2-q12">Questions 12 to 17</a>.</p>
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 19</div>
+              <div class="flip-body">
+                <p>Assume a naive quasi-hyperbolic ($\beta$-$\delta$) agent with $\beta=0.7$ and $\delta=0.9$. Label your answers 1) and 2); otherwise, you may lose points.</p>
+                <p>1) On which day does the agent plan to submit the work?</p>
+                <p>2) When that day arrives, does the agent submit the work? Why or why not?</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 19</div>
+              <div class="flip-body">
+                <p><strong>1)</strong> Tomorrow, on the deadline. As of today, submitting tomorrow is worth $18.9$, more than submitting today ($3$), one day late ($11.907$), or never ($0$). Later days are worth even less.</p>
+                <p><strong>2)</strong> No. When tomorrow comes, the agent discounts from tomorrow&rsquo;s point of view. Submitting now is worth $-60+0.7\cdot 0.9\cdot 100=3$, while submitting the next day, one day late, looks worth</p>
+                $$0.7\cdot\bigl(0.9\cdot(-60)+0.9^2\cdot 90\bigr)=0.7\cdot 18.9=13.23.$$
+                <p>Since $13.23\gt 3$, the agent postpones again. The same happens every day after that:</p>
+                <table class="data-table">
+                  <thead>
+                    <tr><th>Day</th><th>Submit now</th><th>Submit the next day</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Tomorrow (deadline)</td><td>$3$</td><td>$13.23$</td></tr>
+                    <tr><td>1 day late</td><td>$-3.3$</td><td>$7.56$</td></tr>
+                    <tr><td>2 days late</td><td>$-9.6$</td><td>$1.89$</td></tr>
+                    <tr><td>3 days late</td><td>$-15.9$</td><td>$-3.78$</td></tr>
+                  </tbody>
+                </table>
+                <p>Each day the agent plans to submit the next day, and each day it postpones again. Three days late, even the next day is worth less than never doing the work ($0$), so the naive agent never submits; see <a href="inter-temporal-choice.html#procrastination-naive">The Naive Agent</a>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 20: a large loss and a tiny gain (essay) -->
+  <section class="frame" id="midterm-2-q20">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 20</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 20</div>
+              <div class="flip-body">
+                <p>Suppose your value function is $v(x)=\operatorname{sign}(x)\sqrt{\lvert x\rvert}$, that is, $v(x)=\sqrt{x}$ for gains and $v(x)=-\sqrt{\lvert x\rvert}$ for losses. For example, $v(4)=2$ and $v(-4)=-2$. So you are risk averse over gains and risk loving over losses, but not loss averse.</p>
+                <p>Two events happen: X, a loss of 900, and Y, a gain of 0.04. Is it better to segregate or to integrate X and Y? Why? Show your work, using at least two decimal places.</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 20</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> Segregate.</p>
+                $$\text{Integrate: }\ v(-900+0.04)=-\sqrt{899.96}\approx -29.9993\approx -30.00$$
+                $$\text{Segregate: }\ v(-900)+v(0.04)=-30+0.2=-29.80$$
+                <p>Since $-29.80\gt -30.00$, segregating is better.</p>
+                <p>Why: on the gain side, $v$ is steepest at the origin, while far into the losses it is almost flat. Segregated, the tiny gain is worth $v(0.04)=0.2$. Integrated, it only shrinks a loss of 900 to 899.96, which raises the value by about $0.04\cdot v'(-900)=0.04/60\approx 0.0007$. This is the silver-lining rule of <a href="mental-accounting.html#hedonic-editing">hedonic editing</a>: segregate small gains from larger losses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 21: silver lining (fill in the blank) -->
+  <section class="frame" id="midterm-2-q21">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 21</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 21</div>
+              <div class="flip-body">When event Y above happens after, or together with, event X above, we call event Y a ________.</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 21</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> Silver lining.</p>
+                <p>X and Y are the events of <a href="#midterm-2-q20">Question 20</a>: a small gain that comes with a larger loss is a silver lining. As Question 20 shows, it pays to segregate it: &ldquo;segregate small gains (silver linings) from larger losses&rdquo; (<a href="mental-accounting.html#hedonic-editing">Hedonic Editing</a>).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 22: failure of hedonic editing (multiple choice).
+       Thaler (1999), "Mental Accounting Matters," p. 188. -->
+  <section class="frame" id="midterm-2-q22">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 22</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 22</div>
+              <div class="flip-body">
+                <p>Consider the hedonic editing hypothesis, $v(x\,\&amp;\,y)=\max\{v(x+y),\,v(x)+v(y)\}$, where $v$ is risk averse over gains, risk loving over losses, and displays loss aversion. According to Thaler, for what type of events $x$ and $y$ did subjects in the experiments report $v(x\,\&amp;\,y)=\min\{v(x+y),\,v(x)+v(y)\}$, contrary to the hypothesis?</p>
+                <ul>
+                  <li>$x$ and $y$ are both gains</li>
+                  <li>$x$ is a small gain and $y$ is a large loss</li>
+                  <li>For every type of events: subjects never edited as the hypothesis predicts</li>
+                  <li>$x$ is a gain and $y$ is a loss of the same size</li>
+                  <li>$x$ and $y$ are both losses</li>
+                  <li>$x$ is a large gain and $y$ is a small loss</li>
+                  <li>$x$ and $y$ are any mix of one gain and one loss</li>
+                  <li>For no type of events: subjects always edited as the hypothesis predicts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 22</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> $x$ and $y$ are both losses.</p>
+                <p>Thaler (1999, p. 188), on the experiments of Thaler and Johnson (1990): &ldquo;For gains, the hedonic editing hypothesis was supported. &hellip; But, in contrast to the hedonic editing hypothesis, subjects thought separating losses was also a good idea.&rdquo; Since $v$ is convex over losses, two losses are worth more together, $v(x+y)\gt v(x)+v(y)$: the hypothesis says integrate them. Subjects chose to separate them, $v(x)+v(y)$, the minimum. In Thaler&rsquo;s words, they feel &ldquo;that losses must be felt one by one, and that bearing one loss makes one more sensitive to the next.&rdquo;</p>
+                <ul>
+                  <li><em>Both gains.</em> <strong>Incorrect.</strong> For gains the hypothesis was supported: subjects preferred to separate gains, and since $v$ is concave over gains, $v(x)+v(y)$ is the maximum.</li>
+                  <li><em>A small gain and a large loss.</em> <strong>Incorrect.</strong> A silver lining: the hypothesis says segregate, and subjects agreed. People &ldquo;actively parse outcomes consistent with these rules, with the exception of multiple losses.&rdquo;</li>
+                  <li><em>Every type of events.</em> <strong>Incorrect.</strong> For gains the hypothesis was supported.</li>
+                  <li><em>A gain and a loss of the same size.</em> <strong>Incorrect.</strong> A mixed pair; only multiple losses broke the rules.</li>
+                  <li><em>Both losses.</em> <strong>Correct.</strong> See above.</li>
+                  <li><em>A large gain and a small loss.</em> <strong>Incorrect.</strong> The hypothesis says integrate the smaller loss with the larger gain, and people do; only multiple losses broke the rules.</li>
+                  <li><em>Any mix of one gain and one loss.</em> <strong>Incorrect.</strong> Mixed pairs were consistent with the rules; only multiple losses were not.</li>
+                  <li><em>No type of events.</em> <strong>Incorrect.</strong> Multiple losses broke the hypothesis.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 23: a gift in the reference point (essay). Practice Problem 6,
+       Question 2, with the value function of Question 20. -->
+  <section class="frame" id="midterm-2-q23">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 23</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 23</div>
+              <div class="flip-body">
+                <p>Suppose your value function is $v(x)=\operatorname{sign}(x)\sqrt{\lvert x\rvert}$, and you weight outcomes by their probabilities. Hint: if you don&rsquo;t have a calculator, use $\sqrt{1000}=\sqrt{2}\cdot\sqrt{500}$ and $\frac{\sqrt{2}}{2}\lt 1$.</p>
+                <p><strong>Problem 1.</strong> In addition to whatever you own, you have been given 1000. Choose between (A) a 50% chance of winning 1000 and (B) winning 500 for sure.</p>
+                <p><strong>Problem 2.</strong> In addition to whatever you own, you have been given 2000. Choose between (C) a 50% chance of losing 1000 and (D) losing 500 for sure.</p>
+                <p>Assume you integrate the gift into your reference point. Label your answers 1) to 3); otherwise, you may lose points.</p>
+                <p>1) Find the values of A and B. Which do you choose in Problem 1?</p>
+                <p>2) Find the values of C and D. Which do you choose in Problem 2?</p>
+                <p>3) In final outcomes, A is the same as C, and B is the same as D. Why do your choices differ?</p>
+              </div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 23</div>
+              <div class="flip-body">
+                <p><strong>1)</strong> B.</p>
+                $$v(A)=\tfrac12\sqrt{1000}=\tfrac{\sqrt2}{2}\sqrt{500}\approx 15.81,\qquad v(B)=\sqrt{500}\approx 22.36.$$
+                <p>Since $\frac{\sqrt2}{2}\lt 1$, $v(A)\lt v(B)$ even without a calculator.</p>
+                <p><strong>2)</strong> C.</p>
+                $$v(C)=-\tfrac12\sqrt{1000}=-\tfrac{\sqrt2}{2}\sqrt{500}\approx -15.81,\qquad v(D)=-\sqrt{500}\approx -22.36.$$
+                <p><strong>3)</strong> The gift moves the reference point, so the same final outcomes are coded differently. A and C both leave you with 2000 or 1000, with equal chances; B and D both leave you with 1500 for sure. In Problem 1 the reference point is 1000, so the outcomes are gains, where $v$ is concave: risk averse, you take the sure thing. In Problem 2 the reference point is 2000, so the outcomes are losses, where $v$ is convex: risk loving, you take the gamble. Same final outcomes, different frames, different choices: a <a href="kahneman-tversky-1981.html#asian-disease">framing effect</a>. Compare <a href="midterm-02-practice.html#practice-framing">Practice Problem 6</a>, Question 2.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Question 24: Professor Lerath's last question (essay). Also accepted: a
+       preference for improving sequences. -->
+  <section class="frame" id="midterm-2-q24">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Midterm 2&mdash;Answer Key</h2>
+      <p class="frame-subtitle">Question 24</p>
+    </div>
+    <div class="frame-content">
+      <div class="flip-card" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="block">
+              <div class="block-title">Question 24</div>
+              <div class="flip-body">Professor Lerath&rsquo;s students take Behavioral Economics Midterm 2 one question at a time, in order. They prefer easy questions to hard ones, and between two questions of equal difficulty, they prefer the one worth more points. Professor Lerath wants to maximize the students&rsquo; utility and always ends the exam with an easy question worth many points. What rule does Professor Lerath believe the students use to evaluate the stream of utility they experience during the exam? Explain.</div>
+            </div>
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="block">
+              <div class="block-title">Answer 24</div>
+              <div class="flip-body">
+                <p><span class="structure">Answer.</span> The peak-end rule.</p>
+                <p>Under the <a href="inter-temporal-choice.html#utility-streams">peak-end rule</a>, the exam is evaluated as $U(\mathbf{u})=f\bigl(\max_t u_t,\,u_T\bigr)$: only the best moment and the last one count. An easy question worth many points is the students&rsquo; favorite kind, so ending with it makes the final utility $u_T$ as high as it can be, and it is the peak as well.</p>
+                <p>A professor who believed the students discount, exponentially or with the $(\beta,\delta)$-model, would do the opposite: the discount function is decreasing, so the best question should come first. Also accepted: a preference for improving sequences, &ldquo;saving the best for last.&rdquo;</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Nav -->
   <div style="max-width: var(--frame-max-width); margin: 0.5rem auto; padding: 0 0.5rem; display: flex; justify-content: space-between; font-size: 0.55rem;">
     <a href="inter-temporal-choice.html" style="color: var(--crane-blue); text-decoration: none;">&larr; Intertemporal Choice</a>
@@ -77,6 +733,38 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="js/scroll-animations.js"></script>
+
+  <script>
+    // Flip cards (as in midterm-02-practice.html): toggle .flipped on click (or
+    // Enter/Space), and size the card to the visible face; refresh ScrollTrigger once
+    // the height has settled, since everything below the card moves. Links inside a
+    // card navigate without flipping it.
+    document.querySelectorAll('.flip-card').forEach(card => {
+      const inner = card.querySelector('.flip-inner');
+      const front = card.querySelector('.flip-front');
+      const back = card.querySelector('.flip-back');
+      const fit = () => {
+        const face = card.classList.contains('flipped') ? back : front;
+        inner.style.height = face.offsetHeight + 'px';
+      };
+      const flip = () => {
+        const flipped = card.classList.toggle('flipped');
+        front.setAttribute('aria-hidden', flipped ? 'true' : 'false');
+        back.setAttribute('aria-hidden', flipped ? 'false' : 'true');
+        fit();
+      };
+      card.addEventListener('click', e => { if (!e.target.closest('a')) flip(); });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      });
+      inner.addEventListener('transitionend', e => {
+        if (e.propertyName === 'height') ScrollTrigger.refresh();
+      });
+      new ResizeObserver(fit).observe(front);
+      new ResizeObserver(fit).observe(back);
+      fit();
+    });
+  </script>
 
 </body>
 </html>
