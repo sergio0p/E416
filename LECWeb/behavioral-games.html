@@ -28,9 +28,9 @@
 
     /* tikz-svg figures (source: 416/E416_LEC_FA25.tex 1264-1489). */
     .gt-fig { width: 100%; display: block; margin: 0.75rem auto; }
-    .br-fig { max-width: 520px; }
     .tree-fig { max-width: 420px; }
     #fig-dictator { max-width: 260px; }
+    #fig-two-stage { max-width: 600px; }
 
     /* Best-response figures: the Beamer overlays (<2,4-> stars, <3-> circles,
        <5-> Nash note) as scroll steps. The library rebuilds the SVG's children
@@ -42,23 +42,61 @@
     svg.br-fig.show-br1 [id*="-br1-"],
     svg.br-fig.show-br2 [id*="-br2-"],
     svg.br-fig.show-nash [id*="-nash-"] { opacity: 1; }
+    /* Slide-size frames (Stag Hunt, Prisoners' Dilemma): one figure holding the
+       best-response graph on the left and the payoff matrix on the right, as on
+       the 411 slides (PDF pages 119, 124) but spread across the frame. The frame
+       fills the window and fitSlides (below) gives the figure the largest size
+       that fits. */
+    .slide-fit { min-height: 100vh; display: flex; flex-direction: column; }
+    .slide-fit .frame-content { flex: 1; display: flex; flex-direction: column; }
+    .slide-fit .slide-box { flex: 1; display: flex; align-items: center; justify-content: center; }
+    /* The matrix may rise above the figure's box (brFigure crops the viewBox at
+       the legend's top): let it overflow, over the frame's title bar. */
+    .slide-fit .slide-box > svg { flex: none; margin: 0; position: relative; z-index: 1; overflow: visible; }
+    /* \alert{.} and \textcolor{blue}{.} in those matrices: at the equilibria,
+       player 1's payoff in red and player 2's in blue. */
+    #node-stag-c-00 text.node-part-one, #node-stag-c-11 text.node-part-one,
+    #node-pd-c-11 text.node-part-one { fill: #ff0000; }
+    #node-stag-c-00 text.node-part-two, #node-stag-c-11 text.node-part-two,
+    #node-pd-c-11 text.node-part-two { fill: #0000ff; }
 
     /* Coordination-game frame: two columns as in the 411/511 slide, matrix left and
        list right. The list comes first in the DOM because the overlay script steps
        through .overlay items in document order; `order` puts the matrix on the left. */
-    .bos-cols { display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
-    .bos-cols .bos-list { flex: 0 1 30rem; margin: 0; }
+    /* Proportions of the 411 slide (PDF page 46), where the text is 14.4pt and
+       the list's KaTeX renders at 1.21em: the bullets sit ~0.8 text-em right of
+       the boxes (gap 0.4em + the svg's padding + the bullet's place in the list
+       padding), the list breaks where the slide's 10cm column does (explicit
+       <br>s; the box is as wide as its longest line), baselines are 1.24
+       text-em apart within an item (1.50em) and 1.45 between items (+0.25em).
+       The matrix width is set from its viewBox, in em. */
+    .bos-cols { display: flex; align-items: center; justify-content: center; gap: 2.5em; }
+    .bos-cols .bos-list { flex: 0 0 auto; width: max-content; margin: 0; }
+    .bos-cols .bos-list li { line-height: 1.5em; margin-bottom: 0.25em; }
     .bos-cols .bos-matrix { order: -1; flex: 0 0 auto; width: 280px; }
+    /* The frame fills the screen, as a slide does: full window height, the
+       definition block as wide as its text, and the matrix + list (2.5em apart)
+       scaled up by fitBos (below) to fill the space under the definition. */
+    #game-theory-review { min-height: 100vh; display: flex; flex-direction: column; }
+    #game-theory-review .block { width: fit-content; }
+    #game-theory-review .frame-content { flex: 1; display: flex; flex-direction: column; }
+    #game-theory-review .bos-cols { flex: 1; }
     /* break lines only between formulas, never inside one */
     .bos-list .katex { white-space: nowrap; }
     #fig-bos { margin: 0; }
-    /* \only<5>: player 2's side in blue. \only<6>: player 1's side in red, cell
-       slashes included (TikZ's |[red]| colours the whole cell node). */
+    /* \only<5>: player 2's side in blue (row 1, every lower node part, the
+       "Player 2" label). \only<6>: player 1's side in red (column 1, the cells'
+       upper parts and solidi — TikZ's |[red]| colours the whole cell node, with
+       every lower node part kept black — and the "Player 1" label). Colours are
+       TikZ's own blue and red, as in the 411 PDF (pages 47-48): pure #0000ff
+       and #ff0000. */
     #fig-bos text { transition: fill 0.4s ease; }
     #fig-bos path { transition: stroke 0.4s ease; }
-    #game-theory-review[data-step="5"] #fig-bos [id*="bos-p2"] text { fill: #268bd2; }
-    #game-theory-review[data-step="6"] #fig-bos [id*="bos-p1"] text { fill: #dc322f; }
-    #game-theory-review[data-step="6"] #fig-bos path[id^="bos-p1-slash"] { stroke: #dc322f; }
+    #game-theory-review[data-step="5"] #fig-bos [id*="bos-p2"] text,
+    #game-theory-review[data-step="5"] #fig-bos [id^="node-bos-c-"] text.node-part-two { fill: #0000ff; }
+    #game-theory-review[data-step="6"] #fig-bos [id*="bos-p1"] text,
+    #game-theory-review[data-step="6"] #fig-bos [id^="node-bos-c-"] text.node-part-one { fill: #ff0000; }
+    #game-theory-review[data-step="6"] #fig-bos [id^="node-bos-c-"] path.always-stroked { stroke: #ff0000; }
 
     /* Safari/WebKit does not paint `position: relative` content inside
        <foreignObject>, so KaTeX labels in tikz-svg figures never appear. On
@@ -70,20 +108,6 @@
         position: static; clip: auto; clip-path: none; height: auto; width: auto;
         overflow: visible; padding: 0; border: 0; opacity: 1; font-size: 1em;
       }
-    }
-
-    .payoff-matrix {
-      border-collapse: collapse;
-      margin: 0.8rem auto;
-      font-size: 0.95em;
-    }
-    .payoff-matrix td, .payoff-matrix th {
-      border: 1px solid #555;
-      padding: 0.5rem 0.9rem;
-      text-align: center;
-    }
-    .payoff-matrix th {
-      background: #fff8e1;
     }
   </style>
     <!-- Google Analytics -->
@@ -113,13 +137,14 @@
         <div class="block-title">Definition</div>
         <div class="block-body">A (static) game is a list of players, their available actions, and their payoffs.</div>
       </div>
-      <p style="text-align:center;"><em>Example: A coordination game.</em></p>
       <div class="bos-cols">
         <ul class="bos-list">
           <li class="overlay" data-overlay="1">$I = \{1,2\}$</li>
           <li class="overlay" data-overlay="2">$S_1=S_2=\{B,S\}$,<br>
-            $S=S_1\times S_2=\{ (B,B),(B,S),(S,B),(S,S)\}$</li>
-          <li class="overlay" data-overlay="3">$u_1(B,B)=u_2(S,S)=3$, $u_1(S,S)=u_2(B,B)=2$,<br>
+            $S=S_1\times S_2=$<br>
+            $\{ (B,B),(B,S),(S,B),(S,S)\}$</li>
+          <li class="overlay" data-overlay="3">$u_1(B,B)=u_2(S,S)=3$,<br>
+            $u_1(S,S)=u_2(B,B)=2$,<br>
             $u_1(B,S)=u_1(S,B)=0$,<br>
             $u_2(B,S)=u_2(S,B)=0$.</li>
         </ul>
@@ -143,42 +168,28 @@
   </section>
 
   <!-- Frame: BR and Nash example (source: 1263-1311) -->
-  <section class="frame" id="br-nash-example">
+  <section class="frame slide-fit" id="br-nash-example">
     <div class="frame-title-bar">
       <h2 class="frame-title">Best Responses and Nash Equilibrium</h2>
       <p class="frame-subtitle">An Example: Stag Hunt</p>
     </div>
     <div class="frame-content">
-      <table class="payoff-matrix">
-        <thead>
-          <tr><th></th><th>Stag</th><th>Hare</th></tr>
-        </thead>
-        <tbody>
-          <tr><th>Stag</th><td><strong>4, 4</strong></td><td>0, 1</td></tr>
-          <tr><th>Hare</th><td>1, 0</td><td><strong>1, 1</strong></td></tr>
-        </tbody>
-      </table>
-      <svg id="fig-stag" class="gt-fig br-fig" role="img" aria-label="Best responses in the Stag Hunt: both players best respond at (S,S) and (H,H)"></svg>
+      <div class="slide-box">
+        <svg id="fig-stag" class="gt-fig br-fig" role="img" aria-label="Stag Hunt. Payoffs: (Stag, Stag) 4, 4; (Stag, Hare) 0, 1; (Hare, Stag) 1, 0; (Hare, Hare) 1, 1. Best responses: both players best respond at (S,S) and (H,H)"></svg>
+      </div>
     </div>
   </section>
 
   <!-- Frame: Prisoners' Dilemma (source: 1314-1361) -->
-  <section class="frame" id="prisoners-dilemma">
+  <section class="frame slide-fit" id="prisoners-dilemma">
     <div class="frame-title-bar">
       <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
       <p class="frame-subtitle">Prisoners' Dilemma</p>
     </div>
     <div class="frame-content">
-      <table class="payoff-matrix">
-        <thead>
-          <tr><th></th><th>Effort</th><th>Shirk</th></tr>
-        </thead>
-        <tbody>
-          <tr><th>Effort</th><td>9, 9</td><td>1, 10</td></tr>
-          <tr><th>Shirk</th><td>10, 1</td><td><strong>2, 2</strong></td></tr>
-        </tbody>
-      </table>
-      <svg id="fig-pd" class="gt-fig br-fig" role="img" aria-label="Best responses in the Prisoners' Dilemma: they cross only at (S,S)"></svg>
+      <div class="slide-box">
+        <svg id="fig-pd" class="gt-fig br-fig" role="img" aria-label="Prisoners' Dilemma. Payoffs: (Effort, Effort) 9, 9; (Effort, Shirk) 1, 10; (Shirk, Effort) 10, 1; (Shirk, Shirk) 2, 2. Best responses: they cross only at (S,S)"></svg>
+      </div>
     </div>
   </section>
 
@@ -190,6 +201,20 @@
     </div>
     <div class="frame-content">
       <p>The only equilibrium is for both players to shirk. Moreover, the best response is always to shirk regardless of the other player's strategy. However, in experiments, players often choose effort.</p>
+    </div>
+  </section>
+
+  <!-- Frame: Golden Balls (matrix: 411/E411_LEC_SPR_25.tex 328-340; best responses
+       drawn as in the Stag Hunt and Prisoners' Dilemma frames) -->
+  <section class="frame slide-fit" id="golden-balls">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Games Studied by Behavioral Game Theory</h2>
+      <p class="frame-subtitle"><a href="https://www.youtube.com/watch?v=S0qjK3TWZE8" target="_blank" rel="noopener">Golden Balls</a></p>
+    </div>
+    <div class="frame-content">
+      <div class="slide-box">
+        <svg id="fig-gb" class="gt-fig br-fig" role="img" aria-label="Golden Balls. Payoffs: (SPLIT, SPLIT) 13, 13; (SPLIT, STEAL) 0, 26; (STEAL, SPLIT) 26, 0; (STEAL, STEAL) 0, 0. Best responses: they cross at (STEAL, SPLIT), (SPLIT, STEAL) and (STEAL, STEAL)"></svg>
+      </div>
     </div>
   </section>
 
@@ -256,9 +281,9 @@
     </div>
     <div class="frame-content">
       <p>A player has to divide one dollar between private consumption $1-x_i$ and donation to a public good $x_i$. Notice that for public goods, consumption is non-rival. The payoffs are:
-      $$u_i(x)=1-x_i+\alpha\cdot \sum_{j=1}^n x_j,$$
-      where $1/n\lt \alpha\lt 1$ and $n$ is the number of players.</p>
-      <p>Notice that since $\diff{u_i}{x_i}=-1+\alpha\lt 0$, we have $BR_i(x_{-i})=0$ but $u_i(0,\ldots,0)=1\lt u_i(1,\ldots,1)=\alpha\cdot n$.</p>
+      $$u_i(x)=1-x_i+\gamma\cdot \sum_{j=1}^n x_j,$$
+      where $1/n\lt \gamma\lt 1$ and $n$ is the number of players.</p>
+      <p>Notice that since $\diff{u_i}{x_i}=-1+\gamma\lt 0$, we have $BR_i(x_{-i})=0$ but $u_i(0,\ldots,0)=1\lt u_i(1,\ldots,1)=\gamma\cdot n$.</p>
     </div>
   </section>
 
@@ -327,15 +352,34 @@
       <p class="frame-subtitle">Social Preferences</p>
     </div>
     <div class="frame-content">
-      <p>Let $\mathbf{u}=(u_1,\ldots,u_n)$ be the standard payoffs of a game with $n$ players. Behavioral Game Theory assumes that players have <em>social preferences</em>, that is, their utility depends not only on their own payoffs but also on the payoffs of the other players. Thus, the utility of player $i$ is given by $U_i$ where:</p>
-      <ul>
-        <li>Inequity aversion model ($0\lt \beta\lt \min(1,\alpha)$):
-          $$U_i(\mathbf{u})=u_i-\beta\sum_{j\neq i} \underbrace{\max(u_i-u_j,0)}_{\text{guilt}}-\alpha\sum_{j\neq i} \underbrace{\max(u_j-u_i,0)}_{\text{envy}}.$$
-        </li>
-        <li>ERC (equity-reciprocity-competition &mdash; <em>not covered</em>), with $\partial_1 F\gt 0$, $\partial_2 F(u_i,1/n)=0$ and $\partial^2_2 F(u_i,1/n)\lt 0$:
-          $$U_i(\mathbf{u})=F\left(u_i, \dfrac{u_i}{\sum_{j=1}^{n} u_j}\right).$$
-        </li>
-      </ul>
+      <p>Let $\mathbf{u}=(u_1,\ldots,u_n)$ be the payoff profile of a game with $n$ players. Behavioral game theory assumes that players have <em>social preferences</em>: preferences over entire payoff profiles $\mathbf{u}$. Player $i$ does not value her own payoff $u_i$ in isolation; she cares about how every player fares, herself included. Her utility $U_i(\mathbf{u})$ represents these social preferences. Some examples:</p>
+      <dl class="beamer-description">
+        <dt>Selfish</dt>
+        <dd>$U_i(\mathbf{u})=u_i$: only her own payoff matters (the standard assumption).</dd>
+        <dt>Altruistic</dt>
+        <dd>$U_i(\mathbf{u})=u_i+\lambda\sum_{j\neq i}u_j$, with $\lambda\gt 0$: the other players' payoffs raise her utility.</dd>
+        <dt>Envious</dt>
+        <dd>$U_i(\mathbf{u})=u_i-\lambda\sum_{j\neq i}u_j$, with $\lambda\gt 0$: the other players' payoffs lower her utility.</dd>
+        <dt>Utilitarian</dt>
+        <dd>$U_i(\mathbf{u})=\sum_{j=1}^n u_j$: the greatest good for the greatest number.</dd>
+        <dt>Rawlsian</dt>
+        <dd>$U_i(\mathbf{u})=\min\{u_1,\ldots,u_n\}$: only the worst-off player's payoff matters.</dd>
+        <dt>Inequality averse</dt>
+        <dd>$U_i(\mathbf{u})=-\left(\max_j u_j-\min_j u_j\right)$: she dislikes the gap between the best and the worst off.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Frame: Inequity aversion (Fehr and Schmidt, 1999) -->
+  <section class="frame" id="inequity-aversion">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">A Theory of Fairness, Competition, and Cooperation</h2>
+      <p class="frame-subtitle">Fehr and Schmidt (1999)</p>
+    </div>
+    <div class="frame-content">
+      <p>Inequity aversion model ($\beta_i\le \alpha_i$ and $0\le \beta_i\lt 1$):
+        $$U_i(\mathbf{u})=u_i-\frac{\alpha_i}{n-1}\sum_{j\neq i} \underbrace{\max(u_j-u_i,0)}_{\text{envy}}-\frac{\beta_i}{n-1}\sum_{j\neq i} \underbrace{\max(u_i-u_j,0)}_{\text{guilt}}.$$
+      </p>
     </div>
   </section>
 
@@ -403,7 +447,9 @@
     // frame and reveal one step per dwell of scrolling. The content never slides up
     // under the title bar: the gap between the title and the first item is fixed.
     // A frame's data-steps adds steps that reveal no new item (Beamer \only<n>
-    // recolourings); the current step is exposed as data-step for CSS.
+    // recolourings); the current step is exposed as data-step for CSS. Once the
+    // reader scrolls past the frame, data-step becomes "done", so those
+    // recolourings revert to the original colours.
     document.querySelectorAll('.overlay-frame').forEach(frame => {
       const overlays = frame.querySelectorAll('.overlay');
       if (overlays.length === 0) return;
@@ -426,8 +472,9 @@
             const isOnly = overlay.hasAttribute('data-overlay-only');
             overlay.classList.toggle('revealed', isOnly ? i === currentStep : i <= currentStep);
           });
-          frame.dataset.step = String(currentStep + 1);
-        }
+          frame.dataset.step = self.progress >= 1 ? 'done' : String(currentStep + 1);
+        },
+        onLeave: () => { frame.dataset.step = 'done'; }
       });
     });
   </script>
@@ -436,10 +483,12 @@
        Coordinates are the original TikZ cm, y-up; negated on the way in
        because SVG is y-down. -->
   <script type="module">
-    import { render } from './tikz-svg/dist/tikz-svg.min.js';
+    import { render } from './tikz-svg/dist/tikz-svg.min.js?v=20261111';
 
     const MACROS = (typeof katexMacros !== 'undefined' ? katexMacros : undefined);
-    const BLUE = '#268bd2', RED = '#dc322f', GREEN = '#859900', INK = '#000';
+    // TikZ's own colours, as in the source (416/E416_LEC_FA25.tex 1264-1489):
+    // blue, red, green!80!black (Nash arrows), green!60!black (two-stage node).
+    const BLUE = '#0000ff', RED = '#ff0000', NASH_GREEN = '#00cc00', NODE_GREEN = '#009900', INK = '#000';
     const SANS = "'Computer Modern Sans', 'Helvetica Neue', Arial, sans-serif";
     const HAND = "'Augie', cursive";
     const DOTS = '1.5 2.5';   // TikZ "densely dotted"
@@ -448,10 +497,128 @@
     const pt   = { shape: 'circle', radius: 0.5, innerSep: 0, label: '', fill: 'none', stroke: 'none' };
     const leaf = { shape: 'circle', radius: 2.4, innerSep: 0, label: '', fill: INK, stroke: 'none' };
 
+    // ---- Payoff matrices: a port of the ECON 411 TikZ ---------------------------
+    // The 411 slides draw every 2x2 game the same way (411/E411_LEC_SPR_25.tex
+    // 263-273, 576-588): a `matrix of nodes` whose payoff cells are `circle solidus`
+    // nodes (\pay a,b), a `fit` box around each cell (inner sep=-1mm, outer sep=1mm),
+    // a corner line from (Z-2-2) + `corner`, and rotated "Player 2" / "Player 1"
+    // labels placed from the matrix centre. Units are TeX points, y-down. PGF lays
+    // the matrix out with cells={anchor=base} (each row on one baseline), column 1
+    // yshift=-3mm and row 1 xshift=1mm, spacing cells by their extents without outer
+    // sep. Positions are worked out from the centre of cell (2,2) and handed to
+    // `place.pos` relative to the matrix centre; `place.f` converts pt to the
+    // figure's units. Checked against the 411 PDF's vector data (pages 46, 119,
+    // 124): every box, digit, label and line lands within 0.05pt. Ids carry P-p1 /
+    // P-p2, and the cells' parts carry node-part-one / -two, so CSS can colour
+    // each player's side.
+    const MM = 72.27 / 25.4, LW = 0.4, OS = LW / 2;
+    const SERIF = "KaTeX_Main, 'Times New Roman', serif";
+    function payoffMatrix(P, g, place) {
+      const { FS, IS, cap, cell, hdr, lab, player, pays, acts, p2Off, p1Off, corner, partAlign } = g;
+      const { f, pos } = place;
+      // circle solidus radius (incl. outer sep), and how far its centre sits below
+      // the text baseline (\centerpoint)
+      const R = Math.SQRT1_2 * (cell.wd + cell.ht) + LW / 2 + Math.hypot(2 * IS, 2 * IS) + OS;
+      const CY = 0.5 * (cell.wd + cell.ht) - cell.ht + 0.3536 * LW + IS;
+      const RV = R - OS, D = 2 * RV;                    // the cells' layout extent; the pitch
+      const hdrHt = Math.max(...hdr.map(b => b.ht)), hdrDp = Math.max(...hdr.map(b => b.dp));
+      const labExt = Math.max(...lab.map(b => b.wd / 2 + IS));
+      // row 1 baseline: its south extent (depth + inner sep) above row 2's north extent
+      const headBase = -CY - (hdrDp + IS) - (RV - CY);
+      // column 1 centres: its east extent plus the cells' west extent to the left
+      const labX = -(labExt + RV);
+      // the matrix centre is the centre of the cells' bounding box
+      const mx = ((labX - labExt) + (D + RV)) / 2;
+      const my = ((headBase - hdrHt - IS) + (D + RV)) / 2;
+      const at = (x, y) => pos(x - mx, y - my);       // from the centre of cell (2,2)
+      // action labels at labFs when their text is set smaller (\footnotesize SPLIT)
+      const txt = { shape: 'rectangle', innerSep: 0, fill: 'none', stroke: 'none', fontFamily: SERIF, fontSize: (g.labFs ?? FS) * f };
+      const draw = [];
+      for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
+        const id = `${P}-c-${r}${c}`;
+        draw.push(
+          { type: 'node', id, position: at(c * D, r * D), shape: 'circle solidus', label: pays[r][c],
+            partAlign, fontFamily: SERIF, fontSize: FS * f, textWidth: cell.wd * f, textHeight: cell.ht * f,
+            innerSep: IS * f, strokeWidth: LW * f, outerSep: OS * f, stroke: 'none', fill: 'none' },
+          { type: 'node', id: `${P}-box-${r}${c}`, fit: [id], shape: 'rectangle', label: '',
+            innerSep: -MM * f, outerSep: MM * f, strokeWidth: LW * f, stroke: INK, fill: 'none' },
+        );
+      }
+      // Action labels sit on their row's baseline. SVG centres the glyphs (central
+      // baseline), so each label goes half a cap height above that baseline.
+      acts[1].forEach((a, i) => draw.push(
+        { type: 'node', id: `${P}-p2-col-${i}`, position: at(i * D + MM, headBase - cap / 2), label: a, ...txt }));
+      acts[0].forEach((a, i) => draw.push(
+        { type: 'node', id: `${P}-p1-row-${i}`, position: at(labX, i * D - CY - cap / 2 + 3 * MM), label: a, ...txt }));
+      // corner line: from (Z-2-2) + corner, then ++(-1.3cm, 1.3cm)
+      const lx = corner[0] * MM, ly = -corner[1] * MM;
+      draw.push({ type: 'path', points: [at(lx, ly), at(lx - 13 * MM, ly - 13 * MM)], stroke: INK, strokeWidth: LW * f });
+      // "Player 2" [above]: south anchor at p2Off (mm, TikZ y-up) from the matrix
+      // centre; "Player 1" [left]: east anchor at p1Off. TikZ rotate=-45 is library
+      // rotate 45 (clockwise on screen). Each centre is its anchor moved half the
+      // node (plus outer sep) into the rotated frame.
+      const u = Math.SQRT1_2;
+      const halfH = (player.ht + player.dp) / 2 + IS + OS, halfW = player.wd / 2 + IS + OS;
+      const pl = { ...txt, rotate: 45, fontSize: player.fs * f };
+      draw.push(
+        { type: 'node', id: `${P}-p2-name`, label: 'Player 2', ...pl,
+          position: pos(p2Off[0] * MM + halfH * u, -p2Off[1] * MM - halfH * u) },
+        { type: 'node', id: `${P}-p1-name`, label: 'Player 1', ...pl,
+          position: pos(p1Off[0] * MM - halfW * u, -p1Off[1] * MM - halfW * u) },
+      );
+      return draw;
+    }
+
+    // TeX boxes (pt), measured with XeLaTeX in the 411 document's fonts.
+    const tb = (wd, ht, dp = 0) => ({ wd, ht, dp });
+    // Normal-size frames (Stag Hunt, Prisoners' Dilemma): 10.95pt LM Roman 10, em
+    // 10.95, digits 5.475 x 6.895, capitals 0.683em; \footnotesize "Player 1"
+    // (LM Roman 9) 33.30 wide, ht 6.2, dp 1.75.
+    const LM11 = { FS: 10.95, IS: 0.3333 * 10.95, cap: 0.683 * 10.95,
+      player: { wd: 33.298, ht: 6.2, dp: 1.75, fs: 9 },
+      p2Off: [-18, 19], p1Off: [-13, 13], corner: [-9, 9] };
+    const STAG = { ...LM11, cell: tb(5.475, 6.895),
+      hdr: [tb(21.292, 7.543, 2.129), tb(22.843, 7.543)], lab: [tb(21.292, 7.543, 2.129), tb(22.843, 7.543)],
+      acts: [['Stag', 'Hare'], ['Stag', 'Hare']],
+      pays: [[['4', '4'], ['0', '1']], [['1', '0'], ['1', '1']]] };
+    // \pay \phantom{0}9,9\phantom{0}: both parts two digits wide, the upper one
+    // right-aligned and the lower one left-aligned.
+    const PD = { ...LM11, cell: tb(10.95, 6.895), partAlign: ['right', 'left'],
+      hdr: [tb(27.861, 7.543), tb(25.276, 7.543)], lab: [tb(27.861, 7.543), tb(25.276, 7.543)],
+      acts: [['Effort', 'Shirk'], ['Effort', 'Shirk']],
+      pays: [[['9', '9'], ['1', '10']], [['10', '1'], ['2', '2']]] };
+    // The coordination game's \Large frame (411 PDF page 46): 14.4pt LM Roman 12,
+    // em 14.10, digits 7.05 x 9.07, B 9.99 x 9.84; "Player 1" at \small, 36.03 wide.
+    const BOS = { FS: 14.4, IS: 0.3333 * 0.97922 * 14.4, cap: 9.84, cell: tb(7.05, 9.07),
+      hdr: [tb(9.99, 9.84)], lab: [tb(9.99, 9.84)],
+      player: { wd: 36.03, ht: 6.94, dp: 1.94, fs: 10 },
+      p2Off: [-21, 19], p1Off: [-16, 13], corner: [-6, 6],
+      acts: [['B', 'S'], ['B', 'S']],
+      pays: [[['3', '2'], ['0', '0']], [['0', '0'], ['2', '3']]] };
+    // Golden Balls (411 PDF page 50): the cells at \Large like the coordination
+    // game, two digits wide with every phantom on the left (\pay \phantom{1}0,26,
+    // \pay 26,\phantom{1}0), so both parts right-aligned; \footnotesize SPLIT /
+    // STEAL (LM Roman 9, capitals 6.2 high); "Player 1" at \small (LM Roman 10).
+    const GB = { FS: 14.4, IS: 0.3333 * 0.97922 * 14.4, cap: 6.2, labFs: 9,
+      cell: tb(14.1, 9.07), partAlign: 'right',
+      hdr: [tb(27.233, 6.2), tb(30.830, 6.2)], lab: [tb(27.233, 6.2), tb(30.830, 6.2)],
+      player: { wd: 36.0, ht: 6.889, dp: 1.944, fs: 10 },
+      p2Off: [-22, 24.4], p1Off: [-17, 18], corner: [-9, 9],
+      acts: [['SPLIT', 'STEAL'], ['SPLIT', 'STEAL']],
+      pays: [[['13', '13'], ['0', '26']], [['26', '0'], ['0', '0']]] };
+
     // ---- Best-response plots: Stag Hunt and Prisoners' Dilemma ---------------
     // Scroll steps follow the Beamer overlays: 1 axes + legend, 2 BR2 stars
     // (<2,4->), 3 BR1 circles alone (<3->, stars off), 4 both, 5 Nash note (<5->).
-    function brFigure(svgId, frameId, P, { ticks, stars, circles, arrows }) {
+    // The payoff matrix goes in the same figure, at the top right with the Nash
+    // note under it, as on the 411 slides, but spread across the frame and drawn
+    // `matrix.k` times larger than the graph's own scale. `matrix.at` and `note`
+    // are centres in the graph's cm; the arrows' out/in angles are set for the
+    // note's place. The viewBox is cropped at `cropTop` (cm, the legend's top), so
+    // the graph, legend and note size the figure while the top of the matrix (the
+    // "Player" labels) rises above it, over the frame's title bar.
+    const SCALE = 44, PT_CM = 72.27 / 2.54;   // px per cm; pt per cm
+    function brFigure(svgId, frameId, P, { ticks, stars, circles, arrows, matrix, note = [9, 3], cropTop }) {
       const svg = document.getElementById(svgId);
       const draw = [];
       // dotted guides first (TikZ background layer): BR2 verticals, BR1 horizontals
@@ -481,7 +648,7 @@
           rx: 123, ry: 47, label: '', fill: '#bfbfbf', stroke: 'none' },
         { type: 'node', id: `${P}-legend`, position: { x: 3.08, y: -5.60 }, shape: 'ellipse',
           rx: 123, ry: 47, label: '', fill: 'none', stroke: INK, strokeWidth: 1.6 },
-        { type: 'node', id: `${P}-leg0`, position: { x: 2, y: -6 }, label: 'Legend:', ...lbl, fontFamily: SANS },
+        { type: 'node', id: `${P}-leg0`, position: { x: 2, y: -6 }, label: 'Legend:', ...lbl, fontFamily: SERIF },
         { type: 'node', id: `${P}-leg1`, position: { x: 4, y: -6 }, label: '$BR_1=\\circ$', ...lbl, labelColor: RED },
         { type: 'node', id: `${P}-leg2`, position: { x: 3, y: -5.4 }, label: '$BR_2=\\star$', ...lbl, labelColor: BLUE },
       );
@@ -491,15 +658,38 @@
       circles.forEach(([x, y], i) => draw.push({ type: 'node', id: `${P}-br1-c${i}`, position: { x, y: -y },
         shape: 'circle', radius: 9, innerSep: 0, label: '', fill: 'none', stroke: RED, strokeWidth: 1.8 }));
       // Nash note (handwritten) with green arrows to the equilibria
-      draw.push({ type: 'node', id: `${P}-nash-note`, position: { x: 9, y: -3 },
+      draw.push({ type: 'node', id: `${P}-nash-note`, position: { x: note[0], y: -note[1] },
         label: 'Nash eq. = all players are best responding, best response curves cross.',
         ...lbl, textWidth: 132, align: 'left', fontFamily: HAND, fontSize: 15 });
-      arrows.forEach(([x, y, out, inn], i) => draw.push(
-        { type: 'node', id: `${P}-nash-t${i}`, position: { x, y: -y }, ...pt },
-        { type: 'edge', id: `${P}-nash-a${i}`, from: `${P}-nash-note`, to: `${P}-nash-t${i}`,
-          out, in: inn, arrow: '->', stroke: GREEN, strokeWidth: 2.6 }));
+      // [x, y, out, in, { from: [x, y] start on the note's edge, looseness }]
+      arrows.forEach(([x, y, out, inn, o = {}], i) => {
+        let from = `${P}-nash-note`;
+        if (o.from) {
+          from = `${P}-nash-f${i}`;
+          draw.push({ type: 'node', id: from, position: { x: o.from[0], y: -o.from[1] }, ...pt });
+        }
+        draw.push(
+          { type: 'node', id: `${P}-nash-t${i}`, position: { x, y: -y }, ...pt },
+          { type: 'edge', id: `${P}-nash-a${i}`, from, to: `${P}-nash-t${i}`,
+            out, in: inn, looseness: o.looseness, arrow: '->', stroke: NASH_GREEN, strokeWidth: 2.6 });
+      });
+      // the payoff matrix, in pt scaled to the graph's px, magnified k times
+      if (matrix) {
+        const k = matrix.k ?? 1;
+        draw.push(...payoffMatrix(P, matrix.spec, {
+          f: k * SCALE / PT_CM,
+          pos: (x, y) => ({ x: matrix.at[0] + k * x / PT_CM, y: -matrix.at[1] + k * y / PT_CM }),
+        }));
+      }
 
-      render(svg, { scale: 44, originX: 60, originY: 300, padding: 8, katexMacros: MACROS, draw });
+      const cfg = { scale: SCALE, originX: 60, originY: 300, padding: 8, katexMacros: MACROS, draw };
+      render(svg, cfg);
+      // second pass with the viewBox's top cut at cropTop (the library's post-font
+      // re-render keeps the latest config, so the crop survives it)
+      if (cropTop != null) {
+        const vb = svg.viewBox.baseVal, y0 = cfg.originY - SCALE * cropTop;
+        if (vb && vb.height && y0 > vb.y) render(svg, { ...cfg, viewBox: [vb.x, y0, vb.width, vb.y + vb.height - y0] });
+      }
 
       const step = s => {
         svg.classList.toggle('show-br2', s === 2 || s >= 4);
@@ -522,53 +712,85 @@
     try {
       brFigure('fig-stag', 'br-nash-example', 'stag', {
         ticks: ['S', 'H'], stars: [[2, 1], [6, 3]], circles: [[2, 1], [6, 3]],
-        arrows: [[2, 1.3, 150, 90], [6, 2.7, -150, -90]],
+        // the note is below the (H,H) marker, so the arrow to (S,S) runs under it
+        // and meets the marker from the right; the one to (H,H) hooks up from below
+        arrows: [[2.3, 1.0, 180, 0], [6, 2.7, 165, -90]],
+        // matrix right edge at 14cm, bottom 0.3cm above the note; headers below cropTop
+        matrix: { spec: STAG, k: 1.5, at: [11.312, 4.339] }, note: [11.56, 0.54], cropTop: 6.9,
       });
     } catch (err) { console.warn('stag hunt figure failed', err); }
     try {
       brFigure('fig-pd', 'prisoners-dilemma', 'pd', {
         ticks: ['E', 'S'], stars: [[2, 3], [6, 3]], circles: [[6, 1], [6, 3]],
-        arrows: [[6, 2.7, -150, -90]],
+        arrows: [[6, 2.7, 165, -90]],
+        matrix: { spec: PD, k: 1.365, at: [11.063, 4.40] }, note: [11.57, 0.6], cropTop: 6.9,
       });
     } catch (err) { console.warn('prisoners dilemma figure failed', err); }
+    try {
+      // Each player is indifferent when the other steals, so both actions are best
+      // responses there: three equilibria. The arrows leave the note's left edge
+      // (x = 10) at their own heights: (STEAL, STEAL) from the top corner, in from
+      // the right; (STEAL, SPLIT) straight across; (SPLIT, STEAL) level between
+      // the two rows of marks, then up into its mark from below.
+      brFigure('fig-gb', 'golden-balls', 'gb', {
+        ticks: ['\\footnotesize\\text{SPLIT}', '\\footnotesize\\text{STEAL}'],
+        stars: [[2, 3], [6, 1], [6, 3]], circles: [[6, 1], [2, 3], [6, 3]],
+        arrows: [[6.3, 3.0, 150, 0, { from: [10.0, 1.75] }], [6.3, 1.0, 180, 0, { from: [10.0, 0.6] }],
+                 [2, 2.7, 165, -90, { from: [10.0, 1.35], looseness: 0.5 }]],
+        matrix: { spec: GB, k: 1.13, at: [10.935, 4.525] }, note: [11.57, 0.6], cropTop: 6.9,
+      });
+    } catch (err) { console.warn('golden balls figure failed', err); }
 
     // ---- Coordination game (Battle of the Sexes) payoff matrix --------------------
-    // As in ECON 411/511: split cells (player 1's payoff top-left, player 2's
-    // bottom-right) and a diagonal corner with "Player 2" over "Player 1". Pixel
-    // coordinates, y-down. Ids carry bos-p1 / bos-p2 so the frame's data-step can
-    // recolour each player's side from CSS.
+    // The 411 matrix on its own (PDF page 46), drawn in pt at scale 1.
     try {
-      const SERIF = "KaTeX_Main, 'Times New Roman', serif";
-      const C = 70, H = C / 2, STEP = C + 12, D = 15, O = 17;   // cell, half, pitch; slash and payoff offsets
-      const txt = { ...lbl, fontFamily: SERIF, fontSize: 22 };
-      const pays = [[['3', '2'], ['0', '0']], [['0', '0'], ['2', '3']]];
-      const acts = ['B', 'S'];
-      const draw = [];
-      for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
-        const x = c * STEP, y = r * STEP;
-        draw.push(
-          { type: 'node', id: `bos-cell-${r}${c}`, position: { x, y }, shape: 'rectangle', halfWidth: H, halfHeight: H,
-            label: '', fill: 'none', stroke: INK, strokeWidth: 1.3 },
-          { type: 'path', id: `bos-p1-slash-${r}${c}`, points: [{ x: x - D, y: y + D }, { x: x + D, y: y - D }],
-            stroke: INK, strokeWidth: 1.1 },
-          { type: 'node', id: `bos-p1-pay-${r}${c}`, position: { x: x - O, y: y - O }, label: pays[r][c][0], ...txt },
-          { type: 'node', id: `bos-p2-pay-${r}${c}`, position: { x: x + O, y: y + O }, label: pays[r][c][1], ...txt },
-        );
-      }
-      acts.forEach((a, i) => draw.push(
-        { type: 'node', id: `bos-p2-col-${i}`, position: { x: i * STEP, y: -H - 17 }, label: a, ...txt },
-        { type: 'node', id: `bos-p1-row-${i}`, position: { x: -H - 19, y: i * STEP }, label: a, ...txt },
-      ));
-      draw.push(
-        { type: 'path', points: [{ x: -H, y: -H }, { x: -H - 62, y: -H - 62 }], stroke: INK, strokeWidth: 1.1 },
-        // labels parallel to the line, one each side (library rotate: positive = clockwise on screen)
-        { type: 'node', id: 'bos-p2-name', position: { x: -H - 31 + 9, y: -H - 31 - 9 }, label: 'Player 2',
-          rotate: 45, ...lbl, fontFamily: SERIF, fontSize: 15 },
-        { type: 'node', id: 'bos-p1-name', position: { x: -H - 31 - 9, y: -H - 31 + 9 }, label: 'Player 1',
-          rotate: 45, ...lbl, fontFamily: SERIF, fontSize: 15 },
-      );
-      render(document.getElementById('fig-bos'), { scale: 1, originX: 0, originY: 0, padding: 6, draw });
+      const svg = document.getElementById('fig-bos');
+      render(svg, { scale: 1, originX: 0, originY: 0, padding: 2,
+        draw: payoffMatrix('bos', BOS, { f: 1, pos: (x, y) => ({ x, y }) }) });
+      // Size the figure in em so its 14.4pt text matches the list beside it, as in
+      // the PDF; the list's math is KaTeX, which renders at 1.21em.
+      const vb = svg.viewBox.baseVal;
+      if (vb && vb.width) svg.parentElement.style.width = (vb.width / BOS.FS * 1.21) + 'em';
     } catch (err) { console.warn('coordination game matrix failed', err); }
+
+    // Fill the screen with the matrix + list, as the slide does: everything in
+    // .bos-cols is sized in em, so one font size scales the pair. Take the largest
+    // that fits the frame's width and the window height left under the title bar
+    // and the definition, then let ScrollTrigger re-measure the pinned frame.
+    function fitBos() {
+      const frame = document.getElementById('game-theory-review');
+      const cols = frame && frame.querySelector('.bos-cols');
+      if (!cols) return;
+      const list = cols.querySelector('.bos-list'), mat = cols.querySelector('.bos-matrix');
+      cols.style.fontSize = '';
+      const f0 = parseFloat(getComputedStyle(cols).fontSize);
+      const lr = list.getBoundingClientRect(), mr = mat.getBoundingClientRect();
+      const natW = Math.max(lr.right, mr.right) - Math.min(lr.left, mr.left);
+      const natH = Math.max(lr.height, mr.height);
+      const content = frame.querySelector('.frame-content'), cs = getComputedStyle(content);
+      const availW = content.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const availH = window.innerHeight - (frame.offsetHeight - cols.offsetHeight);
+      const s = Math.min(0.94 * availW / natW, 0.97 * availH / natH);
+      if (s > 0 && Number.isFinite(s)) cols.style.fontSize = (f0 * s) + 'px';
+    }
+    // Slide-size figures: the largest size whose aspect fits the frame's width and
+    // the window height left under the title bar.
+    function fitSlides() {
+      document.querySelectorAll('.slide-fit').forEach(frame => {
+        const fig = frame.querySelector('.slide-box > svg');
+        const vb = fig && fig.viewBox.baseVal;
+        if (!vb || !vb.width) return;
+        const box = fig.parentElement;
+        const availH = window.innerHeight - (frame.offsetHeight - box.offsetHeight);
+        fig.style.width = (0.97 * Math.min(box.clientWidth, availH * vb.width / vb.height)) + 'px';
+      });
+    }
+    const refit = () => { fitBos(); fitSlides(); ScrollTrigger.refresh(); };
+    if (document.readyState === 'complete') refit();
+    else window.addEventListener('load', refit);
+    if (document.fonts) document.fonts.ready.then(refit);
+    let fitTimer;
+    window.addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = setTimeout(refit, 300); });
 
     // ---- Game trees -------------------------------------------------------------
     const player = (id, x, y, n) => ({ type: 'node', id, position: { x, y }, label: `Player ${n}`, ...lbl, fontFamily: SANS });
@@ -579,14 +801,15 @@
       render(document.getElementById('fig-two-stage'), {
         scale: 40, originX: 40, originY: 60, padding: 8, katexMacros: MACROS,
         draw: [
-          { type: 'node', id: 'ts-p1', position: { x: 0, y: 0 }, label: '$1$', shape: 'circle', radius: 13,
-            fontSize: 16, fill: RED, stroke: 'none', labelColor: '#fff', shadow: true },
-          { type: 'node', id: 'ts-p2', position: { x: 4, y: 0 }, label: '$2$', shape: 'circle', radius: 13,
-            fontSize: 16, fill: GREEN, stroke: 'none', labelColor: '#fff', shadow: true },
-          { type: 'node', id: 'ts-pay', position: { x: 8, y: 0 }, shape: 'circle split', radius: 46,
+          // the players' nodes as large as the payoff circle, their numbers to match
+          { type: 'node', id: 'ts-p1', position: { x: 0, y: 0 }, label: '$1$', shape: 'circle', radius: 46,
+            innerSep: 0, fontSize: 32, fill: RED, stroke: 'none', labelColor: '#fff', shadow: true },
+          { type: 'node', id: 'ts-p2', position: { x: 5.5, y: 0 }, label: '$2$', shape: 'circle', radius: 46,
+            innerSep: 0, fontSize: 32, fill: NODE_GREEN, stroke: 'none', labelColor: '#fff', shadow: true },
+          { type: 'node', id: 'ts-pay', position: { x: 11, y: 0 }, shape: 'circle split', radius: 46,
             label: ['$u_1(x,y)$', '$u_2(x,y)$'], fontSize: 15, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
-          { type: 'edge', from: 'ts-p1', to: 'ts-p2', label: '$x$', ...branch, arrow: '->' },
-          { type: 'edge', from: 'ts-p2', to: 'ts-pay', label: '$y$', ...branch, arrow: '->' },
+          { type: 'edge', from: 'ts-p1', to: 'ts-p2', label: '$x$', fontSize: 20, ...branch, arrow: '->' },
+          { type: 'edge', from: 'ts-p2', to: 'ts-pay', label: '$y$', fontSize: 20, ...branch, arrow: '->' },
         ],
       });
     } catch (err) { console.warn('two-stage tree failed', err); }
