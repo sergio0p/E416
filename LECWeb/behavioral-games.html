@@ -31,6 +31,8 @@
     .tree-fig { max-width: 420px; }
     #fig-dictator { max-width: 260px; }
     #fig-two-stage { max-width: 600px; }
+    /* Ultimatum under social preferences: display equations at 1.2x. */
+    #ultimatum-social .katex-display { font-size: 1.2em; }
 
     /* Best-response figures: the Beamer overlays (<2,4-> stars, <3-> circles,
        <5-> Nash note) as scroll steps. The library rebuilds the SVG's children
@@ -120,6 +122,33 @@
     <div class="section-title-box">
       <h1>Behavioral Game Theory</h1>
     </div>
+
+    <!-- Table of Contents -->
+    <nav style="margin-top: 2rem; text-align: left; background: #eee; padding: 1rem; border-radius: 8px; font-size: 0.9rem;">
+      <a href="#game-theory-review" style="margin-left: 1rem;">1. Quick Review</a>
+      <a href="#nash-eq-def" style="margin-left: 1rem;">2. Nash Equilibrium</a>
+      <a href="#br-nash-example" style="margin-left: 1rem;">3. Stag Hunt</a>
+      <a href="#prisoners-dilemma" style="margin-left: 1rem;">4. Prisoners' Dilemma</a>
+      <br>
+      <a href="#golden-balls" style="margin-left: 1rem;">5. Golden Balls</a>
+      <a href="#nash-continuum" style="margin-left: 1rem;">6. Continuum of Actions</a>
+      <a href="#dynamic-games" style="margin-left: 1rem;">7. Dynamic Games</a>
+      <a href="#two-stage" style="margin-left: 1rem;">8. Two-Stage Game</a>
+      <br>
+      <a href="#public-good" style="margin-left: 1rem;">9. Public Good</a>
+      <a href="#ultimatum" style="margin-left: 1rem;">10. Ultimatum Game</a>
+      <a href="#dictatorship" style="margin-left: 1rem;">11. Dictatorship Game</a>
+      <a href="#ultimatum-cultures" style="margin-left: 1rem;">12. Across Cultures</a>
+      <br>
+      <a href="#social-preferences" style="margin-left: 1rem;">13. Social Preferences</a>
+      <a href="#inequity-aversion" style="margin-left: 1rem;">14. Fehr and Schmidt</a>
+      <a href="#ultimatum-social" style="margin-left: 1rem;">15. Ultimatum with Social Preferences</a>
+      <a href="#dictatorship-social" style="margin-left: 1rem;">16. Dictatorship with Social Preferences</a>
+      <br>
+      <a href="#alternative-eq" style="margin-left: 1rem;">17. Alternative Concepts</a>
+      <a href="#iterative-deletion" style="margin-left: 1rem;">18. Iterative Deletion</a>
+      <a href="#level-k" style="margin-left: 1rem;">19. Level k</a>
+    </nav>
   </section>
 
   <!-- Frame: Game Theory quick review (source: 1198-1259). The example is the B/S
@@ -380,6 +409,65 @@
       <p>Inequity aversion model ($\beta_i\le \alpha_i$ and $0\le \beta_i\lt 1$):
         $$U_i(\mathbf{u})=u_i-\frac{\alpha_i}{n-1}\sum_{j\neq i} \underbrace{\max(u_j-u_i,0)}_{\text{envy}}-\frac{\beta_i}{n-1}\sum_{j\neq i} \underbrace{\max(u_i-u_j,0)}_{\text{guilt}}.$$
       </p>
+    </div>
+  </section>
+
+  <!-- Frame: Ultimatum game under social preferences -->
+  <section class="frame" id="ultimatum-social">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Ultimatum Game under Social Preferences</h2>
+    </div>
+    <div class="frame-content">
+      <p>To find the subgame perfect equilibrium (the credible equilibrium), we solve the game backwards, from the last round to the first. First, let's consider the subgames in which Player 1 chose $x\gt\tfrac{1}{2}$ in the first round.</p>
+      <svg id="fig-ultimatum-social" class="gt-fig" role="img" aria-label="Ultimatum game with inequity aversion: player 1 demands x greater than 1/2; if player 2 says Y, player 1 gets x minus beta times (2x-1) and player 2 gets 1-x minus alpha times (2x-1); if player 2 says N, both get 0"></svg>
+      <p>Player 2 prefers to say yes if and only if
+        $$\begin{align*}
+        &1-x-\alpha(2x-1)\ge 0\quad\Leftrightarrow\\
+        &x\le\frac{1+\alpha}{1+2\alpha}
+        \end{align*}$$
+      </p>
+      <p>Notice that the largest demand Player 2 is willing to accept, $\frac{1+\alpha}{1+2\alpha}$, decreases with $\alpha$: it equals $1$ when $\alpha=0$ and falls toward $\tfrac{1}{2}$ as $\alpha\to\infty$.</p>
+      <p>Next, let's consider the subgames in which Player 1 chose $x\lt\tfrac{1}{2}$ in the first round.</p>
+      <svg id="fig-ultimatum-social-2" class="gt-fig" role="img" aria-label="Ultimatum game with inequity aversion: player 1 demands x less than 1/2; if player 2 says Y, player 1 gets x minus alpha times (1-2x) and player 2 gets 1-x minus beta times (1-2x); if player 2 says N, both get 0"></svg>
+      <p>Player 2 prefers to say yes if and only if
+        $$\begin{align*}
+        &1-x-\beta(1-2x)\ge 0\quad\Leftrightarrow\\
+        &x\le\frac{1-\beta}{1-2\beta}\ \text{ if }\beta\lt\tfrac{1}{2},\qquad x\ge\frac{\beta-1}{2\beta-1}\ \text{ if }\beta\gt\tfrac{1}{2}
+        \end{align*}$$
+      </p>
+      <p>Since $\beta\lt 1$, every demand $x\lt\tfrac{1}{2}$ satisfies this inequality, so Player 2 accepts it. Without the assumption $\beta\lt 1$, however, overly generous offers (small demands $x$) could be rejected: if $\beta\gt 1$, Player 2 rejects every demand $x\lt\frac{\beta-1}{2\beta-1}$.</p>
+      <p>Now, given Player 2's best response in the last round, Player 1's payoff from choosing $x$ in the first round is
+        $$u_1(x,BR_2(x))=\begin{cases}
+        x-\alpha(1-2x) & \text{if } x\lt\tfrac{1}{2}\\
+        x-\beta(2x-1) & \text{if } \tfrac{1}{2}\le x\le\frac{1+\alpha}{1+2\alpha}\\
+        0 & \text{if } x\gt\frac{1+\alpha}{1+2\alpha}
+        \end{cases}$$
+      </p>
+      <p>Notice that
+        $$\dfrac{d}{dx}u_1=\begin{cases}
+        1+2\alpha & \text{if } x\lt\tfrac{1}{2}\\
+        1-2\beta & \text{if } \tfrac{1}{2}\lt x\lt\frac{1+\alpha}{1+2\alpha}\\
+        0 & \text{if } x\gt\frac{1+\alpha}{1+2\alpha}
+        \end{cases}$$
+      </p>
+      <p>In the range $x\lt\tfrac{1}{2}$, Player 1 always wants to increase $x$. In the range $\tfrac{1}{2}\lt x\lt\frac{1+\alpha}{1+2\alpha}$, Player 1 has an incentive to increase $x$ if $\beta\lt\tfrac{1}{2}$ and to decrease it if $\beta\gt\tfrac{1}{2}$. In sum,
+        $$BR_1=\begin{cases}
+        \frac{1+\alpha}{1+2\alpha} & \text{if } \beta\lt\tfrac{1}{2}\\
+        \text{any } x\in\left[\tfrac{1}{2},\frac{1+\alpha}{1+2\alpha}\right] & \text{if } \beta=\tfrac{1}{2}\\
+        \tfrac{1}{2} & \text{if } \beta\gt\tfrac{1}{2}
+        \end{cases}$$
+      </p>
+    </div>
+  </section>
+
+  <!-- Frame: Dictatorship game -->
+  <section class="frame" id="dictatorship-social">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">The Dictatorship Game</h2>
+    </div>
+    <div class="frame-content">
+      <p>The dictatorship game is simply the ultimatum game in which Player 2 has no say: whatever Player 1 demands is implemented. Recall that in the ultimatum game, players may make generous offers not because they are altruistic, but because they fear that greedy offers will be rejected. The dictatorship game eliminates this possibility.</p>
+      <p>Without social preferences, the only equilibrium demand is the entire surplus, $x=1$. With social preferences, however, the reasoning above shows that Player 1 demands $x=\tfrac{1}{2}$ in equilibrium when $\beta\gt\tfrac{1}{2}$.</p>
     </div>
   </section>
 
@@ -813,6 +901,34 @@
         ],
       });
     } catch (err) { console.warn('two-stage tree failed', err); }
+
+    // Ultimatum game under inequity aversion, drawn twice: 1 --x--> 2, then N (up)
+    // and Y (down) to ellipse-split payoffs (player 1 on top, player 2 below).
+    // x > 1/2: player 1 gets more, so her guilt (beta) and player 2's envy (alpha) bite.
+    // x < 1/2: player 2 gets more, so her guilt (beta) and player 1's envy (alpha) bite.
+    // Everybody shares the same alpha and beta, so no subscripts.
+    function ultimatumSocial(svgId, P, cond, pay) {
+      render(document.getElementById(svgId), {
+        scale: 40, originX: 40, originY: 215, padding: 8, katexMacros: MACROS,
+        draw: [
+          { type: 'node', id: `${P}-p1`, position: { x: 0, y: 0 }, label: '$1$', shape: 'circle', radius: 46,
+            innerSep: 0, fontSize: 32, fill: RED, stroke: 'none', labelColor: '#fff', shadow: true },
+          { type: 'node', id: `${P}-p2`, position: { x: 7, y: 0 }, label: '$2$', shape: 'circle', radius: 46,
+            innerSep: 0, fontSize: 32, fill: NODE_GREEN, stroke: 'none', labelColor: '#fff', shadow: true },
+          { type: 'node', id: `${P}-n`, position: { x: 21, y: -2.9 }, shape: 'ellipse split', rx: 190, ry: 88,
+            label: ['$0$', '$0$'], fontSize: 28, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
+          { type: 'node', id: `${P}-y`, position: { x: 21, y: 2.9 }, shape: 'ellipse split', rx: 190, ry: 88,
+            label: pay, fontSize: 28, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
+          { type: 'edge', from: `${P}-p1`, to: `${P}-p2`, label: cond, fontSize: 30, ...branch, arrow: '->' },
+          { type: 'edge', from: `${P}-p2`, to: `${P}-n`, label: 'N', fontFamily: SANS, fontSize: 27, ...branch, arrow: '->' },
+          { type: 'edge', from: `${P}-p2`, to: `${P}-y`, label: 'Y', fontFamily: SANS, fontSize: 27, ...branch, labelSide: 'right', arrow: '->' },
+        ],
+      });
+    }
+    try { ultimatumSocial('fig-ultimatum-social', 'us', '$x\\gt \\tfrac{1}{2}$', ['$x-\\beta(2x-1)$', '$1-x-\\alpha(2x-1)$']); }
+    catch (err) { console.warn('ultimatum (social preferences, x > 1/2) tree failed', err); }
+    try { ultimatumSocial('fig-ultimatum-social-2', 'us2', '$x\\lt \\tfrac{1}{2}$', ['$x-\\alpha(1-2x)$', '$1-x-\\beta(1-2x)$']); }
+    catch (err) { console.warn('ultimatum (social preferences, x < 1/2) tree failed', err); }
 
     // Ultimatum game (drawn twice): Player 1 --x-- Player 2, then N (up) to 0,0 and Y (down) to x,1-x
     function ultimatum(svgId, P) {
