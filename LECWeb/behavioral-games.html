@@ -28,9 +28,21 @@
 
     /* tikz-svg figures (source: 416/E416_LEC_FA25.tex 1264-1489). */
     .gt-fig { width: 100%; display: block; margin: 0.75rem auto; }
-    .tree-fig { max-width: 420px; }
-    #fig-dictator { max-width: 260px; }
-    #fig-two-stage { max-width: 600px; }
+    /* Game trees: the ultimatum trees span the frame; the narrower trees get their
+       viewBox width's share of it (956.6 and 676.6 of 1092.6) so all render at one scale. */
+    #fig-two-stage { width: 87.6%; }
+    #fig-dictator { width: 61.9%; }
+    /* A title linked to its reading keeps the title's colour: link blue is unreadable on amber. */
+    .frame-title a { color: inherit; text-underline-offset: 0.12em; }
+    /* ID example: Firm 1's payoffs red, Firm 2's blue (the 510/411 colours); the
+       step script dims the other firm's numbers inside the highlighted band. */
+    #fig-ide { max-width: 600px; }
+    #fig-ide [id^="node-ide-c-"] text.node-part-one, #node-ide-p1-name text { fill: #ff0000; }
+    #fig-ide [id^="node-ide-c-"] text.node-part-two, #node-ide-p2-name text { fill: #0000ff; }
+    .ide-controls { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 0.5rem; }
+    .ide-controls button { font-size: 1rem; padding: 0.2rem 0.7rem; cursor: pointer; background: #fff; color: #000; border: 1px solid #999; border-radius: 4px; }
+    .ide-controls button:disabled { opacity: 0.35; cursor: default; }
+    #ide-status { min-width: 22em; text-align: center; }
     /* Ultimatum under social preferences: display equations at 1.2x. */
     #ultimatum-social .katex-display { font-size: 1.2em; }
 
@@ -147,7 +159,8 @@
       <br>
       <a href="#alternative-eq" style="margin-left: 1rem;">17. Alternative Concepts</a>
       <a href="#iterative-deletion" style="margin-left: 1rem;">18. Iterative Deletion</a>
-      <a href="#level-k" style="margin-left: 1rem;">19. Level k</a>
+      <a href="#id-example" style="margin-left: 1rem;">19. ID Example</a>
+      <a href="#level-k" style="margin-left: 1rem;">20. Level k</a>
     </nav>
   </section>
 
@@ -281,7 +294,7 @@
     </div>
     <div class="frame-content">
       <p>Consider the game represented by the following game tree:</p>
-      <svg id="fig-two-stage" class="gt-fig tree-fig" role="img" aria-label="Game tree: player 1 chooses x, player 2 chooses y, payoffs u1(x,y) and u2(x,y)"></svg>
+      <svg id="fig-two-stage" class="gt-fig" role="img" aria-label="Game tree: player 1 chooses x, player 2 chooses y, payoffs u1(x,y) and u2(x,y)"></svg>
       <p>The game is as in the previous slide but now player 1 chooses $x$ first and then player 2 observes $x$ and chooses $y$. The subgame perfect Nash equilibrium is found by backward induction. We analyze the game at the last stage first: for each $x$ we find player 2's best response $BR_2(x)$ by solving
       $$\diff{ }{y}u_2(x,y)=0.$$
       Notice that this best response coincides with the one found in the simultaneous-move game.</p>
@@ -323,7 +336,7 @@
       <p class="frame-subtitle">The Ultimatum Game</p>
     </div>
     <div class="frame-content">
-      <svg id="fig-ultimatum" class="gt-fig tree-fig" role="img" aria-label="Ultimatum game tree: player 1 demands x; player 2 says Y for (x, 1-x) or N for (0,0)"></svg>
+      <svg id="fig-ultimatum" class="gt-fig" role="img" aria-label="Ultimatum game tree: player 1 demands x; player 2 says Y for (x, 1-x) or N for (0,0)"></svg>
       <div class="block">
         <div class="block-title">The Ultimatum Game</div>
         <div class="block-body">Player 1 makes demand $x$ and Player 2, after observing it, says either yes or no. Payoffs are: $u_1(x,y)=x$, $u_2(x,y)=1-x$, and $u_1(x,n)=u_2(x,n)=0.$</div>
@@ -342,7 +355,7 @@
       <p class="frame-subtitle">The Ultimatum Game</p>
     </div>
     <div class="frame-content">
-      <svg id="fig-ultimatum-2" class="gt-fig tree-fig" role="img" aria-label="Ultimatum game tree: player 1 demands x; player 2 says Y for (x, 1-x) or N for (0,0)"></svg>
+      <svg id="fig-ultimatum-2" class="gt-fig" role="img" aria-label="Ultimatum game tree: player 1 demands x; player 2 says Y for (x, 1-x) or N for (0,0)"></svg>
       <ul>
         <li>Thus player 2 has two strategies that can be part of a subgame perfect equilibrium:
           $$s^*(x)=y\text{ for all } x\quad\text{ and }\quad s^{**}(x)=\begin{cases}y\,\text{ if } &x\lt 1,\\ n\,\text{ if } &x=1.\end{cases}$$
@@ -360,7 +373,7 @@
       <p class="frame-subtitle">The Dictatorship Game</p>
     </div>
     <div class="frame-content">
-      <svg id="fig-dictator" class="gt-fig tree-fig" role="img" aria-label="Dictator game tree: player 1 chooses x; payoffs (x, 1-x)"></svg>
+      <svg id="fig-dictator" class="gt-fig" role="img" aria-label="Dictator game tree: player 1 chooses x; payoffs (x, 1-x)"></svg>
     </div>
   </section>
 
@@ -431,7 +444,7 @@
       <svg id="fig-ultimatum-social-2" class="gt-fig" role="img" aria-label="Ultimatum game with inequity aversion: player 1 demands x less than 1/2; if player 2 says Y, player 1 gets x minus alpha times (1-2x) and player 2 gets 1-x minus beta times (1-2x); if player 2 says N, both get 0"></svg>
       <p>Player 2 prefers to say yes if and only if
         $$\begin{align*}
-        &1-x-\beta(1-2x)\ge 0\quad\Leftrightarrow\\
+        &1-x-\beta(1-2x)\ge 0\quad\Leftrightarrow\quad(2\beta-1)\,x\ge\beta-1\\
         &x\le\frac{1-\beta}{1-2\beta}\ \text{ if }\beta\lt\tfrac{1}{2},\qquad x\ge\frac{\beta-1}{2\beta-1}\ \text{ if }\beta\gt\tfrac{1}{2}
         \end{align*}$$
       </p>
@@ -498,10 +511,29 @@
     </div>
   </section>
 
+  <!-- Frame: ID example. A 5x5 Cournot-style game solved by iterative deletion,
+       one strictly dominated action per stage. Arrow keys (or the buttons) step:
+       odd steps highlight the dominated row/column, even steps delete it. -->
+  <section class="frame" id="id-example">
+    <div class="frame-title-bar">
+      <h2 class="frame-title">Iterative Deletion of Dominated Actions (ID)</h2>
+      <p class="frame-subtitle">An Example</p>
+    </div>
+    <div class="frame-content">
+      <p>Two firms choose how much to produce, from 1 to 5 units. Firm 1 picks a row and Firm 2 a column; each cell shows Firm 1's profit on top and Firm 2's below. Each firm's profit falls as its rival produces more.</p>
+      <svg id="fig-ide" class="gt-fig" role="img" aria-label="Five by five payoff matrix of a Cournot game between Firm 1 (rows, outputs 1 to 5) and Firm 2 (columns, outputs 1 to 5), solved step by step by iterative deletion of strictly dominated actions"></svg>
+      <div class="ide-controls">
+        <button type="button" id="ide-prev" aria-label="Previous step">&#9664;</button>
+        <span id="ide-status" aria-live="polite"></span>
+        <button type="button" id="ide-next" aria-label="Next step">&#9654;</button>
+      </div>
+    </div>
+  </section>
+
   <!-- Frame: Level k (source: 1524-1532) -->
   <section class="frame" id="level-k">
     <div class="frame-title-bar">
-      <h2 class="frame-title">Level $k$</h2>
+      <h2 class="frame-title"><a href="https://uncch.instructure.com/courses/128467/files/16576450" target="_blank" rel="noopener">Level $k$</a></h2>
     </div>
     <div class="frame-content">
       <ul>
@@ -580,10 +612,9 @@
     const SANS = "'Computer Modern Sans', 'Helvetica Neue', Arial, sans-serif";
     const HAND = "'Augie', cursive";
     const DOTS = '1.5 2.5';   // TikZ "densely dotted"
-    // invisible label box; coordinate (zero-size anchor for arrows); tree leaf
+    // invisible label box; coordinate (zero-size anchor for arrows)
     const lbl  = { shape: 'rectangle', innerSep: 3, fontSize: 16, fill: 'none', stroke: 'none' };
     const pt   = { shape: 'circle', radius: 0.5, innerSep: 0, label: '', fill: 'none', stroke: 'none' };
-    const leaf = { shape: 'circle', radius: 2.4, innerSep: 0, label: '', fill: INK, stroke: 'none' };
 
     // ---- Payoff matrices: a port of the ECON 411 TikZ ---------------------------
     // The 411 slides draw every 2x2 game the same way (411/E411_LEC_SPR_25.tex
@@ -598,7 +629,11 @@
     // figure's units. Checked against the 411 PDF's vector data (pages 46, 119,
     // 124): every box, digit, label and line lands within 0.05pt. Ids carry P-p1 /
     // P-p2, and the cells' parts carry node-part-one / -two, so CSS can colour
-    // each player's side.
+    // each player's side. Any n x m works: the cells keep the 2x2 pitch, the box
+    // grows, and the corner line and player names keep their place at the top-left
+    // corner (placed from where a 2x2 matrix's centre would be). Optional: g.keys
+    // (row/column ids, default 0..n-1), g.names, g.band ({ row | col, fill }: a
+    // tinted strip drawn behind one row or column).
     const MM = 72.27 / 25.4, LW = 0.4, OS = LW / 2;
     const SERIF = "KaTeX_Main, 'Times New Roman', serif";
     function payoffMatrix(P, g, place) {
@@ -616,28 +651,41 @@
       // column 1 centres: its east extent plus the cells' west extent to the left
       const labX = -(labExt + RV);
       // the matrix centre is the centre of the cells' bounding box
-      const mx = ((labX - labExt) + (D + RV)) / 2;
-      const my = ((headBase - hdrHt - IS) + (D + RV)) / 2;
+      const nr = pays.length, nc = pays[0].length;
+      const keys = g.keys ?? [pays.map((_, i) => i), pays[0].map((_, i) => i)];
+      const mx2 = ((labX - labExt) + (D + RV)) / 2;   // a 2x2 matrix's centre
+      const my2 = ((headBase - hdrHt - IS) + (D + RV)) / 2;
+      const mx = ((labX - labExt) + ((nc - 1) * D + RV)) / 2;
+      const my = ((headBase - hdrHt - IS) + ((nr - 1) * D + RV)) / 2;
       const at = (x, y) => pos(x - mx, y - my);       // from the centre of cell (2,2)
+      const atC = (x, y) => at(x + mx2, y + my2);      // from the 2x2 centre
       // action labels at labFs when their text is set smaller (\footnotesize SPLIT)
       const txt = { shape: 'rectangle', innerSep: 0, fill: 'none', stroke: 'none', fontFamily: SERIF, fontSize: (g.labFs ?? FS) * f };
       const draw = [];
-      for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
-        const id = `${P}-c-${r}${c}`;
+      if (g.band) {
+        const { row, col, fill } = g.band;
+        const [x0, x1, y0, y1] = row != null
+          ? [labX - labExt - IS, (nc - 1) * D + RV, row * D - RV, row * D + RV]
+          : [col * D - RV, col * D + RV, headBase - hdrHt - IS, (nr - 1) * D + RV];
+        draw.push({ type: 'path', points: [at(x0, y0), at(x1, y0), at(x1, y1), at(x0, y1)],
+          cycle: true, fill, stroke: 'none' });
+      }
+      for (let r = 0; r < nr; r++) for (let c = 0; c < nc; c++) {
+        const id = `${P}-c-${keys[0][r]}${keys[1][c]}`;
         draw.push(
           { type: 'node', id, position: at(c * D, r * D), shape: 'circle solidus', label: pays[r][c],
             partAlign, fontFamily: SERIF, fontSize: FS * f, textWidth: cell.wd * f, textHeight: cell.ht * f,
             innerSep: IS * f, strokeWidth: LW * f, outerSep: OS * f, stroke: 'none', fill: 'none' },
-          { type: 'node', id: `${P}-box-${r}${c}`, fit: [id], shape: 'rectangle', label: '',
+          { type: 'node', id: `${P}-box-${keys[0][r]}${keys[1][c]}`, fit: [id], shape: 'rectangle', label: '',
             innerSep: -MM * f, outerSep: MM * f, strokeWidth: LW * f, stroke: INK, fill: 'none' },
         );
       }
       // Action labels sit on their row's baseline. SVG centres the glyphs (central
       // baseline), so each label goes half a cap height above that baseline.
       acts[1].forEach((a, i) => draw.push(
-        { type: 'node', id: `${P}-p2-col-${i}`, position: at(i * D + MM, headBase - cap / 2), label: a, ...txt }));
+        { type: 'node', id: `${P}-p2-col-${keys[1][i]}`, position: at(i * D + MM, headBase - cap / 2), label: a, ...txt }));
       acts[0].forEach((a, i) => draw.push(
-        { type: 'node', id: `${P}-p1-row-${i}`, position: at(labX, i * D - CY - cap / 2 + 3 * MM), label: a, ...txt }));
+        { type: 'node', id: `${P}-p1-row-${keys[0][i]}`, position: at(labX, i * D - CY - cap / 2 + 3 * MM), label: a, ...txt }));
       // corner line: from (Z-2-2) + corner, then ++(-1.3cm, 1.3cm)
       const lx = corner[0] * MM, ly = -corner[1] * MM;
       draw.push({ type: 'path', points: [at(lx, ly), at(lx - 13 * MM, ly - 13 * MM)], stroke: INK, strokeWidth: LW * f });
@@ -648,11 +696,21 @@
       const u = Math.SQRT1_2;
       const halfH = (player.ht + player.dp) / 2 + IS + OS, halfW = player.wd / 2 + IS + OS;
       const pl = { ...txt, rotate: 45, fontSize: player.fs * f };
+      if (g.namesOnLine) {
+        // names centred on the corner line's midpoint, one on each side of it
+        // (player 2 up-right, player 1 down-left), clear of the line by `gap` pt
+        const cx = lx - 6.5 * MM, cy = ly - 6.5 * MM, off = (player.ht + player.dp) / 2 + (g.namesOnLine.gap ?? 2);
+        draw.push(
+          { type: 'node', id: `${P}-p2-name`, label: g.names?.[1] ?? 'Player 2', ...pl, position: at(cx + off * u, cy - off * u) },
+          { type: 'node', id: `${P}-p1-name`, label: g.names?.[0] ?? 'Player 1', ...pl, position: at(cx - off * u, cy + off * u) },
+        );
+        return draw;
+      }
       draw.push(
-        { type: 'node', id: `${P}-p2-name`, label: 'Player 2', ...pl,
-          position: pos(p2Off[0] * MM + halfH * u, -p2Off[1] * MM - halfH * u) },
-        { type: 'node', id: `${P}-p1-name`, label: 'Player 1', ...pl,
-          position: pos(p1Off[0] * MM - halfW * u, -p1Off[1] * MM - halfW * u) },
+        { type: 'node', id: `${P}-p2-name`, label: g.names?.[1] ?? 'Player 2', ...pl,
+          position: atC(p2Off[0] * MM + halfH * u, -p2Off[1] * MM - halfH * u) },
+        { type: 'node', id: `${P}-p1-name`, label: g.names?.[0] ?? 'Player 1', ...pl,
+          position: atC(p1Off[0] * MM - halfW * u, -p1Off[1] * MM - halfW * u) },
       );
       return draw;
     }
@@ -841,6 +899,70 @@
       if (vb && vb.width) svg.parentElement.style.width = (vb.width / BOS.FS * 1.21) + 'em';
     } catch (err) { console.warn('coordination game matrix failed', err); }
 
+    // ---- ID example: 5x5 Cournot-style game -----------------------------------
+    // Outputs 1-5. Payoffs are Cournot profits q_i (A_i - q_1 - q_2) with A_1 = 11,
+    // A_2 = 10, nudged (z3, least total change) so that exactly one action of one
+    // firm is strictly dominated at each of the 8 stages, every firm's profit falls
+    // in the rival's output, and the survivor is the Cournot equilibrium (4, 3).
+    // Steps 0-16: odd = highlight the dominated row/column, even = delete it. The
+    // matrix is re-rendered at each step into the full 5x5 viewBox, so it shrinks
+    // in place; colours come from CSS keyed on the cells' ids.
+    try {
+      const svg = document.getElementById('fig-ide');
+      const status = document.getElementById('ide-status');
+      const prev = document.getElementById('ide-prev'), next = document.getElementById('ide-next');
+      const frame = document.getElementById('id-example');
+      const dim = document.head.appendChild(document.createElement('style'));
+      const U1 = [[9, 8, 7, 6, 5], [21, 14, 12, 11, 8], [21, 18, 15, 12, 9], [26, 20, 16, 11, 7], [25, 19, 15, 10, 7]];
+      const U2 = [[8, 14, 18, 20, 20], [7, 13, 15, 16, 15], [6, 12, 12, 11, 10], [5, 8, 9, 8, 5], [4, 4, 4, 4, 0]];
+      // [firm, deleted output index, an output index that strictly dominates it]
+      const STAGES = [[1, 0, 1], [2, 4, 3], [1, 4, 3], [2, 0, 1], [1, 1, 2], [2, 3, 2], [1, 2, 3], [2, 1, 2]];
+      const LAST = 2 * STAGES.length;
+      const DIG = tb(7.05, 9.07);
+      const IDG = { FS: 14.4, IS: 0.3333 * 0.97922 * 14.4, cap: 9.07, cell: tb(14.1, 9.07), partAlign: 'right',
+        player: { wd: 33.1, ht: 8.33, dp: 0, fs: 12 }, names: ['Firm 1', 'Firm 2'], namesOnLine: { gap: 2 },
+        p2Off: [-22, 24.4], p1Off: [-17, 18], corner: [-9, 9] };
+      let VB = null, step = 0;
+      const draw = (s) => {
+        const done = s >> 1, hl = s % 2 ? STAGES[done] : null;
+        const R = [0, 1, 2, 3, 4], C = [0, 1, 2, 3, 4];
+        STAGES.slice(0, done).forEach(([f, x]) => { const L = f === 1 ? R : C; L.splice(L.indexOf(x), 1); });
+        const g = { ...IDG, keys: [R, C], acts: [R.map(i => String(i + 1)), C.map(i => String(i + 1))],
+          hdr: C.map(() => DIG), lab: R.map(() => DIG),
+          pays: R.map(r => C.map(c => [String(U1[r][c]), String(U2[r][c])])),
+          band: hl && (hl[0] === 1 ? { row: R.indexOf(hl[1]), fill: 'rgba(255, 0, 0, 0.12)' }
+                                   : { col: C.indexOf(hl[1]), fill: 'rgba(0, 0, 255, 0.10)' }) };
+        render(svg, { scale: 1, originX: 0, originY: 0, padding: 4, ...(VB ? { viewBox: VB } : {}),
+          draw: payoffMatrix('ide', g, { f: 1, pos: (x, y) => ({ x, y }) }) });
+        if (!VB) { const v = svg.viewBox.baseVal; if (v && v.width) VB = [v.x, v.y, v.width, v.height]; }
+        // inside the band, grey out the other firm's numbers
+        dim.textContent = !hl ? '' : hl[0] === 1
+          ? `#fig-ide [id^="node-ide-c-${hl[1]}"] text.node-part-two { fill: #bdbdbd; }`
+          : `#fig-ide [id^="node-ide-c-"][id$="${hl[1]}"] text.node-part-one { fill: #bdbdbd; }`;
+        if (s === 0) status.textContent = 'Press \u2192 (or \u25B6) to start.';
+        else if (s === LAST) status.textContent = 'Only (4, 3) survives.';
+        else {
+          const [f, x, y] = STAGES[(s - 1) >> 1];
+          status.textContent = s % 2
+            ? `Stage ${(s + 1) >> 1}: Firm ${f}'s output ${x + 1} is strictly dominated by ${y + 1}.`
+            : `Firm ${f}'s output ${x + 1} deleted.`;
+        }
+        prev.disabled = s === 0; next.disabled = s === LAST;
+      };
+      const go = (d) => { const s = Math.max(0, Math.min(LAST, step + d)); if (s !== step) { step = s; draw(step); } };
+      prev.addEventListener('click', () => go(-1));
+      next.addEventListener('click', () => go(1));
+      document.addEventListener('keydown', (e) => {
+        if (e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) return;   // Shift/Alt+arrows navigate lectures
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const r = frame.getBoundingClientRect();
+        if (r.top >= window.innerHeight || r.bottom <= 0) return;
+        e.preventDefault();
+        go(e.key === 'ArrowRight' ? 1 : -1);
+      });
+      draw(0);
+    } catch (err) { console.warn('ID example failed', err); }
+
     // Fill the screen with the matrix + list, as the slide does: everything in
     // .bos-cols is sized in em, so one font size scales the pair. Take the largest
     // that fits the frame's width and the window height left under the title bar
@@ -881,86 +1003,77 @@
     window.addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = setTimeout(refit, 300); });
 
     // ---- Game trees -------------------------------------------------------------
-    const player = (id, x, y, n) => ({ type: 'node', id, position: { x, y }, label: `Player ${n}`, ...lbl, fontFamily: SANS });
-    const branch = { arrow: 'none', stroke: INK, strokeWidth: 1.2, labelSide: 'left' };
+    // One style for every tree (as in 510): decision nodes are shadowed discs, player 1
+    // red and player 2 green, with the player's number in white; payoffs sit in an
+    // ellipse split, player 1 on top and player 2 below (never "a, b"). All trees share
+    // scale 40 and these sizes; the CSS widths keep them at the same on-screen scale.
+    const branch = { arrow: '->', stroke: INK, strokeWidth: 1.2, labelSide: 'left' };
+    const decision = (id, x, y, n) => ({ type: 'node', id, position: { x, y }, label: `$${n}$`, shape: 'circle',
+      radius: 46, innerSep: 0, fontSize: 32, fill: n === 1 ? RED : NODE_GREEN, stroke: 'none', labelColor: '#fff', shadow: true });
+    const payoff = (id, x, y, label) => ({ type: 'node', id, position: { x, y }, shape: 'ellipse split', rx: 190, ry: 88,
+      label, fontSize: 28, fill: '#fff', stroke: INK, strokeWidth: 1.2 });
+    const X_SEP = -5;   // the ultimatum and dictator games' bare "x" branch label hugs its branch
+    // Two shorter dash-dotted stubs out of player 1's node, at slopes +0.7 and -0.7,
+    // hint that the depicted branch is one of a continuum of choices. A stub ends
+    // STUB_LEN units from the node's centre: 130px drawn, ~70% of the labelled branch.
+    const STUB_SLOPE = 0.7, STUB_LEN = 4.4, DASHDOT = '7 3.5 1.5 3.5';
+    const stubs = P => [1, -1].flatMap(s => {
+      const a = Math.atan(STUB_SLOPE), id = `${P}-stub-${s > 0 ? 'up' : 'down'}`;
+      return [
+        { type: 'node', id, position: { x: STUB_LEN * Math.cos(a), y: -s * STUB_LEN * Math.sin(a) }, ...pt },
+        { type: 'edge', from: `${P}-p1`, to: id, stroke: INK, strokeWidth: 1.2, arrow: 'none', dashed: DASHDOT },
+      ];
+    });
+    const tree = (svgId, draw) => render(document.getElementById(svgId),
+      { scale: 40, originX: 40, originY: 215, padding: 8, katexMacros: MACROS, draw });
 
-    // Two-stage game: 1 --x--> 2 --y--> payoff circle split
+    // Two-stage game: 1 --x--> 2 --y--> payoffs
     try {
-      render(document.getElementById('fig-two-stage'), {
-        scale: 40, originX: 40, originY: 60, padding: 8, katexMacros: MACROS,
-        draw: [
-          // the players' nodes as large as the payoff circle, their numbers to match
-          { type: 'node', id: 'ts-p1', position: { x: 0, y: 0 }, label: '$1$', shape: 'circle', radius: 46,
-            innerSep: 0, fontSize: 32, fill: RED, stroke: 'none', labelColor: '#fff', shadow: true },
-          { type: 'node', id: 'ts-p2', position: { x: 5.5, y: 0 }, label: '$2$', shape: 'circle', radius: 46,
-            innerSep: 0, fontSize: 32, fill: NODE_GREEN, stroke: 'none', labelColor: '#fff', shadow: true },
-          { type: 'node', id: 'ts-pay', position: { x: 11, y: 0 }, shape: 'circle split', radius: 46,
-            label: ['$u_1(x,y)$', '$u_2(x,y)$'], fontSize: 15, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
-          { type: 'edge', from: 'ts-p1', to: 'ts-p2', label: '$x$', fontSize: 20, ...branch, arrow: '->' },
-          { type: 'edge', from: 'ts-p2', to: 'ts-pay', label: '$y$', fontSize: 20, ...branch, arrow: '->' },
-        ],
-      });
+      tree('fig-two-stage', [
+        decision('ts-p1', 0, 0, 1),
+        decision('ts-p2', 7, 0, 2),
+        payoff('ts-pay', 17.6, 0, ['$u_1(x,y)$', '$u_2(x,y)$']),
+        { type: 'edge', from: 'ts-p1', to: 'ts-p2', label: '$x$', fontSize: 30, ...branch },
+        { type: 'edge', from: 'ts-p2', to: 'ts-pay', label: '$y$', fontSize: 30, ...branch },
+      ]);
     } catch (err) { console.warn('two-stage tree failed', err); }
 
-    // Ultimatum game under inequity aversion, drawn twice: 1 --x--> 2, then N (up)
-    // and Y (down) to ellipse-split payoffs (player 1 on top, player 2 below).
+    // Ultimatum game: 1 --cond--> 2, then N (up) and Y (down) to the payoffs.
+    // Drawn plain twice (x; Y pays x and 1-x) and twice under inequity aversion:
     // x > 1/2: player 1 gets more, so her guilt (beta) and player 2's envy (alpha) bite.
     // x < 1/2: player 2 gets more, so her guilt (beta) and player 1's envy (alpha) bite.
     // Everybody shares the same alpha and beta, so no subscripts.
-    function ultimatumSocial(svgId, P, cond, pay) {
-      render(document.getElementById(svgId), {
-        scale: 40, originX: 40, originY: 215, padding: 8, katexMacros: MACROS,
-        draw: [
-          { type: 'node', id: `${P}-p1`, position: { x: 0, y: 0 }, label: '$1$', shape: 'circle', radius: 46,
-            innerSep: 0, fontSize: 32, fill: RED, stroke: 'none', labelColor: '#fff', shadow: true },
-          { type: 'node', id: `${P}-p2`, position: { x: 7, y: 0 }, label: '$2$', shape: 'circle', radius: 46,
-            innerSep: 0, fontSize: 32, fill: NODE_GREEN, stroke: 'none', labelColor: '#fff', shadow: true },
-          { type: 'node', id: `${P}-n`, position: { x: 21, y: -2.9 }, shape: 'ellipse split', rx: 190, ry: 88,
-            label: ['$0$', '$0$'], fontSize: 28, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
-          { type: 'node', id: `${P}-y`, position: { x: 21, y: 2.9 }, shape: 'ellipse split', rx: 190, ry: 88,
-            label: pay, fontSize: 28, fill: '#fff', stroke: INK, strokeWidth: 1.2 },
-          { type: 'edge', from: `${P}-p1`, to: `${P}-p2`, label: cond, fontSize: 30, ...branch, arrow: '->' },
-          { type: 'edge', from: `${P}-p2`, to: `${P}-n`, label: 'N', fontFamily: SANS, fontSize: 27, ...branch, arrow: '->' },
-          { type: 'edge', from: `${P}-p2`, to: `${P}-y`, label: 'Y', fontFamily: SANS, fontSize: 27, ...branch, labelSide: 'right', arrow: '->' },
-        ],
-      });
+    // labelSep: inner padding of the branch label (library default 3); the bare x
+    // passes a negative one so it sits closer to its branch.
+    function ultimatum(svgId, P, cond, pay, labelSep) {
+      tree(svgId, [
+        ...stubs(P),
+        decision(`${P}-p1`, 0, 0, 1),
+        decision(`${P}-p2`, 7, 0, 2),
+        payoff(`${P}-n`, 21, -2.9, ['$0$', '$0$']),
+        payoff(`${P}-y`, 21, 2.9, pay),
+        { type: 'edge', from: `${P}-p1`, to: `${P}-p2`, label: cond, fontSize: 30, innerSep: labelSep, ...branch },
+        { type: 'edge', from: `${P}-p2`, to: `${P}-n`, label: 'N', fontFamily: SANS, fontSize: 27, ...branch },
+        { type: 'edge', from: `${P}-p2`, to: `${P}-y`, label: 'Y', fontFamily: SANS, fontSize: 27, ...branch, labelSide: 'right' },
+      ]);
     }
-    try { ultimatumSocial('fig-ultimatum-social', 'us', '$x\\gt \\tfrac{1}{2}$', ['$x-\\beta(2x-1)$', '$1-x-\\alpha(2x-1)$']); }
+    try { ultimatum('fig-ultimatum', 'ug1', '$x$', ['$x$', '$1-x$'], X_SEP); }
+    catch (err) { console.warn('ultimatum tree failed', err); }
+    try { ultimatum('fig-ultimatum-2', 'ug2', '$x$', ['$x$', '$1-x$'], X_SEP); }
+    catch (err) { console.warn('ultimatum tree (2) failed', err); }
+    try { ultimatum('fig-ultimatum-social', 'us', '$x\\gt \\tfrac{1}{2}$', ['$x-\\beta(2x-1)$', '$1-x-\\alpha(2x-1)$']); }
     catch (err) { console.warn('ultimatum (social preferences, x > 1/2) tree failed', err); }
-    try { ultimatumSocial('fig-ultimatum-social-2', 'us2', '$x\\lt \\tfrac{1}{2}$', ['$x-\\alpha(1-2x)$', '$1-x-\\beta(1-2x)$']); }
+    try { ultimatum('fig-ultimatum-social-2', 'us2', '$x\\lt \\tfrac{1}{2}$', ['$x-\\alpha(1-2x)$', '$1-x-\\beta(1-2x)$']); }
     catch (err) { console.warn('ultimatum (social preferences, x < 1/2) tree failed', err); }
 
-    // Ultimatum game (drawn twice): Player 1 --x-- Player 2, then N (up) to 0,0 and Y (down) to x,1-x
-    function ultimatum(svgId, P) {
-      render(document.getElementById(svgId), {
-        scale: 40, originX: 50, originY: 70, padding: 8, katexMacros: MACROS,
-        draw: [
-          player(`${P}-p1`, 0, 0, 1),
-          player(`${P}-p2`, 3.5, 0, 2),
-          { type: 'node', id: `${P}-n`, position: { x: 7, y: -1 }, ...leaf },
-          { type: 'node', id: `${P}-y`, position: { x: 7, y: 1 }, ...leaf },
-          { type: 'node', id: `${P}-nl`, position: { x: 7.08, y: -1 }, label: '$0,0$', anchor: 'west', ...lbl },
-          { type: 'node', id: `${P}-yl`, position: { x: 7.08, y: 1 }, label: '$x,1-x$', anchor: 'west', ...lbl },
-          { type: 'edge', from: `${P}-p1`, to: `${P}-p2`, label: '$x$', ...branch },
-          { type: 'edge', from: `${P}-p2`, to: `${P}-n`, label: 'N', sloped: true, fontFamily: SANS, ...branch },
-          { type: 'edge', from: `${P}-p2`, to: `${P}-y`, label: 'Y', sloped: true, fontFamily: SANS, ...branch },
-        ],
-      });
-    }
-    try { ultimatum('fig-ultimatum', 'ug1'); } catch (err) { console.warn('ultimatum tree failed', err); }
-    try { ultimatum('fig-ultimatum-2', 'ug2'); } catch (err) { console.warn('ultimatum tree (2) failed', err); }
-
-    // Dictator game: Player 1 --x-- leaf x,1-x (player 2 has no move)
+    // Dictator game: 1 --x--> payoffs (player 2 has no move)
     try {
-      render(document.getElementById('fig-dictator'), {
-        scale: 40, originX: 50, originY: 30, padding: 8, katexMacros: MACROS,
-        draw: [
-          player('dg-p1', 0, 0, 1),
-          { type: 'node', id: 'dg-leaf', position: { x: 3.5, y: 0 }, ...leaf },
-          { type: 'node', id: 'dg-ll', position: { x: 3.58, y: 0 }, label: '$x,1-x$', anchor: 'west', ...lbl },
-          { type: 'edge', from: 'dg-p1', to: 'dg-leaf', label: '$x$', ...branch },
-        ],
-      });
+      tree('fig-dictator', [
+        ...stubs('dg'),
+        decision('dg-p1', 0, 0, 1),
+        payoff('dg-pay', 10.6, 0, ['$x$', '$1-x$']),
+        { type: 'edge', from: 'dg-p1', to: 'dg-pay', label: '$x$', fontSize: 30, innerSep: X_SEP, ...branch },
+      ]);
     } catch (err) { console.warn('dictator tree failed', err); }
   </script>
 
